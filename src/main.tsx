@@ -1,4 +1,4 @@
-import '~/app/styles/style.scss';
+import '~/app/styles/wendorStyle.scss';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { StrictMode } from 'react';
@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router';
 import App from '~/app/App.tsx';
 import { store } from '~/app/store/configure-store';
 
-import { theme } from './app/styles/theme/theme';
+import theme from './app/styles/theme';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
