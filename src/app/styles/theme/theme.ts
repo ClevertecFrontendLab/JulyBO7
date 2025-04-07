@@ -26,6 +26,7 @@ export const theme = extendTheme({
             50: ' rgba(0, 0, 0, 0.24)',
             100: '  rgba(0, 0, 0, 0.48)',
             150: 'rgba(0, 0, 0, 0.64)',
+            200: 'rgba(0, 0, 0, 0.08)',
         },
     },
     fontSizes: {
@@ -140,11 +141,24 @@ export const theme = extendTheme({
                     padding: 0,
                     color: 'primaryColor',
                 },
+                withIcon: {
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    py: 0,
+                    px: '4px',
+                    gap: '6px',
+                },
             },
 
             defaultProps: {
                 size: 'm',
                 variant: 'outline',
+            },
+        },
+        Heading: {
+            baseStyle: {
+                fontFamily: 'Inter, sans-serif',
             },
         },
     },

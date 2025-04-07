@@ -10,8 +10,8 @@ const SvgBsBookmarkHeart = (props: SVGProps<SVGSVGElement>) => (
         {...props}
     >
         <path
-            fill-rule='evenodd'
-            clip-rule='evenodd'
+            fillRule='evenodd'
+            clipRule='evenodd'
             d='M5.99985 3.3075C7.0401 2.23875 9.64035 4.11 5.99985 6.51525C2.35935 4.11 4.9596 2.2395 5.99985 3.309V3.3075Z'
             fill='black'
         />

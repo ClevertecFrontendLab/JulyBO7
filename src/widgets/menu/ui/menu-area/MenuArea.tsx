@@ -12,10 +12,10 @@ export const MenuArea: FC = () => {
 
     const handleClickItemMenu = useCallback(() => {
         setIsFocusable(true);
-    }, [isFocusable]);
+    }, []);
 
-    const items = menuItems.map((menuItem) => (
-        <MenuItem key={menuItem.title} itemData={menuItem} onClickItem={handleClickItemMenu} />
+    const items = menuItems.map((menuItem, idx) => (
+        <MenuItem key={idx} itemData={menuItem} onClickItem={handleClickItemMenu} />
     ));
     return (
         <menu className={classNames(cls.menu, { [cls.active]: isFocusable })}>

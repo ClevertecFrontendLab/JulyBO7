@@ -18,7 +18,7 @@ export const MenuItem: FC<MenuItemProps> = ({ itemData, onClickItem }) => {
         onClickItem?.();
     };
     const items = itemData.items.map((item, idx) => (
-        <li key={item.title}>
+        <li key={idx}>
             <Item
                 active={idx % 2 ? active : false}
                 path={item.routePath}

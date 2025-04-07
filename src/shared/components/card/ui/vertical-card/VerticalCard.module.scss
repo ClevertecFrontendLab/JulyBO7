@@ -1,0 +1,25 @@
+.text{
+    -webkit-line-clamp: 3; 
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media screen and (min-width: 0px) {
+    .title {
+        -webkit-line-clamp: 2; 
+        line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+@media screen and (min-width: 1440px) {
+    .title {
+        -webkit-line-clamp: none; 
+        line-clamp: 0;
+        display: block;
+        -webkit-box-orient:none;
+    }
+}

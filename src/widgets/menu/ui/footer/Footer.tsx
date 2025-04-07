@@ -8,8 +8,8 @@ export const Footer: FC = () => (
             Версия программы 03.25
         </Text>
         <Text mb='16px' color='gray.150'>
-            Все права защищены, ученический файл,
-            <Text>©Клевер Технолоджи, 2025</Text>
+            все права защищены, ученический файл,
+            <span>©Клевер Технолоджи, 2025</span>
         </Text>
         <Button variant='clear' fontWeight={600} leftIcon={<ArrowBackIcon />}>
             Выйти

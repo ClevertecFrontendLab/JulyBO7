@@ -14,11 +14,14 @@ export const Badge: FC<BadgeProps> = (props) => {
         <Box
             display='inline-flex'
             alignItems='center'
-            height='24px'
+            h='24px'
             bg='lime.50'
             p={{ base: '2px 4px', lg: '2px 8px' }}
             borderRadius='4px'
             gap='8px'
+            position={{ base: 'absolute', lg: 'static' }}
+            top={{ base: '8px' }}
+            left={{ base: '8px' }}
             {...style}
         >
             <Icon width={16} height={16} />
