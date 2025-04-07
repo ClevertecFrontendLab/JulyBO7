@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 
 import { MainPage } from '~/pages/main-page';
 import { useGetPostsQuery } from '~/query/services/posts.ts';
+import { Menu } from '~/widgets/menu';
 
 function App() {
     const { data: _data, isLoading: _isLoading } = useGetPostsQuery();
@@ -10,7 +11,7 @@ function App() {
         <Box height='100vh' bg='bgColor'>
             <Box />
             <Box display='flex'>
-                <Box />
+                <Menu />
                 <MainPage />
                 <Box />
             </Box>

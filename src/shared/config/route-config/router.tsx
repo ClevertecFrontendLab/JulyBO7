@@ -66,35 +66,35 @@ export const routeConfig: RouteProps[] = [
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.GRILL]}:id`,
+        path: `${routePaths[AppRoutes.GRILL]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}:id`,
+        path: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.NATIONAL_DISHES]}:id`,
+        path: `${routePaths[AppRoutes.NATIONAL_DISHES]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.PROVISIONS]}:id`,
+        path: `${routePaths[AppRoutes.PROVISIONS]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SALADS]}:id`,
+        path: `${routePaths[AppRoutes.SALADS]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SAUCES]}:id`,
+        path: `${routePaths[AppRoutes.SAUCES]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SECONDARY_DISHES]}:id`,
+        path: `${routePaths[AppRoutes.SECONDARY_DISHES]}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SNACKS]}:id`,
+        path: `${routePaths[AppRoutes.SNACKS]}:item`,
         element: <VeganCuisinePage />,
     },
 ];

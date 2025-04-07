@@ -5,7 +5,7 @@ export const theme = extendTheme({
         global: {
             'html, body': {
                 fontFamily: 'Inter, sans-serif',
-                bg: 'green',
+                bg: 'bgColor',
                 color: 'primaryColor',
             },
         },
@@ -22,6 +22,11 @@ export const theme = extendTheme({
             700: '#207e00',
             800: '#134b00',
         },
+        gray: {
+            50: ' rgba(0, 0, 0, 0.24)',
+            100: '  rgba(0, 0, 0, 0.48)',
+            150: 'rgba(0, 0, 0, 0.64)',
+        },
     },
     fontSizes: {
         xs: '12px',
@@ -32,6 +37,12 @@ export const theme = extendTheme({
         '2xl': '48px',
     },
     textStyles: {
+        xs: {
+            fontSize: '12px',
+            fontWeight: 400,
+            lineHeight: '16px',
+            fontFamily: 'Inter, sans-serif',
+        },
         s: {
             fontSize: '14px',
             fontWeight: 400,
