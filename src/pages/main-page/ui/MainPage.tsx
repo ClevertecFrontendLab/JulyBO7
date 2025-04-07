@@ -1,3 +1,5 @@
 import { FC } from 'react';
 
-export const MainPage: FC = () => <div>main page</div>;
+import { Page } from '~/shared/components/page/ui/Page';
+
+export const MainPage: FC = () => <Page>main page</Page>;

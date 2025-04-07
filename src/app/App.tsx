@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
+import { MainPage } from '~/pages/main-page';
 import { useGetPostsQuery } from '~/query/services/posts.ts';
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
             <Box />
             <Box display='flex'>
                 <Box />
-                <Box />
+                <MainPage />
                 <Box />
             </Box>
         </Box>

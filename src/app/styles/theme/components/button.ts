@@ -1,6 +1,6 @@
-import { defineStyleConfig } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 
-export const Button = defineStyleConfig({
+export const Button = extendTheme({
     baseStyle: {
         fontWeight: 600,
         borderRadius: '6px',
@@ -12,32 +12,32 @@ export const Button = defineStyleConfig({
             fontSize: 'xs',
             lineHeight: '133%',
             height: '24px',
-            px: 2,
+            px: '8px',
             py: 0,
         },
         s: {
             fontSize: 'xs',
             lineHeight: '133%',
-            px: 2,
+            px: '8px',
             py: 0,
         },
         m: {
             fontSize: 's',
             lineHeight: '143%',
-            px: 3,
+            px: '12px',
             py: 0,
         },
         l: {
             fontSize: 'm',
             lineHeight: '150%',
-            px: 4,
+            px: '16px',
             py: 0,
             height: '40px',
         },
         xl: {
             fontSize: 'l',
             lineHeight: '156%',
-            px: 6,
+            px: '24px',
             py: 0,
             height: '48px',
         },

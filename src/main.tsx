@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router';
 import App from '~/app/App.tsx';
 import { store } from '~/app/store/configure-store';
 
-import theme from './app/styles/theme';
+import { theme } from './app/styles/theme/theme';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
