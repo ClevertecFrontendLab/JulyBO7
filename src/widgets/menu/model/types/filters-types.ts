@@ -16,12 +16,12 @@ export enum MenuFilter {
     DRINKS = 'Напитки',
 }
 
-export type MenuFilterItem = {
+export type SubMenuItem = {
     title: string;
     routePath: string;
 };
 export type MenuItemData = {
-    items: MenuFilterItem[];
+    items: SubMenuItem[];
     Icon: FC<SVGProps<SVGSVGElement>>;
     title: MenuFilter;
     routePath: string;

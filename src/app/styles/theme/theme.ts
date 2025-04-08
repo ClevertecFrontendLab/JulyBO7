@@ -7,6 +7,14 @@ export const theme = extendTheme({
                 fontFamily: 'Inter, sans-serif',
                 bg: 'bgColor',
                 color: 'primaryColor',
+                margin: 0,
+                padding: 0,
+            },
+            li: {
+                listStyleType: 'none',
+            },
+            a: {
+                textDecoration: 'none',
             },
         },
     },

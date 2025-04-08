@@ -1,3 +1,5 @@
 import { FC } from 'react';
 
-export const VeganCuisinePage: FC = () => <div> VeganCuisinePage</div>;
+import { Page } from '~/shared/components/page/ui/Page';
+
+export const VeganCuisinePage: FC = () => <Page> VeganCuisinePage</Page>;
