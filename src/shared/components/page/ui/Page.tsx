@@ -14,7 +14,6 @@ export const Page: FC<PageProps> = ({ children }) => (
         border='1px solid red'
         pl={{ base: '16px', md: '20px', lg: '24px' }}
         pr={{ base: '16px', md: '20px', lg: '72px' }}
-        pt='7px'
         overflowY='auto'
         className={cls.page}
     >

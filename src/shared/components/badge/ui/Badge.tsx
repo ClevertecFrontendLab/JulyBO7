@@ -1,8 +1,8 @@
-import { Box, BoxProps, Text } from '@chakra-ui/react';
-import { FC, SVGProps } from 'react';
+import { Box, BoxProps, IconProps, Text } from '@chakra-ui/react';
+import { FC } from 'react';
 
 type BadgeProps = {
-    Icon: FC<SVGProps<SVGSVGElement>>;
+    Icon: FC<IconProps>;
     text: string | number;
     style?: BoxProps;
 };
@@ -18,15 +18,15 @@ export const Badge: FC<BadgeProps> = (props) => {
             bg='lime.50'
             p={{ base: '2px 4px', lg: '2px 8px' }}
             borderRadius='4px'
-            gap='8px'
-            position={{ base: 'absolute', lg: 'static' }}
+            // gap='6px'
+            // position={{ base: 'absolute', lg: 'static' }} = передавать в style
             top={{ base: '8px' }}
             left={{ base: '8px' }}
             {...style}
         >
-            <Icon width={16} height={16} />
+            <Icon width='16px' height='16px' />
 
-            <Text textStyle='s'>{text}</Text>
+            <Text textStyle={{ base: 's', md: 'xs', lg: 's' }}>{text}</Text>
         </Box>
     );
 };

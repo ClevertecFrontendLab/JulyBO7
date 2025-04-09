@@ -26,6 +26,7 @@ export const theme = extendTheme({
             100: '#eaffc7',
             150: '#d7ff94',
             300: '#c4ff61',
+            400: '#b1ff2e',
             600: '#2db100',
             700: '#207e00',
             800: '#134b00',
@@ -79,7 +80,7 @@ export const theme = extendTheme({
             fontSize: '48px',
             lineHeight: '100%',
             fontWeight: 700,
-            fontFamily: 'Inter, sans-serif',
+            // fontFamily: 'Inter, sans-serif',
         },
     },
     breakpoints: {

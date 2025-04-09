@@ -1,15 +1,28 @@
 import { useCallback, useMemo } from 'react';
-import { Route, RouteProps, Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 
-import { routeConfig } from '~/shared/config/route-config/router';
+import { RouteConfig, routeConfig } from '~/shared/config/route-config/router';
 
 export const AppRouter = () => {
+    console.log('AppRouter');
     const getRouteElements = useCallback(
-        (route: RouteProps) => <Route key={route.path} path={route.path} element={route.element} />,
+        (route: RouteConfig) => (
+            <Route key={route.path} path={route.path} element={route.element}>
+                {route.childrenRoutes?.map((childrenRoute, idx) => (
+                    <Route
+                        path={childrenRoute.path}
+                        index={childrenRoute.index}
+                        key={idx}
+                        element={childrenRoute.element}
+                    />
+                ))}
+            </Route>
+        ),
         [],
     );
 
     const routes = useMemo(() => routeConfig.map(getRouteElements), [getRouteElements]);
+    console.log('AppRouter : ', routes);
 
     return <Routes>{routes}</Routes>;
 };

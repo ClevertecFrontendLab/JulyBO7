@@ -1,7 +1,18 @@
+import { ReactElement } from 'react';
 import { RouteProps } from 'react-router';
 
 import { MainPage } from '~/pages/main-page';
-import { VeganCuisinePage } from '~/pages/vegan-cuisine-page';
+import {
+    BakeryPage,
+    FirstDishesPage,
+    SnacksPage,
+    VeganCuisinePage,
+} from '~/pages/vegan-cuisine-page';
+import { DesertsPage } from '~/pages/vegan-cuisine-page/ui/deserts-page/DesertsPage';
+import { DrinksPage } from '~/pages/vegan-cuisine-page/ui/drinks-page/DrinksPage';
+import { RawFoodDishesPage } from '~/pages/vegan-cuisine-page/ui/raw-food-dishes-page/RawFoodDishesPage';
+import { SecondDishesPage } from '~/pages/vegan-cuisine-page/ui/second-dishes-page/SecondDishesPage';
+import { SideDishesPage } from '~/pages/vegan-cuisine-page/ui/side-dishes-page/SideDishesPage';
 
 export enum AppRoutes {
     MAIN = 'main',
@@ -44,14 +55,29 @@ export const routePaths: RoutePaths = {
     [AppRoutes.NOT_PAGE]: '/*',
 };
 
-export const routeConfig: RouteProps[] = [
+export type RouteConfig = {
+    path: string;
+    element: ReactElement;
+    childrenRoutes?: RouteProps[];
+};
+export const routeConfig: RouteConfig[] = [
     {
         path: routePaths[AppRoutes.MAIN],
         element: <MainPage />,
     },
     {
-        path: `${routePaths[AppRoutes.VEGAN]}:item`,
+        path: `${routePaths[AppRoutes.VEGAN]}`,
         element: <VeganCuisinePage />,
+        childrenRoutes: [
+            { path: 'snacks', element: <SnacksPage />, index: true },
+            { path: 'first-dishes', element: <FirstDishesPage /> },
+            { path: 'second-dishes', element: <SecondDishesPage /> },
+            { path: 'side-dishes', element: <SideDishesPage /> },
+            { path: 'deserts', element: <DesertsPage /> },
+            { path: 'bakery', element: <BakeryPage /> },
+            { path: 'raw-food-dishes', element: <RawFoodDishesPage /> },
+            { path: 'drinks', element: <DrinksPage /> },
+        ],
     },
     {
         path: `${routePaths[AppRoutes.CHILDREN_DISHES]}:item`,

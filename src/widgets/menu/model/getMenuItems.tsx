@@ -269,7 +269,11 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.VEGAN]}first-dishes`,
                 },
                 {
-                    title: 'Первые блюда',
+                    title: 'Вторые блюда',
+                    routePath: `${routePaths[AppRoutes.VEGAN]}second-dishes`,
+                },
+                {
+                    title: 'Гарниры',
                     routePath: `${routePaths[AppRoutes.VEGAN]}side-dishes`,
                 },
                 {
