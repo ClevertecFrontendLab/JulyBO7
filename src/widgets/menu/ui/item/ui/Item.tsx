@@ -1,4 +1,5 @@
-import { FC, FunctionComponent, SVGProps } from 'react';
+import { IconProps } from '@chakra-ui/react';
+import { FC } from 'react';
 import { Link } from 'react-router';
 
 import Arrow from '~/shared/assets/icons/components/Arrow';
@@ -8,7 +9,7 @@ import cls from './Item.module.scss';
 
 type ItemProps = {
     path: string;
-    Icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+    Icon?: FC<IconProps>;
     text: string;
     active?: boolean;
     onClick?: () => void;

@@ -26,7 +26,7 @@ export const Sidebar: FC = () => (
                 height='40px'
                 gap='8px'
             >
-                <Bookmark width={16} height={16} />
+                <Bookmark width='16px' height='16px' />
                 <Text textStyle='m' fontWeight={600}>
                     {185}
                 </Text>
@@ -39,7 +39,7 @@ export const Sidebar: FC = () => (
                 height='40px'
                 gap='8px'
             >
-                <People width={16} height={16} />
+                <People width='16px' height='16px' />
                 <Text textStyle='m' fontWeight={600}>
                     {185}
                 </Text>
@@ -52,7 +52,7 @@ export const Sidebar: FC = () => (
                 height='40px'
                 gap='8px'
             >
-                <Emoji width={16} height={16} />
+                <Emoji width='16px' height='16px' />
                 <Text textStyle='m' fontWeight={600}>
                     {185}
                 </Text>

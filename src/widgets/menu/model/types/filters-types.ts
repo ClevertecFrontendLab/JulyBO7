@@ -1,4 +1,5 @@
-import { FC, SVGProps } from 'react';
+import { IconProps } from '@chakra-ui/react';
+import { FC } from 'react';
 
 export enum MenuFilter {
     SALADS = 'Салаты',
@@ -22,7 +23,7 @@ export type SubMenuItem = {
 };
 export type MenuItemData = {
     items: SubMenuItem[];
-    Icon: FC<SVGProps<SVGSVGElement>>;
+    Icon: FC<IconProps>;
     title: MenuFilter;
     routePath: string;
 };

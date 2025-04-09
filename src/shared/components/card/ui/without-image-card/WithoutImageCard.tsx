@@ -72,7 +72,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                             color='lime.600'
                             w={{ base: '34px', md: '32px', lg: '34px' }}
                         >
-                            <Bookmark width={12} height={12} />
+                            <Bookmark width='12px' height='12px' />
                             <Text fontSize='12px'>{bookmarkCount}</Text>
                         </Button>
                     )}
@@ -83,7 +83,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                             padding={{ base: '0 4px', md: '0 2px', lg: '0 4px' }}
                             w={{ base: '34px', md: '32px', lg: '34px' }}
                         >
-                            <Emoji width={12} height={12} />
+                            <Emoji width='12px' height='12px' />
                             <Text fontSize='12px'>{emojiCount}</Text>
                         </Button>
                     )}

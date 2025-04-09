@@ -1,9 +1,10 @@
-import { memo, SVGProps } from 'react';
+import { Icon, IconProps } from '@chakra-ui/react';
+import { memo } from 'react';
 
-const SvgLogoSecond = (props: SVGProps<SVGSVGElement>) => (
-    <svg
-        width='98'
-        height='26'
+const SvgLogoSecond = (props: IconProps) => (
+    <Icon
+        width='98px'
+        height='26px'
         viewBox='0 0 98 26'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -37,7 +38,7 @@ const SvgLogoSecond = (props: SVGProps<SVGSVGElement>) => (
             d='M52.1746 11.2221C52.978 12.6956 52.7741 15.5971 51.2858 16.3324C49.6703 17.1084 46.8455 16.3324 45.6888 14.5578C47.2895 14.5546 48.2925 14.2617 49.5104 13.8888C50.8418 13.2213 51.715 12.3222 52.1746 11.2221Z'
             fill='#29813F'
         />
-    </svg>
+    </Icon>
 );
 const Memo = memo(SvgLogoSecond);
 

@@ -1,9 +1,10 @@
-import { memo, SVGProps } from 'react';
+import { Icon, IconProps } from '@chakra-ui/react';
+import { memo } from 'react';
 
-const SvgBsPeopleFill = (props: SVGProps<SVGSVGElement>) => (
-    <svg
-        width='16'
-        height='16'
+const SvgBsPeopleFill = (props: IconProps) => (
+    <Icon
+        width='16px'
+        height='16px'
         viewBox='0 0 16 16'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -23,7 +24,7 @@ const SvgBsPeopleFill = (props: SVGProps<SVGSVGElement>) => (
             d='M4.5 8C5.16304 8 5.79893 7.73661 6.26777 7.26777C6.73661 6.79893 7 6.16304 7 5.5C7 4.83696 6.73661 4.20107 6.26777 3.73223C5.79893 3.26339 5.16304 3 4.5 3C3.83696 3 3.20107 3.26339 2.73223 3.73223C2.26339 4.20107 2 4.83696 2 5.5C2 6.16304 2.26339 6.79893 2.73223 7.26777C3.20107 7.73661 3.83696 8 4.5 8V8Z'
             fill='black'
         />
-    </svg>
+    </Icon>
 );
 const Memo = memo(SvgBsPeopleFill);
 

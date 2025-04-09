@@ -1,9 +1,10 @@
-import { memo, SVGProps } from 'react';
+import { Icon, IconProps } from '@chakra-ui/react';
+import { memo } from 'react';
 
-const SvgMenuItemKitchen = (props: SVGProps<SVGSVGElement>) => (
-    <svg
-        width='24'
-        height='24'
+const SvgMenuItemKitchen = (props: IconProps) => (
+    <Icon
+        width='24px'
+        height='24px'
         viewBox='0 0 24 24'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
@@ -19,7 +20,7 @@ const SvgMenuItemKitchen = (props: SVGProps<SVGSVGElement>) => (
         />
         <path d='M12 11.2382V15.2448' stroke='black' strokeWidth='1.2' />
         <path d='M9.99658 13.2415H14.0031' stroke='black' strokeWidth='1.2' />
-    </svg>
+    </Icon>
 );
 const Memo = memo(SvgMenuItemKitchen);
 
