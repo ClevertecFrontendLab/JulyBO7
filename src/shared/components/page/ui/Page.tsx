@@ -10,7 +10,6 @@ type PageProps = {
 export const Page: FC<PageProps> = ({ children }) => (
     <Box
         as='main'
-        w='100%'
         border='1px solid red'
         pl={{ base: '16px', md: '20px', lg: '24px' }}
         pr={{ base: '16px', md: '20px', lg: '72px' }}

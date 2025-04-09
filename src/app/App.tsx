@@ -3,6 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { useGetPostsQuery } from '~/query/services/posts.ts';
 import { Menu } from '~/widgets/menu';
 import { Navbar } from '~/widgets/navbar';
+import { Sidebar } from '~/widgets/sidebar/ui/Sidebar';
 
 import { AppRouter } from './providers/routes/ui/AppRouter';
 
@@ -15,7 +16,7 @@ function App() {
             <Box display='flex'>
                 <Menu />
                 <AppRouter />
-                <Box />
+                <Sidebar />
             </Box>
         </Box>
     );

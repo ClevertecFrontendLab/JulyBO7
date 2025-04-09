@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Text, VStack } from '@chakra-ui/react';
+import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import {
@@ -64,11 +64,11 @@ export const PageFooter: FC<PageFooterProps> = (props) => {
                         emojiCount={cardData.emojiCount}
                     />
                 ))}
-                <Box>
+                <VStack spacing={{ base: '12px', md: '6px', lg: '12px' }}>
                     {withoutTextCardData.map((cardData, idx) => (
                         <WithoutTextCard key={idx} text={cardData.text} Icon={cardData.Icon} />
                     ))}
-                </Box>
+                </VStack>
             </Stack>
         </VStack>
     );
