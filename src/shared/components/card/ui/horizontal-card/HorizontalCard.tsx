@@ -1,9 +1,18 @@
-import { Box, Button, ButtonGroup, Card, Heading, Image, Stack, Text } from '@chakra-ui/react';
-import { FC, SVGProps } from 'react';
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Card,
+    Heading,
+    IconProps,
+    Image,
+    Stack,
+    Text,
+} from '@chakra-ui/react';
+import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
-import Teftels from '~/shared/assets/images/image.jpg';
 
 import { Badge } from '../../../badge/ui/Badge';
 import cls from './HorizontalCard.module.scss';
@@ -13,7 +22,7 @@ type HorizontalCardProps = {
     text: string;
     onSave?: () => void;
     onCook?: () => void;
-    BadgeIcon: FC<SVGProps<SVGSVGElement>>;
+    BadgeIcon: FC<IconProps>;
     badgeText: string;
     image?: string;
     alt?: string;
@@ -22,17 +31,8 @@ type HorizontalCardProps = {
 };
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
-    const {
-        title,
-        onSave,
-        onCook,
-        text,
-        BadgeIcon,
-        badgeText,
-        image = Teftels,
-        emojiCount,
-        bookmarkCount,
-    } = props;
+    const { title, onSave, onCook, text, BadgeIcon, badgeText, image, emojiCount, bookmarkCount } =
+        props;
 
     return (
         <Card
@@ -65,11 +65,11 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                     <Badge Icon={BadgeIcon} text={badgeText} />
                     <Box display='flex' gap='8px'>
                         <Button variant='withIcon' color='lime.600'>
-                            <Bookmark width={12} height={12} />
+                            <Bookmark width='12px' height='12px' />
                             <Text fontSize='12px'>{bookmarkCount}</Text>
                         </Button>
                         <Button variant='withIcon' color='lime.600'>
-                            <Emoji width={12} height={12} />
+                            <Emoji width='12px' height='12px' />
                             <Text fontSize='12px'>{emojiCount}</Text>
                         </Button>
                     </Box>

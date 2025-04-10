@@ -26,15 +26,15 @@ export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
     return (
         <Box display={{ base: 'flex', lg: 'none' }} alignItems='center'>
             <Button variant='withIcon' color='lime.600' padding='0px 8px'>
-                <Bookmark width={12} height={12} />
+                <Bookmark />
                 <Text fontSize='12px'>{bookmarkCount}</Text>
             </Button>
             <Button variant='withIcon' color='lime.600' padding='0px 8px'>
-                <People width={12} height={12} />
+                <People width='12px' height='12px' />
                 <Text fontSize='12px'>{peopleCount}</Text>
             </Button>
             <Button variant='withIcon' color='lime.600' padding='0px 8px'>
-                <Emoji width={12} height={12} />
+                <Emoji />
                 <Text fontSize='12px'>{emojiCount}</Text>
             </Button>
             <Menu>

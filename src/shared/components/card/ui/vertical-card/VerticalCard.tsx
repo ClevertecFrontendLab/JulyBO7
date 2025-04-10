@@ -1,5 +1,5 @@
-import { Box, Button, Card, Heading, Image, Text, VStack } from '@chakra-ui/react';
-import { FC, SVGProps } from 'react';
+import { Box, Button, Card, Heading, IconProps, Image, Text, VStack } from '@chakra-ui/react';
+import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
@@ -12,7 +12,7 @@ type HorizontalCardProps = {
     title: string;
     text: string;
 
-    BadgeIcon: FC<SVGProps<SVGSVGElement>>;
+    BadgeIcon: FC<IconProps>;
     badgeText: string;
     image?: string;
     alt?: string;

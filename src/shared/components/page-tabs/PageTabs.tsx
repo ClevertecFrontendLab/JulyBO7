@@ -1,8 +1,10 @@
-import { Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { Outlet } from 'react-router';
 
 import { SubMenuItem } from '~/widgets/menu/model/types/filters-types';
+
+import cls from './PageTabs.module.scss';
 
 type PageTabsProps = {
     onChangeTab: (index: number) => void;
@@ -19,18 +21,39 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             position='relative'
             variant='unstyled'
             mt='32px'
+            w='100%'
+            align='center'
         >
-            <TabList borderBottomWidth='1px' borderBottomColor='gray.200' borderBottomStyle='solid'>
+            <TabList
+                className={cls.tabs}
+                h={{ base: '30px', lg: '42px' }}
+                w={{ base: '100%', '2xl': '1006px' }}
+                overflowX='auto'
+                mb='12px'
+                justifyContent='start'
+                borderBottomWidth='1px'
+                borderBottomColor='gray.200'
+                borderBottomStyle='solid'
+            >
                 {items.map((item, idx) => (
-                    <Tab _selected={{ color: 'lime.600' }} key={idx}>
-                        {item.title}
+                    <Tab
+                        _selected={{
+                            color: 'lime.600',
+                            borderBottomWidth: '2px',
+                            borderBottomStyle: 'solid',
+                            borderBottomColor: 'lime.600',
+                        }}
+                        flexShrink={0}
+                        padding={{ base: '4px 16px', lg: '8px 16px' }}
+                        key={idx}
+                    >
+                        <Text textStyle={{ base: 'md', lg: 'm' }}>{item.title}</Text>
                     </Tab>
                 ))}
             </TabList>
-            <TabIndicator mt='-1.5px' height='2px' bg='lime.600' borderRadius='1px' />
             <TabPanels>
                 {items.map((_, idx) => (
-                    <TabPanel key={idx}>
+                    <TabPanel key={idx} padding='12px 0 0 0'>
                         <Outlet />
                     </TabPanel>
                 ))}

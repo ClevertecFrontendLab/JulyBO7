@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -29,9 +29,6 @@ export const VeganCuisinePage: FC = () => {
                 />
 
                 <PageTabs onChangeTab={onChangeTab} items={veganCuisineItems} />
-                <Button variant='solid' bg='lime.400' size='l' color='primaryColor'>
-                    Загрузить
-                </Button>
             </VStack>
             <PageFooter
                 title={veganPageData.footerPage.title}

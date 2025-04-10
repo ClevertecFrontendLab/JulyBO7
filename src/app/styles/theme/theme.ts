@@ -59,6 +59,12 @@ export const theme = extendTheme({
             lineHeight: '20px',
             fontFamily: 'Inter, sans-serif',
         },
+        md: {
+            fontSize: '14px',
+            fontWeight: 500,
+            lineHeight: '20px',
+            fontFamily: 'Inter, sans-serif',
+        },
         m: {
             fontSize: '16px',
             lineHeight: '24px',
