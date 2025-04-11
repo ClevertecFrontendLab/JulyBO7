@@ -1,32 +1,47 @@
-import { Box, BoxProps, IconProps, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 
+export enum BadgeTheme {
+    DEFAULT = 'default',
+    RECOMEND = 'recomend',
+}
+export enum BadgeColor {
+    PRIMARY = 'lime.50',
+    SECONDARY = 'lime.150',
+}
 type BadgeProps = {
-    Icon: FC<IconProps>;
+    image: string;
     text: string | number;
     style?: BoxProps;
+    theme?: BadgeTheme;
+    badgeColor?: BadgeColor;
 };
 
 export const Badge: FC<BadgeProps> = (props) => {
-    const { Icon, text, style } = props;
+    const {
+        image,
+        text,
+        style,
+        theme = BadgeTheme.DEFAULT,
+        badgeColor = BadgeColor.PRIMARY,
+    } = props;
 
     return (
         <Box
-            display='inline-flex'
+            display={
+                theme === BadgeTheme.RECOMEND ? { base: 'none', lg: 'inline-flex' } : 'inline-flex'
+            }
             alignItems='center'
-            h='24px'
-            bg='lime.50'
-            p={{ base: '2px 4px', lg: '2px 8px' }}
+            h={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
+            bg={badgeColor}
+            p={theme === BadgeTheme.RECOMEND ? '4px 8px' : { base: '2px 4px', lg: '2px 8px' }}
             borderRadius='4px'
-            // gap='6px'
-            // position={{ base: 'absolute', lg: 'static' }} = передавать в style
-            top={{ base: '8px' }}
-            left={{ base: '8px' }}
+            gap='2px'
             {...style}
         >
-            <Icon width='16px' height='16px' />
+            <Image src={image} h='16px' w='16px' />
 
-            <Text textStyle={{ base: 's', md: 'xs', lg: 's' }}>{text}</Text>
+            <Text textStyle='s'>{text}</Text>
         </Box>
     );
 };

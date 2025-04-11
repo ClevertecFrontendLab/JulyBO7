@@ -1,14 +1,4 @@
-import {
-    Box,
-    Button,
-    ButtonGroup,
-    Card,
-    Heading,
-    IconProps,
-    Image,
-    Stack,
-    Text,
-} from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, Heading, Image, Stack, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
@@ -22,7 +12,7 @@ type HorizontalCardProps = {
     text: string;
     onSave?: () => void;
     onCook?: () => void;
-    BadgeIcon: FC<IconProps>;
+    badgeImage: string;
     badgeText: string;
     image?: string;
     alt?: string;
@@ -31,7 +21,7 @@ type HorizontalCardProps = {
 };
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
-    const { title, onSave, onCook, text, BadgeIcon, badgeText, image, emojiCount, bookmarkCount } =
+    const { title, onSave, onCook, text, badgeImage, badgeText, image, emojiCount, bookmarkCount } =
         props;
 
     return (
@@ -62,7 +52,15 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 border='1px solid gray.200'
             >
                 <Box display='flex' justifyContent='space-between'>
-                    <Badge Icon={BadgeIcon} text={badgeText} />
+                    <Badge
+                        image={badgeImage}
+                        text={badgeText}
+                        style={{
+                            position: { base: 'absolute', lg: 'static' },
+                            top: { base: '8px' },
+                            left: { base: '8px' },
+                        }}
+                    />
                     <Box display='flex' gap='8px'>
                         <Button variant='withIcon' color='lime.600'>
                             <Bookmark width='12px' height='12px' />
@@ -84,22 +82,24 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                         textOverflow='ellipsis'
                         mb={{ base: '20px', lg: 0 }}
                         className={cls.title}
+                        textAlign='left'
                     >
                         {title}
                     </Heading>
                     <Text
                         display={{ base: 'none', lg: 'block' }}
-                        lineHeight='143%'
+                        textStyle='s'
                         marginTop='8px'
                         height='4.5em'
                         textOverflow='ellipsis'
+                        textAlign='left'
                         className={cls.text}
                     >
                         {text}
                     </Text>
                 </Box>
 
-                <ButtonGroup gap={{ base: '12px', lg: '8px' }} justifyContent='flex-end'>
+                <ButtonGroup gap={{ base: '12px', lg: '8px' }} justifyContent='flex-end' mt='auto'>
                     <Button variant='outline' size={{ base: 's', lg: 'm' }} onClick={onSave}>
                         <Bookmark />
                         <Text ml='8px' display={{ base: 'none', lg: 'block' }} fontWeight={600}>

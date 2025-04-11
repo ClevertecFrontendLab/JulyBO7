@@ -20,7 +20,12 @@ export const SecondDishesPage: FC = () => {
     ));
     return (
         <>
-            <Stack direction='row' wrap='wrap' columnGap='24px' rowGap='16px'>
+            <Stack
+                direction='row'
+                wrap='wrap'
+                columnGap={{ base: '16px', lg: '24px' }}
+                rowGap='16px'
+            >
                 {cards}
             </Stack>
             <Button variant='solid' bg='lime.400' size='l' color='primaryColor' mt='16px'>

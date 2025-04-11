@@ -86,7 +86,7 @@ export const theme = extendTheme({
             fontSize: '48px',
             lineHeight: '100%',
             fontWeight: 700,
-            // fontFamily: 'Inter, sans-serif',
+            fontFamily: 'Inter, sans-serif',
         },
     },
     breakpoints: {
@@ -174,6 +174,34 @@ export const theme = extendTheme({
         Heading: {
             baseStyle: {
                 fontFamily: 'Inter, sans-serif',
+                color: 'primaryColor',
+            },
+            variants: {
+                s: {
+                    fontWeight: 500,
+                    fontSize: '24px',
+                    lineHeight: '32px',
+                },
+                m: {
+                    fontWeight: 500,
+                    fontSize: '30px',
+                    lineHeight: '36px',
+                },
+                l: {
+                    fontWeight: 400,
+                    fontSize: '36px',
+                    lineHeight: '40px',
+                },
+                lm: {
+                    fontWeight: 500,
+                    fontSize: '36px',
+                    lineHeight: '40px',
+                },
+                xl: {
+                    fontWeight: 500,
+                    fontSize: '48px',
+                    lineHeight: '48px',
+                },
             },
         },
     },

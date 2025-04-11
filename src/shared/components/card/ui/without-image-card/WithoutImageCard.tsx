@@ -1,4 +1,4 @@
-import { Box, Button, Heading, IconProps, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
@@ -10,7 +10,7 @@ import cls from './WithoutImageCard.module.scss';
 export type WithoutImageCardProps = {
     title: string;
     text: string;
-    BadgeIcon: FC<IconProps>;
+    badgeImage: string;
     badgeText: string;
 
     bookmarkCount?: number;
@@ -18,7 +18,7 @@ export type WithoutImageCardProps = {
 };
 
 export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
-    const { title, text, BadgeIcon, bookmarkCount, emojiCount, badgeText } = props;
+    const { title, text, badgeImage, bookmarkCount, emojiCount, badgeText } = props;
 
     return (
         <VStack
@@ -64,7 +64,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                 w='100%'
                 mb={{ base: '12px', md: '14px', lg: '16px', '2xl': '24px' }}
             >
-                <Badge Icon={BadgeIcon} text={badgeText} style={{ bg: 'lime.50' }} />
+                <Badge image={badgeImage} text={badgeText} style={{ bg: 'lime.50' }} />
                 <Box display='flex' gap='8px'>
                     {bookmarkCount && (
                         <Button

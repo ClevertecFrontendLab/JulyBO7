@@ -30,7 +30,11 @@ type PageHeaderProps = {
 export const PageHeader: FC<PageHeaderProps> = (props) => {
     const { title, text } = props;
     return (
-        <VStack w={{ base: '328px', md: '727px' }} align='center'>
+        <VStack
+            w={{ base: '328px', md: '727px' }}
+            paddingTop={{ base: '16px', lg: '32px' }}
+            align='center'
+        >
             <Heading
                 mb={{ base: '16px', lg: '32px' }}
                 fontSize={{ base: '24px', lg: '2xl' }}

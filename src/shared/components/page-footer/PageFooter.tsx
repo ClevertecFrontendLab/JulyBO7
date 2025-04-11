@@ -23,24 +23,25 @@ export const PageFooter: FC<PageFooterProps> = (props) => {
         <VStack
             as='section'
             spacing={{ base: '16px', lg: '24px' }}
-            mt={{ base: '8px', lg: '24px' }}
+            pt={{ base: '8px', lg: '24px' }}
+            borderTop='1px solid rgba(0, 0, 0, 0.08)'
         >
             <Stack
                 w='100%'
-                border='1px solid red'
                 direction={{ base: 'column', lg: 'row' }}
                 justify='space-between'
+                gap={{ lg: '12px' }}
             >
                 <Heading
+                    w={{ lg: '278px', '2xl': 'auto' }}
                     mb={{ base: '16px', lg: '32px' }}
-                    fontSize={{ base: '24px', lg: '2xl' }}
-                    fontWeight={500}
-                    lineHeight={{ base: '133%', lg: '100%' }}
+                    variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}
+                    flexShrink={0}
                 >
                     {title}
                 </Heading>
                 <Text
-                    w={{ lg: '582px', '2xl': '668px' }}
+                    w={{ lg: '578px', '2xl': '668px' }}
                     color='gray.100'
                     textStyle={{ base: 's', lg: 'm' }}
                     mb={{ base: '16px', lg: '32px' }}
@@ -51,14 +52,14 @@ export const PageFooter: FC<PageFooterProps> = (props) => {
             <Stack
                 direction={{ base: 'column', md: 'row' }}
                 w='100%'
-                spacing={{ base: '12px', md: '16px', '2xl': '24px' }}
+                spacing={{ base: '12px', lg: '16px', '2xl': '24px' }}
             >
                 {withoutImageCardData.map((cardData, idx) => (
                     <WithoutImageCard
                         key={idx}
                         title={cardData.title}
                         text={cardData.text}
-                        BadgeIcon={cardData.BadgeIcon}
+                        badgeImage={cardData.badgeImage}
                         badgeText={cardData.badgeText}
                         bookmarkCount={cardData.bookmarkCount}
                         emojiCount={cardData.emojiCount}
@@ -66,7 +67,7 @@ export const PageFooter: FC<PageFooterProps> = (props) => {
                 ))}
                 <VStack spacing={{ base: '12px', md: '6px', lg: '12px' }}>
                     {withoutTextCardData.map((cardData, idx) => (
-                        <WithoutTextCard key={idx} text={cardData.text} Icon={cardData.Icon} />
+                        <WithoutTextCard key={idx} text={cardData.text} image={cardData.image} />
                     ))}
                 </VStack>
             </Stack>

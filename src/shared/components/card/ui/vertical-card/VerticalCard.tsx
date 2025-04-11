@@ -1,43 +1,49 @@
-import { Box, Button, Card, Heading, IconProps, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Card, CardProps, Heading, Image, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
-import Teftels from '~/shared/assets/images/image.jpg';
 
-import { Badge } from '../../../badge/ui/Badge';
+// import Teftels from '~/shared/assets/images/image.jpg';
+import { Badge, BadgeColor } from '../../../badge/ui/Badge';
 import cls from './VerticalCard.module.scss';
 
-type HorizontalCardProps = {
+type VerticalCardProps = {
     title: string;
     text: string;
-
-    BadgeIcon: FC<IconProps>;
+    badgeImage: string;
     badgeText: string;
     image?: string;
     alt?: string;
     bookmarkCount?: number;
     emojiCount?: number;
+    badgeColor?: BadgeColor;
+    style?: CardProps;
 };
 
-export const VerticalCard: FC<HorizontalCardProps> = (props) => {
+export const VerticalCard: FC<VerticalCardProps> = (props) => {
     const {
         alt,
         title,
         text,
-        BadgeIcon,
+        badgeImage,
         bookmarkCount,
         emojiCount,
         badgeText,
-        image = Teftels,
+        image,
+        badgeColor,
+        style,
     } = props;
 
     return (
         <Card
             as='article'
             borderRadius='8px'
+            position='relative'
             width={{ base: '158px', lg: '277px', '2xl': '322px' }}
             height={{ base: '220px', lg: '402px', '2xl': '414px' }}
+            flexShrink={0}
+            {...style}
         >
             <Image
                 width={{ base: '158px', lg: '279px', '2xl': '322px' }}
@@ -50,7 +56,7 @@ export const VerticalCard: FC<HorizontalCardProps> = (props) => {
             />
 
             <VStack
-                border='1px solid green'
+                border='1px solid rgba(0, 0, 0, 0.08)'
                 padding={{ base: '8px 8px 4px 8px', lg: '12px', '2xl': '16px 24px 20px 24px' }}
                 spacing={{ base: '8px', lg: '24px' }}
             >
@@ -82,17 +88,26 @@ export const VerticalCard: FC<HorizontalCardProps> = (props) => {
                     </Text>
                 </Box>
                 <Box display='flex' justifyContent='space-between' w='100%'>
-                    <Badge Icon={BadgeIcon} text={badgeText} style={{ bg: 'lime.150' }} />
+                    <Badge
+                        image={badgeImage}
+                        text={badgeText}
+                        badgeColor={badgeColor}
+                        style={{
+                            position: { base: 'absolute', lg: 'static' },
+                            top: '8px',
+                            left: '8px',
+                        }}
+                    />
                     <Box display='flex' gap='8px'>
                         {bookmarkCount && (
                             <Button variant='withIcon' color='lime.600'>
-                                <Bookmark width={12} height={12} />
+                                <Bookmark />
                                 <Text fontSize='12px'>123</Text>
                             </Button>
                         )}
                         {emojiCount && (
                             <Button variant='withIcon' color='lime.600'>
-                                <Emoji width={12} height={12} />
+                                <Emoji />
                                 <Text fontSize='12px'>12</Text>
                             </Button>
                         )}

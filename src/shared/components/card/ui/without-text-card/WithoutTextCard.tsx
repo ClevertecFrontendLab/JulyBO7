@@ -1,13 +1,13 @@
-import { Button, Heading, HStack, IconProps } from '@chakra-ui/react';
+import { Button, Heading, HStack, Image } from '@chakra-ui/react';
 import { FC } from 'react';
 
 export type WithoutTextCardProps = {
     text: string;
-    Icon: FC<IconProps>;
+    image: string;
 };
 
 export const WithoutTextCard: FC<WithoutTextCardProps> = (props) => {
-    const { text, Icon } = props;
+    const { text, image } = props;
 
     return (
         <HStack
@@ -20,7 +20,7 @@ export const WithoutTextCard: FC<WithoutTextCardProps> = (props) => {
             padding={{ base: '12px', md: '0 12px', lg: '0 0 0 0', '2xl': '16px 24px' }}
         >
             <HStack spacing={{ base: '8px', '2xl': '12px' }}>
-                <Icon />
+                <Image src={image} h='24px' w='24px' />
                 <Heading
                     fontSize='l'
                     fontWeight='500'
