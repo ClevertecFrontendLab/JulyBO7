@@ -47,6 +47,7 @@ export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
                     icon={<HamburgerIcon />}
                     border='none'
                     color='primaryColor'
+                    bg='transparent'
                 />
 
                 <MenuList>

@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 
 import { useGetPostsQuery } from '~/query/services/posts.ts';
+import { Footer } from '~/widgets/footer';
 import { Menu } from '~/widgets/menu';
 import { Navbar } from '~/widgets/navbar';
 import { Sidebar } from '~/widgets/sidebar/ui/Sidebar';
@@ -18,6 +19,7 @@ function App() {
                 <AppRouter />
                 <Sidebar />
             </Box>
+            <Footer />
         </Box>
     );
 }

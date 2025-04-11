@@ -28,7 +28,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
             borderWidth='1px'
             borderStyle='solid'
             borderRadius='8px'
-            padding={{ base: '8px 8px 4px 8px', lg: '12px', '2xl': '16px 24px 20px 24px' }}
+            padding={{ base: '12px', '2xl': '16px 24px 20px 24px' }}
             spacing={{ base: '8px', lg: '24px' }}
             h={{ base: '168px', lg: '180px', '2xl': '192px' }}
             w={{ base: '328px', md: '232px', lg: '282px', '2xl': '322px' }}
@@ -58,21 +58,12 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                     {text}
                 </Text>
             </Box>
-            <Box
-                display='flex'
-                justifyContent='space-between'
-                w='100%'
-                mb={{ base: '12px', md: '14px', lg: '16px', '2xl': '24px' }}
-            >
+            <Box display='flex' justifyContent='space-between' w='100%'>
                 <Badge image={badgeImage} text={badgeText} style={{ bg: 'lime.50' }} />
-                <Box display='flex' gap='8px'>
+                <Box display='flex' gap={{ base: '12px', md: '0', lg: '8px' }}>
                     {bookmarkCount && (
-                        <Button
-                            variant='withIcon'
-                            color='lime.600'
-                            w={{ base: '34px', md: '32px', lg: '34px' }}
-                        >
-                            <Bookmark width='12px' height='12px' />
+                        <Button variant='withIcon' color='lime.600'>
+                            <Bookmark />
                             <Text fontSize='12px'>{bookmarkCount}</Text>
                         </Button>
                     )}
@@ -83,7 +74,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                             padding={{ base: '0 4px', md: '0 2px', lg: '0 4px' }}
                             w={{ base: '34px', md: '32px', lg: '34px' }}
                         >
-                            <Emoji width='12px' height='12px' />
+                            <Emoji />
                             <Text fontSize='12px'>{emojiCount}</Text>
                         </Button>
                     )}

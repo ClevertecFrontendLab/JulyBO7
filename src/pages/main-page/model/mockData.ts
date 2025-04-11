@@ -1,9 +1,9 @@
-import frying from '~/shared/assets/images/icons/icons8-frying-pan-96 1.png';
-import international from '~/shared/assets/images/icons/icons8-international-food-96 1.png';
-import boil from '~/shared/assets/images/icons/icons8-кастрюля-96 2.png';
-import leaf from '~/shared/assets/images/icons/icons8-лавровый-лист-96 1.png';
-import bread from '~/shared/assets/images/icons/icons8-хлеб-и-скалка-96 1.png';
-import eggplant from '~/shared/assets/images/icons8-баклажан-96 1.png';
+import eggplant from '~/shared/assets/images/eggplant.png';
+import bread from '~/shared/assets/images/icons/bread.png';
+import frying from '~/shared/assets/images/icons/icons8-frying-pan.png';
+import international from '~/shared/assets/images/icons/icons8-international-food.png';
+import leaf from '~/shared/assets/images/icons/leaf.png';
+import pot from '~/shared/assets/images/icons/pot.png';
 import avatar1 from '~/shared/assets/images/main-page-images/Avatarblog.png';
 import avatar2 from '~/shared/assets/images/main-page-images/AvatarBlog2.png';
 import avatar3 from '~/shared/assets/images/main-page-images/Avatarblog3.png';
@@ -54,7 +54,7 @@ export const mainPageData = {
             image: solyanka,
             title: 'Солянка с грибами',
             text: 'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
-            badgeImage: boil,
+            badgeImage: pot,
             badgeText: 'Первые блюда',
             bookmarkCount: 1,
         },
@@ -192,7 +192,7 @@ export const mainPageData = {
             },
             {
                 text: 'Сырный суп с лапшой и брокколи',
-                image: boil,
+                image: pot,
             },
         ],
     },

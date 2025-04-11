@@ -4,7 +4,6 @@ import { FC } from 'react';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 
-// import Teftels from '~/shared/assets/images/image.jpg';
 import { Badge, BadgeColor } from '../../../badge/ui/Badge';
 import cls from './VerticalCard.module.scss';
 
@@ -49,8 +48,8 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                 width={{ base: '158px', lg: '279px', '2xl': '322px' }}
                 height={{ base: '128px', lg: '230px', '2xl': '230px' }}
                 objectFit='cover'
-                borderBottomLeftRadius='8px'
                 borderTopLeftRadius='8px'
+                borderTopRightRadius='8px'
                 src={image}
                 alt={alt}
             />
@@ -68,7 +67,6 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                         whiteSpace={{ base: 'wrap', lg: 'nowrap' }}
                         overflow='hidden'
                         textOverflow='ellipsis'
-                        // mb={{ base: '20px', lg: 0 }}
                         className={cls.title}
                     >
                         {title}
@@ -87,7 +85,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                         {text}
                     </Text>
                 </Box>
-                <Box display='flex' justifyContent='space-between' w='100%'>
+                <Box display='flex' alignItems='flex-start' justifyContent='space-between' w='100%'>
                     <Badge
                         image={badgeImage}
                         text={badgeText}
@@ -100,13 +98,13 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                     />
                     <Box display='flex' gap='8px'>
                         {bookmarkCount && (
-                            <Button variant='withIcon' color='lime.600'>
+                            <Button variant='withIcon' color='lime.600' h='24px'>
                                 <Bookmark />
                                 <Text fontSize='12px'>123</Text>
                             </Button>
                         )}
                         {emojiCount && (
-                            <Button variant='withIcon' color='lime.600'>
+                            <Button variant='withIcon' color='lime.600' h='24px'>
                                 <Emoji />
                                 <Text fontSize='12px'>12</Text>
                             </Button>

@@ -157,18 +157,29 @@ export const theme = extendTheme({
                     color: 'primaryColor',
                 },
                 withIcon: {
-                    height: '24px',
+                    h: '24px',
                     display: 'flex',
                     alignItems: 'center',
                     py: 0,
                     px: '4px',
                     gap: '6px',
                 },
-            },
+                menu: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: '10px 0',
+                    h: '84px',
+                    bg: 'inherit',
+                    border: 'none',
+                    color: 'primaryColor',
+                    gap: '4px',
+                },
 
-            defaultProps: {
-                size: 'm',
-                variant: 'outline',
+                defaultProps: {
+                    size: 'm',
+                    variant: 'outline',
+                },
             },
         },
         Heading: {

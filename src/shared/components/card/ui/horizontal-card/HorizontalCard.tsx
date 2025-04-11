@@ -62,12 +62,12 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                         }}
                     />
                     <Box display='flex' gap='8px'>
-                        <Button variant='withIcon' color='lime.600'>
-                            <Bookmark width='12px' height='12px' />
+                        <Button variant='withIcon' color='lime.600' h='24px'>
+                            <Bookmark />
                             <Text fontSize='12px'>{bookmarkCount}</Text>
                         </Button>
-                        <Button variant='withIcon' color='lime.600'>
-                            <Emoji width='12px' height='12px' />
+                        <Button variant='withIcon' color='lime.600' h='24px'>
+                            <Emoji />
                             <Text fontSize='12px'>{emojiCount}</Text>
                         </Button>
                     </Box>
