@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 
-import { subPageMockData } from '../../model/SubPageMockData';
+import { subPageMockData } from '../../model/subPageMockData';
 
 export const SecondDishesPage: FC = () => {
     const cards = subPageMockData.map((card, idx) => (
@@ -11,7 +11,7 @@ export const SecondDishesPage: FC = () => {
             key={idx}
             title={card.title}
             text={card.text}
-            BadgeIcon={card.BadgeIcon}
+            badgeImage={card.badgeImage}
             badgeText={card.badgeText}
             image={card.image}
             bookmarkCount={card.bookmarkCount}

@@ -7,7 +7,15 @@ import Write from '~/shared/assets/icons/components/Write';
 import avatar from '~/shared/assets/images/Avatar.png';
 
 export const Footer: FC = () => (
-    <HStack display={{ base: 'flex', lg: 'none' }} gap='0' h='84px' w='100%' bg='lime.50'>
+    <HStack
+        as='footer'
+        data-test-id='footer'
+        display={{ base: 'flex', lg: 'none' }}
+        gap='0'
+        h='84px'
+        w='100%'
+        bg='lime.50'
+    >
         <Button
             variant='menu'
             w={{ base: '90px', md: '192px' }}

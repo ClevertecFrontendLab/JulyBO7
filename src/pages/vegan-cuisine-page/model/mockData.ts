@@ -1,4 +1,6 @@
-import ChildTasty from '~/shared/assets/icons/components/Filter';
+import ChildTasty from '~/shared/assets/images/icons/icons8-child-tasty.png';
+import international from '~/shared/assets/images/icons/icons8-international-food.png';
+import leaf from '~/shared/assets/images/icons/leaf.png';
 
 export const veganPageData = {
     headerPage: {
@@ -12,7 +14,7 @@ export const veganPageData = {
             {
                 title: 'Бананово-молочное желе',
                 text: 'Молочное желе – это просто, вкусно и полезно, ведь для его приготовления в качестве основы используется молоко.',
-                BadgeIcon: ChildTasty,
+                badgeImage: ChildTasty,
                 badgeText: 'Детские блюда',
                 bookmarkCount: 1,
                 emojiCount: 1,
@@ -20,7 +22,7 @@ export const veganPageData = {
             {
                 title: 'Нежный сливочно-сырный крем для кексов',
                 text: 'Сливочно-сырным кремом можно украсить кексы, либо другую выпечку, а также этим кремом можно наполнить заварные пирожные.',
-                BadgeIcon: ChildTasty,
+                badgeImage: ChildTasty,
                 badgeText: 'Детские блюда',
                 bookmarkCount: 2,
                 emojiCount: 1,
@@ -29,15 +31,15 @@ export const veganPageData = {
         withoutTextCards: [
             {
                 text: 'Домашние сырные палочки',
-                Icon: ChildTasty,
+                image: ChildTasty,
             },
             {
                 text: 'Панкейки',
-                Icon: ChildTasty,
+                image: international,
             },
             {
                 text: 'Воздушное банановое печенье на сковороде',
-                Icon: ChildTasty,
+                image: leaf,
             },
         ],
     },

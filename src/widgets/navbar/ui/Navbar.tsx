@@ -25,6 +25,7 @@ export const Navbar: FC = () => {
 
     return (
         <HStack
+            data-test-id='header'
             as='header'
             w='100%'
             h={{ base: '64px', lg: '80px' }}

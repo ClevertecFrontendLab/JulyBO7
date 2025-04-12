@@ -14,7 +14,6 @@ export const Sidebar: FC = () => (
         display={{ base: 'none', lg: 'flex' }}
         w='208px'
         justify='space-between'
-        border='1px solid red'
         className={cls.sidebar}
     >
         <VStack justify='center' padding='16px 56px 16px 16px'>

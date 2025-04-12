@@ -1,16 +1,16 @@
-import BayLeaf from '~/shared/assets/icons/components/MenuItemBayLeaf';
-import BreadAndRollingPin from '~/shared/assets/icons/components/MenuItemBreadAndRollingPin';
-import ChildTasty from '~/shared/assets/icons/components/MenuItemChildTasty';
-import Grill from '~/shared/assets/icons/components/MenuItemDishwasher';
-import Eggplant from '~/shared/assets/icons/components/MenuItemEggplant';
-import FryingPan from '~/shared/assets/icons/components/MenuItemFryingPan';
-import InternationalFood from '~/shared/assets/icons/components/MenuItemInternationalFood';
-import Nutrition from '~/shared/assets/icons/components/MenuItemKitchen';
-import MortarAndPestle from '~/shared/assets/icons/components/MenuItemMortarAndPestle';
-import Paste from '~/shared/assets/icons/components/MenuItemPaste';
-import Pot from '~/shared/assets/icons/components/MenuItemPot';
-import Snacks from '~/shared/assets/icons/components/MenuItemSnacks';
-import TeaCup from '~/shared/assets/icons/components/MenuItemTeaCup';
+import Eggplant from '~/shared/assets/images/eggplant.png';
+import BreadAndRollingPin from '~/shared/assets/images/icons/bread.png';
+import Snacks from '~/shared/assets/images/icons/cup-of-tea.png';
+import TeaCup from '~/shared/assets/images/icons/cup-of-tea.png';
+import Nutrition from '~/shared/assets/images/icons/healthy.png';
+import ChildTasty from '~/shared/assets/images/icons/icons8-child-tasty.png';
+import FryingPan from '~/shared/assets/images/icons/icons8-frying-pan.png';
+import InternationalFood from '~/shared/assets/images/icons/icons8-international-food.png';
+import BayLeaf from '~/shared/assets/images/icons/leaf.png';
+import Grill from '~/shared/assets/images/icons/mortar.png';
+import MortarAndPestle from '~/shared/assets/images/icons/mortar.png';
+import Paste from '~/shared/assets/images/icons/pasta.png';
+import Pot from '~/shared/assets/images/icons/pot.png';
 import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
 
 import { MenuFilter, MenuItemData } from './types/filters-types';
@@ -21,10 +21,10 @@ export enum MenuItem {
     SECONDARY_DISHES = 'Вторые блюда',
     DESERTS = 'Десерты, выпечка',
     GRILL = 'Блюда на грилe',
-    VEGAN = 'Веганские блюда',
+    VEGAN = 'Веганская кухня',
     CHILDREN_DISHES = 'Детские блюда',
     MEDICAL_NUTRITION = 'Лечебное питание',
-    NATIONAL_DISHES = 'Национальные блюда',
+    NATIONAL_DISHES = 'Национальные',
     SAUCES = 'Соусы',
     PROVISIONS = 'Заготовки',
     DRINKS = 'Напитки',
@@ -51,7 +51,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.SALADS]}warm-salads`,
                 },
             ],
-            Icon: Eggplant,
+            icon: Eggplant,
             routePath: `${routePaths[AppRoutes.SALADS]}meet-salads`,
             title: MenuFilter.SALADS,
         },
@@ -82,7 +82,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.SNACKS]}fast-food`,
                 },
             ],
-            Icon: Snacks,
+            icon: Snacks,
             routePath: `${routePaths[AppRoutes.SNACKS]}meet-snacks`,
             title: MenuFilter.SNACKS,
         },
@@ -110,7 +110,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.FIRST_DISHES]}diet-soups`,
                 },
             ],
-            Icon: Pot,
+            icon: Pot,
             routePath: `${routePaths[AppRoutes.FIRST_DISHES]}meet-soups`,
             title: MenuFilter.FIRST_DISHES,
         },
@@ -166,7 +166,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}sushi`,
                 },
             ],
-            Icon: FryingPan,
+            icon: FryingPan,
             routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}meet`,
             title: MenuFilter.SECONDARY_DISHES,
         },
@@ -226,7 +226,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.DESERTS]}creams'`,
                 },
             ],
-            Icon: BreadAndRollingPin,
+            icon: BreadAndRollingPin,
             routePath: `${routePaths[AppRoutes.DESERTS]}pancakes`,
             title: MenuFilter.DESERTS,
         },
@@ -253,7 +253,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.GRILL]}vegetables`,
                 },
             ],
-            Icon: Grill,
+            icon: Grill,
             routePath: `${routePaths[AppRoutes.GRILL]}pork`,
             title: MenuFilter.GRILL,
         },
@@ -293,7 +293,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.VEGAN]}drinks`,
                 },
             ],
-            Icon: BayLeaf,
+            icon: BayLeaf,
             routePath: `${routePaths[AppRoutes.VEGAN]}snacks`,
             title: MenuFilter.VEGAN,
         },
@@ -328,7 +328,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}complementary-feeding-dishes`,
                 },
             ],
-            Icon: ChildTasty,
+            icon: ChildTasty,
             routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}secondary-dishes`,
             title: MenuFilter.CHILDREN_DISHES,
         },
@@ -403,7 +403,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}allergen-free`,
                 },
             ],
-            Icon: Nutrition,
+            icon: Nutrition,
             routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}children-diet`,
             title: MenuFilter.MEDICAL_NUTRITION,
         },
@@ -466,7 +466,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}another-cuisine`,
                 },
             ],
-            Icon: InternationalFood,
+            icon: InternationalFood,
             routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}greek-cuisine`,
             title: MenuFilter.NATIONAL_DISHES,
         },
@@ -485,7 +485,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.SAUCES]}marinades`,
                 },
             ],
-            Icon: MortarAndPestle,
+            icon: MortarAndPestle,
             routePath: `${routePaths[AppRoutes.SAUCES]}meet-sauces`,
             title: MenuFilter.SAUCES,
         },
@@ -525,7 +525,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.PROVISIONS]}from-fruits-and-berries-provisions`,
                 },
             ],
-            Icon: Paste,
+            icon: Paste,
             routePath: `${routePaths[AppRoutes.PROVISIONS]}meat-provisions`,
             title: MenuFilter.PROVISIONS,
         },
@@ -569,7 +569,7 @@ export const getMenuItems = () => {
                     routePath: `${routePaths[AppRoutes.DRINKS]}alcohol`,
                 },
             ],
-            Icon: TeaCup,
+            icon: TeaCup,
             routePath: `${routePaths[AppRoutes.DRINKS]}juices-and-fresh-juices`,
             title: MenuFilter.DRINKS,
         },
