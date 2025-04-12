@@ -20,16 +20,17 @@ import cls from './MenuArea.module.scss';
 
 export const MenuArea: FC = () => {
     const [isActivated, setIsActivated] = useState(false);
+
     const menuItems = getMenuItems();
     const navigate = useNavigate();
     const onClickMenuItem = (path: string) => () => navigate(path);
+
     const onActivateMenu = (expandedIndex: number) => {
         if (expandedIndex >= 0) {
             setIsActivated(true);
         } else {
             setIsActivated(false);
         }
-        console.log('expandedIndex: ', expandedIndex);
     };
 
     const accordeonItems = menuItems.map((menuItem, idx) => (
@@ -93,6 +94,7 @@ export const MenuArea: FC = () => {
             padding={isActivated ? '10px 4px 10px 10px' : '10px 16px 10px 10px'}
             borderRadius='12px'
             overflowY='auto'
+            overflowX='hidden'
             boxShadow={
                 isActivated
                     ? '0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1)'

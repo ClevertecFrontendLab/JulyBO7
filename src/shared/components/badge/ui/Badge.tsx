@@ -36,7 +36,11 @@ export const Badge: FC<BadgeProps> = (props) => {
             alignItems='center'
             h={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
             bg={badgeColor}
-            p={theme === BadgeTheme.RECOMEND ? '4px 8px' : { base: '2px 4px', lg: '2px 8px' }}
+            p={
+                theme === BadgeTheme.RECOMEND
+                    ? '4px 8px'
+                    : { base: '2px 4px', md: '0', lg: '2px 8px' }
+            }
             borderRadius='4px'
             gap='2px'
             {...style}

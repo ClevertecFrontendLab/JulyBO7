@@ -113,6 +113,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                         noOfLines={3}
                         textAlign='left'
                         position={{ base: 'absolute', lg: 'static' }}
+                        color={{ base: 'transparent', lg: 'primaryColor' }}
                         top='-1000%'
                     >
                         {text}

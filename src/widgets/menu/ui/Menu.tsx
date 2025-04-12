@@ -7,7 +7,7 @@ import { MenuArea } from './menu-area/MenuArea';
 
 export const Menu: FC = () => (
     <Box
-        w='256px'
+        w='258px'
         display={{ base: 'none', lg: 'flex' }}
         flexDirection='column'
         justifyContent='space-between'

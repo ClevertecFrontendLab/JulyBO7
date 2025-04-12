@@ -75,6 +75,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                         marginTop='8px'
                         height='4.5em'
                         position={{ base: 'absolute', lg: 'static' }}
+                        color={{ base: 'transparent', lg: 'primaryColor' }}
                         top='-1000%'
                     >
                         {text}
