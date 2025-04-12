@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { RouteProps } from 'react-router';
 
+import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
 import {
     BakeryPage,
@@ -16,6 +17,7 @@ import { SideDishesPage } from '~/pages/vegan-cuisine-page/ui/side-dishes-page/S
 
 export enum AppRoutes {
     MAIN = 'main',
+    JUICIEST = 'juiciest',
     VEGAN = 'vegan-dishes',
     SALADS = 'salads',
     SNACKS = 'snacks',
@@ -38,6 +40,7 @@ export type RoutePaths = {
 
 export const routePaths: RoutePaths = {
     [AppRoutes.MAIN]: '/',
+    [AppRoutes.JUICIEST]: '/juiciest',
     [AppRoutes.VEGAN]: '/vegan-dishes/',
     [AppRoutes.CHILDREN_DISHES]: '/children-dishes/',
     [AppRoutes.DESERTS]: '/deserts-and-bakery/',
@@ -65,6 +68,11 @@ export const routeConfig: RouteConfig[] = [
         path: routePaths[AppRoutes.MAIN],
         element: <MainPage />,
     },
+    {
+        path: routePaths[AppRoutes.JUICIEST],
+        element: <JuiciestPage />,
+    },
+
     {
         path: `${routePaths[AppRoutes.VEGAN]}`,
         element: <VeganCuisinePage />,

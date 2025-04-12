@@ -1,4 +1,4 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import { Tab, TabList, TabPanel, TabPanels, Tabs, TabsProps, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { Outlet } from 'react-router';
 
@@ -10,10 +10,11 @@ type PageTabsProps = {
     onChangeTab: (index: number) => void;
     items: SubMenuItem[];
     defaultTab?: number;
+    style?: TabsProps;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
-    const { onChangeTab, items, defaultTab } = props;
+    const { onChangeTab, items, defaultTab, style } = props;
 
     return (
         <Tabs
@@ -25,6 +26,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             mt='32px'
             w='100%'
             align='center'
+            {...style}
         >
             <TabList
                 className={cls.tabs}

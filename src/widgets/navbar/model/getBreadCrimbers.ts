@@ -1,13 +1,25 @@
+import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
 import { getMenuItems } from '~/widgets/menu/model/getMenuItems';
 
 import { BreadCrumbItem } from '../ui/bread-crumb/BreadCrumb';
+
+const menuItems = getMenuItems();
+
+const mapPathTitle = [
+    ...menuItems,
+    {
+        routePath: `${routePaths[AppRoutes.JUICIEST]}`,
+        title: 'Самое сочное',
+        items: [],
+    },
+];
 
 export const getBreadCrimbers = (path: string) => {
     const breadCrimbers: BreadCrumbItem[] = [{ text: 'Главная', path: '/' }];
 
     const currentPathSegments = path.split('/');
-    const menuItems = getMenuItems();
-    const currentMenuItem = menuItems.find(
+
+    const currentMenuItem = mapPathTitle.find(
         (item) => item.routePath.split('/')[1] === currentPathSegments[1],
     );
 
