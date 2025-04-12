@@ -5,7 +5,6 @@ import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 
 import { Badge, BadgeColor } from '../../../badge/ui/Badge';
-import cls from './VerticalCard.module.scss';
 
 type VerticalCardProps = {
     title: string;
@@ -63,24 +62,20 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                     <Heading
                         fontSize={{ base: 'm', lg: 'l', '2xl': 'xl' }}
                         fontWeight={500}
+                        noOfLines={{ base: 2, lg: 1 }}
                         lineHeight={{ base: '150%', lg: '156%', '2xl': '140%' }}
-                        whiteSpace={{ base: 'wrap', lg: 'nowrap' }}
-                        overflow='hidden'
-                        textOverflow='ellipsis'
-                        className={cls.title}
                     >
                         {title}
                     </Heading>
                     <Text
-                        display={{ base: 'none', lg: 'block' }}
                         lineHeight='143%'
                         fontSize='s'
-                        textOverflow='ellipsis'
-                        overflow='hidden'
+                        noOfLines={3}
                         fontWeight={400}
                         marginTop='8px'
                         height='4.5em'
-                        className={cls.text}
+                        position={{ base: 'absolute', lg: 'static' }}
+                        top='-1000%'
                     >
                         {text}
                     </Text>

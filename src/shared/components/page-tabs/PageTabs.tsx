@@ -9,16 +9,16 @@ import cls from './PageTabs.module.scss';
 type PageTabsProps = {
     onChangeTab: (index: number) => void;
     items: SubMenuItem[];
-    defaultTab?: number;
+    tabIndex?: number;
     style?: TabsProps;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
-    const { onChangeTab, items, defaultTab, style } = props;
+    const { onChangeTab, items, tabIndex, style } = props;
 
     return (
         <Tabs
-            defaultIndex={defaultTab}
+            index={tabIndex}
             color='lime.800'
             onChange={onChangeTab}
             position='relative'

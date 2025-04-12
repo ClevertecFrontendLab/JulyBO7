@@ -15,6 +15,9 @@ export const Sidebar: FC = () => (
         w='208px'
         justify='space-between'
         className={cls.sidebar}
+        position='fixed'
+        right='0'
+        top='80px'
     >
         <VStack justify='center' padding='16px 56px 16px 16px'>
             <Button

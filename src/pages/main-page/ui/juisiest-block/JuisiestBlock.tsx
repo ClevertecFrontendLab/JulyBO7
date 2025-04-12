@@ -20,6 +20,7 @@ export const JuisiestBlock: FC = () => {
             image={data.image}
             bookmarkCount={data.bookmarkCount}
             emojiCount={data.emojiCount}
+            recomend={data.recomend}
         />
     ));
     return (

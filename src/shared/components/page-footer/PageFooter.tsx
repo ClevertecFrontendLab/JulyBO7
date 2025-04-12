@@ -25,7 +25,7 @@ export const PageFooter: FC<PageFooterProps> = (props) => {
             spacing={{ base: '16px', lg: '24px' }}
             pt={{ base: '8px', lg: '24px' }}
             borderTop='1px solid rgba(0, 0, 0, 0.08)'
-            mb={{ base: '26px', md: '16px' }}
+            mb={{ base: '16px', lg: '0' }}
             mt={{ base: '32px', lg: '40px' }}
         >
             <Stack

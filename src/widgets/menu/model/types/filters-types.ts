@@ -5,7 +5,7 @@ export enum MenuFilter {
     SECONDARY_DISHES = 'Вторые блюда',
     DESERTS = 'Десерты, выпечка',
     GRILL = 'Блюда на грилe',
-    VEGAN = 'Веганские блюда',
+    VEGAN = 'Веганская кухня',
     CHILDREN_DISHES = 'Детские блюда',
     MEDICAL_NUTRITION = 'Лечебное питание',
     NATIONAL_DISHES = 'Национальные',

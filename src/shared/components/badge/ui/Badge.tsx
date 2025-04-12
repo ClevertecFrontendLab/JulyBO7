@@ -26,6 +26,8 @@ export const Badge: FC<BadgeProps> = (props) => {
         badgeColor = BadgeColor.PRIMARY,
     } = props;
 
+    const badgeText = theme === BadgeTheme.RECOMEND ? `${text} рекомендует` : text;
+
     return (
         <Box
             display={
@@ -40,8 +42,7 @@ export const Badge: FC<BadgeProps> = (props) => {
             {...style}
         >
             <Image src={image} h='16px' w='16px' />
-
-            <Text textStyle='s'>{text}</Text>
+            <Text textStyle='s'>{badgeText}</Text>
         </Box>
     );
 };

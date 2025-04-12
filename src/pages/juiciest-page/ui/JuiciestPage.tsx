@@ -9,22 +9,23 @@ import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { juiciestPageData } from '../model/mockData';
 
 export const JuiciestPage: FC = () => {
-    const cards = juiciestPageData.content.map((card, idx) => (
+    const cards = juiciestPageData.content.map((data, idx) => (
         <HorizontalCard
             key={idx}
-            title={card.title}
-            text={card.text}
-            badgeImage={card.badgeImage}
-            badgeText={card.badgeText}
-            image={card.image}
-            bookmarkCount={card.bookmarkCount}
-            emojiCount={card.emojiCount}
+            title={data.title}
+            text={data.text}
+            badgeImage={data.badgeImage}
+            badgeText={data.badgeText}
+            image={data.image}
+            bookmarkCount={data.bookmarkCount}
+            emojiCount={data.emojiCount}
+            recomend={data.recomend}
         />
     ));
 
     return (
         <Page>
-            <VStack align='center' mt='32px'>
+            <VStack align='center'>
                 <PageHeader title={juiciestPageData.headerPage.title} />
             </VStack>
             <Stack

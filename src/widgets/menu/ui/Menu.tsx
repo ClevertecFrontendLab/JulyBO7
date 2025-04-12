@@ -15,6 +15,9 @@ export const Menu: FC = () => (
         className={cls.menu}
         flexShrink={0}
         boxShadow='0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12)'
+        position='fixed'
+        left='0'
+        top='80px'
     >
         <MenuArea />
         <Footer />

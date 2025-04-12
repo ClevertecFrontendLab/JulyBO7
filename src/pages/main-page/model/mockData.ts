@@ -112,6 +112,7 @@ export const mainPageData = {
             emojiCount: 287,
             recomend: {
                 user: 'Елена Высоцкая',
+                avatar: avatar1,
             },
         },
         {
@@ -124,6 +125,7 @@ export const mainPageData = {
             emojiCount: 342,
             recomend: {
                 user: 'Alex Cook',
+                avatar: avatar2,
             },
         },
         {
@@ -136,6 +138,7 @@ export const mainPageData = {
             emojiCount: 324,
             recomend: {
                 user: 'Alex Cook',
+                avatar: avatar2,
             },
         },
     ],

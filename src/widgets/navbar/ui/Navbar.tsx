@@ -32,6 +32,10 @@ export const Navbar: FC = () => {
             padding={{ base: '8px 16px', md: '8px 20px', lg: '16px 56px 16px 16px' }}
             bg='lime.50'
             justify='space-between'
+            position='fixed'
+            left='0'
+            top='0'
+            zIndex='100'
         >
             <Box as='nav' display='flex' alignItems='center' h='100%'>
                 <ChakraLink

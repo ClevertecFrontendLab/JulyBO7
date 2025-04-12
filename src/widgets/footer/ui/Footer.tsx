@@ -15,6 +15,11 @@ export const Footer: FC = () => (
         h='84px'
         w='100%'
         bg='lime.50'
+        position='fixed'
+        bottom='0%'
+        // left='0'
+        // right='0'
+        zIndex='100'
     >
         <Button
             variant='menu'

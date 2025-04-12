@@ -4,8 +4,7 @@ import { FC } from 'react';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 
-import { Badge } from '../../../badge/ui/Badge';
-import cls from './HorizontalCard.module.scss';
+import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
 type HorizontalCardProps = {
     title: string;
@@ -18,11 +17,22 @@ type HorizontalCardProps = {
     alt?: string;
     bookmarkCount?: number;
     emojiCount?: number;
+    recomend?: { user: string; avatar: string };
 };
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
-    const { title, onSave, onCook, text, badgeImage, badgeText, image, emojiCount, bookmarkCount } =
-        props;
+    const {
+        title,
+        onSave,
+        onCook,
+        text,
+        badgeImage,
+        badgeText,
+        image,
+        emojiCount,
+        bookmarkCount,
+        recomend,
+    } = props;
 
     return (
         <Card
@@ -45,6 +55,19 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 alt='Noodles with chicken'
             />
 
+            {recomend && (
+                <Badge
+                    theme={BadgeTheme.RECOMEND}
+                    image={recomend.avatar}
+                    text={recomend.user}
+                    badgeColor={BadgeColor.SECONDARY}
+                    style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '24px',
+                    }}
+                />
+            )}
             <Stack
                 padding={{ base: '8px 8px 4px 8px', lg: '20px 24px' }}
                 spacing={{ base: 0, lg: '24px' }}
@@ -77,23 +100,20 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                     <Heading
                         fontSize={{ base: 'm', lg: 'xl' }}
                         fontWeight={500}
-                        whiteSpace={{ base: 'wrap', lg: 'nowrap' }}
-                        overflow='hidden'
-                        textOverflow='ellipsis'
+                        noOfLines={{ base: 2, lg: 1 }}
                         mb={{ base: '20px', lg: 0 }}
-                        className={cls.title}
                         textAlign='left'
                     >
                         {title}
                     </Heading>
                     <Text
-                        display={{ base: 'none', lg: 'block' }}
                         textStyle='s'
                         marginTop='8px'
                         height='4.5em'
-                        textOverflow='ellipsis'
+                        noOfLines={3}
                         textAlign='left'
-                        className={cls.text}
+                        position={{ base: 'absolute', lg: 'static' }}
+                        top='-1000%'
                     >
                         {text}
                     </Text>
