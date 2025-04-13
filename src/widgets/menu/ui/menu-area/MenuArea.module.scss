@@ -1,0 +1,22 @@
+
+.link{
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    
+    // span{
+    //     width: 1px;
+    //     height: 24px;
+    //     background-color: #c4ff61;
+    //     transition: width 0.2s;
+    // }
+}
+.activeLink{
+    span{
+        width: 8px;
+    }
+    p{
+        font-weight: 700;
+    }
+}
