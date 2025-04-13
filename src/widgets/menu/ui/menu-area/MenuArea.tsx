@@ -74,7 +74,13 @@ export const MenuArea: FC = () => {
                                     }
                                     to={item.routePath}
                                 >
-                                    <Text as='span' />
+                                    <Text
+                                        as='span'
+                                        width='1px'
+                                        height='24px'
+                                        bg='#c4ff61'
+                                        transition='width 0.2s'
+                                    />
                                     <Text textStyle='m'>{item.title}</Text>
                                 </NavLink>
                             </Box>
