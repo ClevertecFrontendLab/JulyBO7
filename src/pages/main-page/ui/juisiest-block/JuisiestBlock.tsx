@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
+import { routePaths } from '~/shared/config/route-config/router';
 
 import { mainPageData } from '../../model/mockData';
 
@@ -29,7 +29,7 @@ export const JuisiestBlock: FC = () => {
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
                 <Button
                     data-test-id='juiciest-link'
-                    onClick={() => navigate(routePaths[AppRoutes.JUICIEST])}
+                    onClick={() => navigate(routePaths.juiciest)}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
                     variant='solid'
@@ -53,7 +53,7 @@ export const JuisiestBlock: FC = () => {
                 {juiciestCards}
                 <Button
                     data-test-id='juiciest-link-mobile'
-                    onClick={() => navigate(routePaths[AppRoutes.JUICIEST])}
+                    onClick={() => navigate(routePaths.juiciest)}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'
                     variant='solid'

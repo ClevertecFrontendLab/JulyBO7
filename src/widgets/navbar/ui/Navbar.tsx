@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router';
 import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
 import avatar from '~/shared/assets/images/Avatar.png';
-import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
+import { routePaths } from '~/shared/config/route-config/router';
 
 import { getBreadCrimbers } from '../model/getBreadCrimbers';
 import { AvatarBlock } from './avatar-block/AvatarBlock';
@@ -40,7 +40,7 @@ export const Navbar: FC = () => {
             <Box as='nav' display='flex' alignItems='center' h='100%'>
                 <ChakraLink
                     as={Link}
-                    to={routePaths[AppRoutes.MAIN]}
+                    to={routePaths.main}
                     display='flex'
                     alignItems='center'
                     gap='7px'

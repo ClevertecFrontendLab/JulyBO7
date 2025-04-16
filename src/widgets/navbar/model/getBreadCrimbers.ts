@@ -1,5 +1,5 @@
-import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
-import { getMenuItems } from '~/widgets/menu/model/getMenuItems';
+import { routePaths } from '~/shared/config/route-config/router';
+import { getMenuItems } from '~/shared/lib/getMenuItems';
 
 import { BreadCrumbItem } from '../ui/bread-crumb/BreadCrumb';
 
@@ -8,7 +8,7 @@ const menuItems = getMenuItems();
 const mapPathTitle = [
     ...menuItems,
     {
-        routePath: `${routePaths[AppRoutes.JUICIEST]}`,
+        routePath: `${routePaths.juiciest}`,
         title: 'Самое сочное',
         items: [],
     },

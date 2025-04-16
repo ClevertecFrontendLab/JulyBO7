@@ -11,567 +11,600 @@ import Grill from '~/shared/assets/images/icons/mortar.png';
 import MortarAndPestle from '~/shared/assets/images/icons/mortar.png';
 import Paste from '~/shared/assets/images/icons/pasta.png';
 import Pot from '~/shared/assets/images/icons/pot.png';
-import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
+import { routePaths } from '~/shared/config/route-config/router';
+import { Category, SubCategory } from '~/shared/types/categories';
 
-import { MenuFilter, MenuItemData } from './types/filters-types';
-export enum MenuItem {
-    SALADS = 'Салаты',
-    SNACKS = 'Закуски',
-    FIRST_DISHES = 'Первые блюда',
-    SECONDARY_DISHES = 'Вторые блюда',
-    DESERTS = 'Десерты, выпечка',
-    GRILL = 'Блюда на грилe',
-    VEGAN = 'Веганская кухня',
-    CHILDREN_DISHES = 'Детские блюда',
-    MEDICAL_NUTRITION = 'Лечебное питание',
-    NATIONAL_DISHES = 'Национальные',
-    SAUCES = 'Соусы',
-    PROVISIONS = 'Заготовки',
-    DRINKS = 'Напитки',
-}
+export type SubMenuItem = {
+    title: string;
+    routePath: string;
+    subCategory?: SubCategory;
+};
+export type MenuItem = {
+    items: SubMenuItem[];
+    icon: string;
+    title: string;
+    routePath: string;
+    category: Category;
+};
+export type MenuItems = MenuItem[];
 
 export const getMenuItems = () => {
-    const menuItems: MenuItemData[] = [
+    const menuItems: MenuItems = [
         {
             items: [
                 {
                     title: 'Мясные салаты',
-                    routePath: `${routePaths[AppRoutes.SALADS]}meet-salads`,
+                    routePath: `${routePaths.salads}meet-salads`,
+                    subCategory: 'meet-salads',
                 },
                 {
                     title: 'Рыбные салаты',
-                    routePath: `${routePaths[AppRoutes.SALADS]}fish-salads`,
+                    routePath: `${routePaths.salads}fish-salads`,
+                    subCategory: 'fish-salads',
                 },
                 {
                     title: 'Овощные салаты',
-                    routePath: `${routePaths[AppRoutes.SALADS]}vegetable-salads`,
+                    routePath: `${routePaths.salads}vegetable-salads`,
+                    subCategory: 'vegetable-salads',
                 },
                 {
                     title: 'Теплые салаты',
-                    routePath: `${routePaths[AppRoutes.SALADS]}warm-salads`,
+                    routePath: `${routePaths.salads}warm-salads`,
+                    subCategory: 'warm-salads',
                 },
             ],
             icon: Eggplant,
-            routePath: `${routePaths[AppRoutes.SALADS]}meet-salads`,
-            title: MenuFilter.SALADS,
+            routePath: `${routePaths.salads}meet-salads`,
+            title: 'Салаты',
+            category: 'salads',
         },
         {
             items: [
                 {
                     title: 'Мясные закуски',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}meet-snacks`,
+                    routePath: `${routePaths.snacks}meet-snacks`,
+                    subCategory: 'meet-snacks',
                 },
                 {
                     title: 'Рыбные закуски',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}fish-snacks`,
+                    routePath: `${routePaths.snacks}fish-snacks`,
+                    subCategory: 'fish-snacks',
                 },
                 {
                     title: 'Овощные закуски',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}vegetable-snacks`,
+                    routePath: `${routePaths.snacks}vegetable-snacks`,
+                    subCategory: 'vegetable-snacks',
                 },
                 {
                     title: 'Теплые закуски',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}warm-snacks`,
+                    routePath: `${routePaths.snacks}warm-snacks`,
+                    subCategory: 'warm-snacks',
                 },
                 {
                     title: 'Бутерброды',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}sandwiches`,
+                    routePath: `${routePaths.snacks}sandwiches`,
+                    subCategory: 'sandwiches',
                 },
                 {
                     title: 'Фастфуд',
-                    routePath: `${routePaths[AppRoutes.SNACKS]}fast-food`,
+                    routePath: `${routePaths.snacks}fast-food`,
+                    subCategory: 'fast-food',
                 },
             ],
             icon: Snacks,
-            routePath: `${routePaths[AppRoutes.SNACKS]}meet-snacks`,
-            title: MenuFilter.SNACKS,
+            routePath: `${routePaths.snacks}meet-snacks`,
+            title: 'Закуски',
+            category: 'snacks',
         },
         {
             items: [
                 {
                     title: 'Мясные супы',
-                    routePath: `${routePaths[AppRoutes.FIRST_DISHES]}meet-soups`,
+                    routePath: `${routePaths['first-dish']}meet-soups`,
+                    subCategory: 'meet-soups',
                 },
 
                 {
                     title: 'Овощные супы',
-                    routePath: `${routePaths[AppRoutes.FIRST_DISHES]}vegetable-soups`,
+                    routePath: `${routePaths['first-dish']}vegetable-soups`,
+                    subCategory: 'vegetable-soups',
                 },
                 {
                     title: 'Бульоны',
-                    routePath: `${routePaths[AppRoutes.FIRST_DISHES]}broths`,
+                    routePath: `${routePaths['first-dish']}broths`,
+                    subCategory: 'broths',
                 },
                 {
                     title: 'Холодные супы',
-                    routePath: `${routePaths[AppRoutes.FIRST_DISHES]}cold-soups`,
+                    routePath: `${routePaths['first-dish']}cold-soups`,
+                    subCategory: 'cold-soups',
                 },
                 {
                     title: 'Диетические супы',
-                    routePath: `${routePaths[AppRoutes.FIRST_DISHES]}diet-soups`,
+                    routePath: `${routePaths['first-dish']}diet-soups`,
+                    subCategory: 'diet-soups',
                 },
             ],
             icon: Pot,
-            routePath: `${routePaths[AppRoutes.FIRST_DISHES]}meet-soups`,
-            title: MenuFilter.FIRST_DISHES,
+            routePath: `${routePaths['first-dish']}meet-soups`,
+            title: 'Первые блюда',
+            category: 'first-dish',
         },
         {
             items: [
                 {
                     title: 'Мясные',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}meet`,
+                    routePath: `${routePaths['second-dish']}meet`,
                 },
 
                 {
                     title: 'Рыбные',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}fish`,
+                    routePath: `${routePaths['second-dish']}fish`,
                 },
                 {
                     title: 'Овощные',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}vegetables`,
+                    routePath: `${routePaths['second-dish']}vegetables`,
                 },
                 {
                     title: 'Из птицы',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}poultry`,
+                    routePath: `${routePaths['second-dish']}poultry`,
                 },
                 {
                     title: 'Из грибов',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}mashroom`,
+                    routePath: `${routePaths['second-dish']}mashroom`,
                 },
                 {
                     title: 'Из субпродуктов',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}offal`,
+                    routePath: `${routePaths['second-dish']}offal`,
                 },
                 {
                     title: 'На пару',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}for-a-couple`,
+                    routePath: `${routePaths['second-dish']}for-a-couple`,
                 },
                 {
                     title: 'Пельмени, вареники',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}dumplings`,
+                    routePath: `${routePaths['second-dish']}dumplings`,
                 },
                 {
                     title: 'Мучные гарниры',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}flour-side-dishes`,
+                    routePath: `${routePaths['second-dish']}flour-side-dishes`,
                 },
                 {
                     title: 'Овощные гарниры',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}vegetable-garnish`,
+                    routePath: `${routePaths['second-dish']}vegetable-garnish`,
                 },
                 {
                     title: 'Пицца',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}pizza`,
+                    routePath: `${routePaths['second-dish']}pizza`,
                 },
                 {
                     title: 'Суши',
-                    routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}sushi`,
+                    routePath: `${routePaths['second-dish']}sushi`,
                 },
             ],
             icon: FryingPan,
-            routePath: `${routePaths[AppRoutes.SECONDARY_DISHES]}meet`,
-            title: MenuFilter.SECONDARY_DISHES,
+            routePath: `${routePaths['second-dish']}meet`,
+            title: 'Вторые блюда',
+            category: 'second-dish',
         },
         {
             items: [
                 {
                     title: 'Блины и оладьи',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}pancakes`,
+                    routePath: `${routePaths['desert-bakery']}pancakes`,
                 },
                 {
                     title: 'Пироги и пончики',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}pies-and-donuts`,
+                    routePath: `${routePaths['desert-bakery']}pies-and-donuts`,
                 },
                 {
                     title: 'Торты',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}cakes`,
+                    routePath: `${routePaths['desert-bakery']}cakes`,
                 },
                 {
                     title: 'Рулеты',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}rolls`,
+                    routePath: `${routePaths['desert-bakery']}rolls`,
                 },
                 {
                     title: 'Кексы и маффины',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}cupcakes-and-Muffins`,
+                    routePath: `${routePaths['desert-bakery']}cupcakes-and-Muffins`,
                 },
                 {
                     title: 'Сырники и ватрушки',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}cheesecakes-and-vatrushki`,
+                    routePath: `${routePaths['desert-bakery']}cheesecakes-and-vatrushki`,
                 },
                 {
                     title: 'Из слоеного теста',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}from-puff-pastry`,
+                    routePath: `${routePaths['desert-bakery']}from-puff-pastry`,
                 },
                 {
                     title: 'Из заварного теста',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}from-choux-pastry`,
+                    routePath: `${routePaths['desert-bakery']}from-choux-pastry`,
                 },
                 {
                     title: 'Из дрожжевого теста',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}from-yeast-dough`,
+                    routePath: `${routePaths['desert-bakery']}from-yeast-dough`,
                 },
                 {
                     title: 'Булочки и сдоба',
 
-                    routePath: `${routePaths[AppRoutes.DESERTS]}buns-and-pastries`,
+                    routePath: `${routePaths['desert-bakery']}buns-and-pastries`,
                 },
                 {
                     title: 'Хлеб',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}bread`,
+                    routePath: `${routePaths['desert-bakery']}bread`,
                 },
                 {
                     title: 'Тесто на пиццу',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}pizza-dough',`,
+                    routePath: `${routePaths['desert-bakery']}pizza-dough',`,
                 },
                 {
                     title: 'Кремы',
-                    routePath: `${routePaths[AppRoutes.DESERTS]}creams'`,
+                    routePath: `${routePaths['desert-bakery']}creams'`,
                 },
             ],
             icon: BreadAndRollingPin,
-            routePath: `${routePaths[AppRoutes.DESERTS]}pancakes`,
-            title: MenuFilter.DESERTS,
+            routePath: `${routePaths['desert-bakery']}pancakes`,
+            title: 'Десерты, выпечка',
+            category: 'desert-bakery',
         },
         {
             items: [
                 {
                     title: 'Свинина',
-                    routePath: `${routePaths[AppRoutes.GRILL]}pork`,
+                    routePath: `${routePaths.grill}pork`,
                 },
                 {
                     title: 'Птица',
-                    routePath: `${routePaths[AppRoutes.GRILL]}bird`,
+                    routePath: `${routePaths.grill}bird`,
                 },
                 {
                     title: 'Рыба',
-                    routePath: `${routePaths[AppRoutes.GRILL]}fish`,
+                    routePath: `${routePaths.grill}fish`,
                 },
                 {
                     title: 'Грибы',
-                    routePath: `${routePaths[AppRoutes.GRILL]}mashroom`,
+                    routePath: `${routePaths.grill}mashroom`,
                 },
                 {
                     title: 'Овощи',
-                    routePath: `${routePaths[AppRoutes.GRILL]}vegetables`,
+                    routePath: `${routePaths.grill}vegetables`,
                 },
             ],
             icon: Grill,
-            routePath: `${routePaths[AppRoutes.GRILL]}pork`,
-            title: MenuFilter.GRILL,
+            routePath: `${routePaths.grill}pork`,
+            title: 'Блюда на грилe',
+            category: 'grill',
         },
-
         {
             items: [
                 {
                     title: 'Закуски',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}snacks`,
+                    routePath: `${routePaths.vegan}snacks`,
+                    subCategory: 'snacks',
                 },
                 {
                     title: 'Первые блюда',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}first-dishes`,
+                    routePath: `${routePaths.vegan}first-dish`,
+                    subCategory: 'first-dish',
                 },
                 {
                     title: 'Вторые блюда',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}second-dishes`,
+                    routePath: `${routePaths.vegan}second-dish`,
+                    subCategory: 'second-dish',
                 },
                 {
                     title: 'Гарниры',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}side-dishes`,
+                    routePath: `${routePaths.vegan}side-dishes`,
+                    subCategory: 'side-dishes',
                 },
                 {
                     title: 'Десерты',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}deserts`,
+                    routePath: `${routePaths.vegan}deserts`,
+                    subCategory: 'deserts',
                 },
                 {
                     title: 'Выпечка',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}bakery`,
+                    routePath: `${routePaths.vegan}bakery`,
+                    subCategory: 'bakery',
                 },
                 {
                     title: 'Сыроедческие блюда',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}raw-food-dishes`,
+                    routePath: `${routePaths.vegan}raw-food-dishes`,
+                    subCategory: 'raw-food-dishes',
                 },
                 {
                     title: 'Напитки',
-                    routePath: `${routePaths[AppRoutes.VEGAN]}drinks`,
+                    routePath: `${routePaths.vegan}drinks`,
+                    subCategory: 'drinks',
                 },
             ],
             icon: BayLeaf,
-            routePath: `${routePaths[AppRoutes.VEGAN]}snacks`,
-            title: MenuFilter.VEGAN,
+            routePath: `${routePaths.vegan}snacks`,
+            title: 'Веганская кухня',
+            category: 'vegan',
         },
         {
             items: [
                 {
                     title: 'Вторые блюда',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}secondary-dishes`,
+                    routePath: `${routePaths['children-dish']}secondary-dishes`,
                 },
                 {
                     title: 'Гарниры',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}side-dishes`,
+                    routePath: `${routePaths['children-dish']}side-dishes`,
                 },
                 {
                     title: 'Выпечка',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}bakery`,
+                    routePath: `${routePaths['children-dish']}bakery`,
                 },
                 {
                     title: 'Без глютена',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}gluten-free`,
+                    routePath: `${routePaths['children-dish']}gluten-free`,
                 },
                 {
                     title: 'Без сахара',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}sugar-free`,
+                    routePath: `${routePaths['children-dish']}sugar-free`,
                 },
                 {
                     title: 'Без аллергенов',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}allergen-free`,
+                    routePath: `${routePaths['children-dish']}allergen-free`,
                 },
                 {
                     title: 'Блюда для прикорма',
-                    routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}complementary-feeding-dishes`,
+                    routePath: `${routePaths['children-dish']}complementary-feeding-dishes`,
                 },
             ],
             icon: ChildTasty,
-            routePath: `${routePaths[AppRoutes.CHILDREN_DISHES]}secondary-dishes`,
-            title: MenuFilter.CHILDREN_DISHES,
+            routePath: `${routePaths['children-dish']}secondary-dishes`,
+            title: 'Детские блюда',
+            category: 'children-dish',
         },
         {
             items: [
                 {
                     title: 'Детская диета',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}children-diet`,
+                    routePath: `${routePaths['medical-nutrition']}children-diet`,
                 },
                 {
                     title: 'Диета №1',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-1`,
+                    routePath: `${routePaths['medical-nutrition']}diet-1`,
                 },
                 {
                     title: 'Диета №2',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-2`,
+                    routePath: `${routePaths['medical-nutrition']}diet-2`,
                 },
                 {
                     title: 'Диета №3',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-3`,
+                    routePath: `${routePaths['medical-nutrition']}diet-3`,
                 },
                 {
                     title: 'Диета №4',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-4`,
+                    routePath: `${routePaths['medical-nutrition']}diet-4`,
                 },
                 {
                     title: 'Диета №5',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-5`,
+                    routePath: `${routePaths['medical-nutrition']}diet-5`,
                 },
                 {
                     title: 'Диета №6',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-6`,
+                    routePath: `${routePaths['medical-nutrition']}diet-6`,
                 },
                 {
                     title: 'Диета №7',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-7`,
+                    routePath: `${routePaths['medical-nutrition']}diet-7`,
                 },
                 {
                     title: 'Диета №8',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-8`,
+                    routePath: `${routePaths['medical-nutrition']}diet-8`,
                 },
                 {
                     title: 'Диета №9',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-9`,
+                    routePath: `${routePaths['medical-nutrition']}diet-9`,
                 },
                 {
                     title: 'Диета №10',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-10`,
+                    routePath: `${routePaths['medical-nutrition']}diet-10`,
                 },
                 {
                     title: 'Диета №11',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-11`,
+                    routePath: `${routePaths['medical-nutrition']}diet-11`,
                 },
                 {
                     title: 'Диета №12',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-12`,
+                    routePath: `${routePaths['medical-nutrition']}diet-12`,
                 },
                 {
                     title: 'Диета №13',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-13`,
+                    routePath: `${routePaths['medical-nutrition']}diet-13`,
                 },
                 {
                     title: 'Диета №14',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}diet-14`,
+                    routePath: `${routePaths['medical-nutrition']}diet-14`,
                 },
                 {
                     title: 'Без глютена',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}gluten-free`,
+                    routePath: `${routePaths['medical-nutrition']}gluten-free`,
                 },
                 {
                     title: 'Без аллергенов',
-                    routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}allergen-free`,
+                    routePath: `${routePaths['medical-nutrition']}allergen-free`,
                 },
             ],
             icon: Nutrition,
-            routePath: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}children-diet`,
-            title: MenuFilter.MEDICAL_NUTRITION,
+            routePath: `${routePaths['medical-nutrition']}children-diet`,
+            title: 'Лечебное питание',
+            category: 'medical-nutrition',
         },
         {
             items: [
                 {
                     title: 'Греческая кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}greek-cuisine`,
+                    routePath: `${routePaths.national}greek-cuisine`,
                 },
                 {
                     title: 'Грузинская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}georgian-cuisine`,
+                    routePath: `${routePaths.national}georgian-cuisine`,
                 },
                 {
                     title: 'Итальянская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}italian-cuisine`,
+                    routePath: `${routePaths.national}italian-cuisine`,
                 },
                 {
                     title: 'Испанская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}spanish-cuisine`,
+                    routePath: `${routePaths.national}spanish-cuisine`,
                 },
                 {
                     title: 'Испанская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}spanish-cuisine`,
+                    routePath: `${routePaths.national}spanish-cuisine`,
                 },
                 {
                     title: 'Китайская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}china-cuisine`,
+                    routePath: `${routePaths.national}china-cuisine`,
                 },
                 {
                     title: 'Мексиканская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}mexican-cuisine`,
+                    routePath: `${routePaths.national}mexican-cuisine`,
                 },
                 {
                     title: 'Паназиатская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}pan-Asian-cuisine`,
+                    routePath: `${routePaths.national}pan-Asian-cuisine`,
                 },
                 {
                     title: 'Русская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}russian-cuisine`,
+                    routePath: `${routePaths.national}russian-cuisine`,
                 },
                 {
                     title: 'Турецкая кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}turkish-cuisine`,
+                    routePath: `${routePaths.national}turkish-cuisine`,
                 },
                 {
                     title: 'Французская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}french-cuisine`,
+                    routePath: `${routePaths.national}french-cuisine`,
                 },
                 {
                     title: 'Шведская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}swedan-cuisine`,
+                    routePath: `${routePaths.national}swedan-cuisine`,
                 },
                 {
                     title: 'Японская кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}japanese-cuisine`,
+                    routePath: `${routePaths.national}japanese-cuisine`,
                 },
                 {
                     title: 'Другая кухня',
-                    routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}another-cuisine`,
+                    routePath: `${routePaths.national}another-cuisine`,
                 },
             ],
             icon: InternationalFood,
-            routePath: `${routePaths[AppRoutes.NATIONAL_DISHES]}greek-cuisine`,
-            title: MenuFilter.NATIONAL_DISHES,
+            routePath: `${routePaths.national}greek-cuisine`,
+            title: 'Национальные',
+            category: 'national',
         },
         {
             items: [
                 {
                     title: 'Соусы мясные',
-                    routePath: `${routePaths[AppRoutes.SAUCES]}meet-sauces`,
+                    routePath: `${routePaths.sauces}meet-sauces`,
                 },
                 {
                     title: 'Соусы сырные',
-                    routePath: `${routePaths[AppRoutes.SAUCES]}cheese-sauces`,
+                    routePath: `${routePaths.sauces}cheese-sauces`,
                 },
                 {
                     title: 'Маринады',
-                    routePath: `${routePaths[AppRoutes.SAUCES]}marinades`,
+                    routePath: `${routePaths.sauces}marinades`,
                 },
             ],
             icon: MortarAndPestle,
-            routePath: `${routePaths[AppRoutes.SAUCES]}meet-sauces`,
-            title: MenuFilter.SAUCES,
+            routePath: `${routePaths.sauces}meet-sauces`,
+            title: 'Соусы',
+            category: 'sauces',
         },
         {
             items: [
                 {
                     title: 'Мяcные заготовки',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}meat-provisions`,
+                    routePath: `${routePaths.provisions}meat-provisions`,
                 },
                 {
                     title: 'Рыбные заготовки',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}fish-provisions`,
+                    routePath: `${routePaths.provisions}fish-provisions`,
                 },
                 {
                     title: 'Из огурцов',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}from-cucumbers-provisions`,
+                    routePath: `${routePaths.provisions}from-cucumbers-provisions`,
                 },
                 {
                     title: 'Из томатов',
 
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}from-tomato-provisions`,
+                    routePath: `${routePaths.provisions}from-tomato-provisions`,
                 },
                 {
                     title: 'Из грибов',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}from-mashrooms-provisions`,
+                    routePath: `${routePaths.provisions}from-mashrooms-provisions`,
                 },
                 {
                     title: 'Овощные заготовки',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}vegetables-provisions`,
+                    routePath: `${routePaths.provisions}vegetables-provisions`,
                 },
                 {
                     title: 'Салаты, икра',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}salads-caviar-provisions`,
+                    routePath: `${routePaths.provisions}salads-caviar-provisions`,
                 },
                 {
                     title: 'Из фруктов и ягод',
-                    routePath: `${routePaths[AppRoutes.PROVISIONS]}from-fruits-and-berries-provisions`,
+                    routePath: `${routePaths.provisions}from-fruits-and-berries-provisions`,
                 },
             ],
             icon: Paste,
-            routePath: `${routePaths[AppRoutes.PROVISIONS]}meat-provisions`,
-            title: MenuFilter.PROVISIONS,
+            routePath: `${routePaths.provisions}meat-provisions`,
+            title: 'Заготовки',
+            category: 'provisions',
         },
         {
             items: [
                 {
                     title: 'Соки и фреши',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}juices-and-fresh-juices`,
+                    routePath: `${routePaths.drinks}juices-and-fresh-juices`,
                 },
                 {
                     title: 'Смузи',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}smoothie`,
+                    routePath: `${routePaths.drinks}smoothie`,
                 },
                 {
                     title: 'Компоты',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}compotes`,
+                    routePath: `${routePaths.drinks}compotes`,
                 },
                 {
                     title: 'Кисели',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}kiseli`,
+                    routePath: `${routePaths.drinks}kiseli`,
                 },
                 {
                     title: 'Кофе',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}coffee`,
+                    routePath: `${routePaths.drinks}coffee`,
                 },
 
                 {
                     title: 'Лечебный чай',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}nutrition-tea`,
+                    routePath: `${routePaths.drinks}nutrition-tea`,
                 },
                 {
                     title: 'Квас',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}kvass`,
+                    routePath: `${routePaths.drinks}kvass`,
                 },
                 {
                     title: 'Коктейли',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}coctails`,
+                    routePath: `${routePaths.drinks}coctails`,
                 },
                 {
                     title: 'Алкогольные',
-                    routePath: `${routePaths[AppRoutes.DRINKS]}alcohol`,
+                    routePath: `${routePaths.drinks}alcohol`,
                 },
             ],
             icon: TeaCup,
-            routePath: `${routePaths[AppRoutes.DRINKS]}juices-and-fresh-juices`,
-            title: MenuFilter.DRINKS,
+            routePath: `${routePaths.drinks}juices-and-fresh-juices`,
+            title: 'Напитки',
+            category: 'drinks',
         },
     ];
 

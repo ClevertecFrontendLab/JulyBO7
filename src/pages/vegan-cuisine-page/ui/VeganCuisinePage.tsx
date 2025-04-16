@@ -5,17 +5,18 @@ import { useLocation, useNavigate } from 'react-router';
 import { Page } from '~/shared/components/page/ui/Page';
 import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
-import { PageTabs } from '~/shared/components/page-tabs/PageTabs';
-import { getMenuItems } from '~/widgets/menu/model/getMenuItems';
-import { MenuFilter } from '~/widgets/menu/model/types/filters-types';
+import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
+import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
+import { getMenuItems } from '~/shared/lib/getMenuItems';
 
 import { veganPageData } from '../model/mockData';
 
 export const VeganCuisinePage: FC = () => {
+    //TODO: ВЫНЕСТИ ВЕСЬ КОД В ХУК ДЛЯ PAGETABS:
     const [activeTabIndex, setcurrentTabIndex] = useState(0);
     const { pathname } = useLocation();
     const veganCuisineItems = useMemo(
-        () => getMenuItems().find((item) => item.title === MenuFilter.VEGAN)!.items,
+        () => getMenuItems().find((item) => item.category === 'vegan')!.items,
         [],
     );
 
@@ -25,9 +26,9 @@ export const VeganCuisinePage: FC = () => {
         setcurrentTabIndex(ind);
     };
     useEffect(() => {
-        const index = veganCuisineItems.findIndex((item) => item.routePath === pathname);
-        if (index !== -1) {
-            setcurrentTabIndex(index);
+        const tabIndex = getCurrentCategoryByPath(pathname);
+        if (tabIndex !== undefined) {
+            setcurrentTabIndex(tabIndex);
         }
     }, [pathname]);
 

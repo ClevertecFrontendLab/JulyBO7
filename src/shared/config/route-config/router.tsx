@@ -14,72 +14,55 @@ import { DrinksPage } from '~/pages/vegan-cuisine-page/ui/drinks-page/DrinksPage
 import { RawFoodDishesPage } from '~/pages/vegan-cuisine-page/ui/raw-food-dishes-page/RawFoodDishesPage';
 import { SecondDishesPage } from '~/pages/vegan-cuisine-page/ui/second-dishes-page/SecondDishesPage';
 import { SideDishesPage } from '~/pages/vegan-cuisine-page/ui/side-dishes-page/SideDishesPage';
+import { Category, SubCategory } from '~/shared/types/categories';
 
-export enum AppRoutes {
-    MAIN = 'main',
-    JUICIEST = 'juiciest',
-    VEGAN = 'vegan-dishes',
-    SALADS = 'salads',
-    SNACKS = 'snacks',
-    FIRST_DISHES = 'first-dishes',
-    SECONDARY_DISHES = 'secondary-dishes',
-    DESERTS = 'deserts-and-bakery',
-    GRILL = 'grill-dishes',
-    CHILDREN_DISHES = 'children-dishes',
-    MEDICAL_NUTRITION = 'medical-nutrition',
-    NATIONAL_DISHES = 'national-dishes',
-    SAUCES = 'sauces',
-    PROVISIONS = 'provisions',
-    DRINKS = 'drinks',
-    NOT_PAGE = 'not-page',
-}
+type AppRoutes = Category | 'main' | 'juiciest' | 'not-page';
 
 export type RoutePaths = {
     [name in AppRoutes]: string;
 };
 
 export const routePaths: RoutePaths = {
-    [AppRoutes.MAIN]: '/',
-    [AppRoutes.JUICIEST]: '/juiciest',
-    [AppRoutes.VEGAN]: '/vegan-dishes/',
-    [AppRoutes.CHILDREN_DISHES]: '/children-dishes/',
-    [AppRoutes.DESERTS]: '/deserts-and-bakery/',
-    [AppRoutes.DRINKS]: '/drinks/',
-    [AppRoutes.FIRST_DISHES]: '/first-dishes/',
-    [AppRoutes.GRILL]: '/grill-dishes/',
-    [AppRoutes.MEDICAL_NUTRITION]: '/medical-nutrition/',
-    [AppRoutes.NATIONAL_DISHES]: '/national-dishes/',
-    [AppRoutes.PROVISIONS]: '/provisions/',
-    [AppRoutes.SNACKS]: '/snacks/',
-    [AppRoutes.SECONDARY_DISHES]: '/secondary-dishes/',
-    [AppRoutes.SAUCES]: '/sauces/',
-    [AppRoutes.SALADS]: '/salads/',
-
-    [AppRoutes.NOT_PAGE]: '/*',
+    main: '/',
+    juiciest: '/juiciest',
+    vegan: '/vegan/',
+    'children-dish': '/children-dish/',
+    'desert-bakery': '/desert-bakery/',
+    drinks: '/drinks/',
+    'first-dish': '/first-dish/',
+    grill: '/grill/',
+    'medical-nutrition': '/medical-nutrition/',
+    national: '/national/',
+    provisions: '/provisions/',
+    snacks: '/snacks/',
+    'second-dish': '/second-dish/',
+    sauces: '/sauces/',
+    salads: '/salads/',
+    'not-page': '/*',
 };
 
 export type RouteConfig = {
     path: string;
     element: ReactElement;
-    childrenRoutes?: RouteProps[];
+    childrenRoutes?: (Omit<RouteProps, 'path'> & { path: SubCategory })[];
 };
 export const routeConfig: RouteConfig[] = [
     {
-        path: routePaths[AppRoutes.MAIN],
+        path: routePaths.main,
         element: <MainPage />,
     },
     {
-        path: routePaths[AppRoutes.JUICIEST],
+        path: routePaths.juiciest,
         element: <JuiciestPage />,
     },
 
     {
-        path: `${routePaths[AppRoutes.VEGAN]}`,
+        path: `${routePaths.vegan}`,
         element: <VeganCuisinePage />,
         childrenRoutes: [
             { path: 'snacks', element: <SnacksPage />, index: true },
-            { path: 'first-dishes', element: <FirstDishesPage /> },
-            { path: 'second-dishes', element: <SecondDishesPage /> },
+            { path: 'first-dish', element: <FirstDishesPage /> },
+            { path: 'second-dish', element: <SecondDishesPage /> },
             { path: 'side-dishes', element: <SideDishesPage /> },
             { path: 'deserts', element: <DesertsPage /> },
             { path: 'bakery', element: <BakeryPage /> },
@@ -88,47 +71,85 @@ export const routeConfig: RouteConfig[] = [
         ],
     },
     {
-        path: `${routePaths[AppRoutes.CHILDREN_DISHES]}:item`,
+        path: `${routePaths['children-dish']}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.DRINKS]}:item`,
+        path: `${routePaths.drinks}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.FIRST_DISHES]}:item`,
+        path: `${routePaths['first-dish']}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.GRILL]}:item`,
+        path: `${routePaths.grill}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.MEDICAL_NUTRITION]}:item`,
+        path: `${routePaths['medical-nutrition']}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.NATIONAL_DISHES]}:item`,
+        path: `${routePaths.national}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.PROVISIONS]}:item`,
+        path: `${routePaths.provisions}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SALADS]}:item`,
+        path: `${routePaths.salads}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SAUCES]}:item`,
+        path: `${routePaths.sauces}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SECONDARY_DISHES]}:item`,
+        path: `${routePaths['second-dish']}:item`,
         element: <VeganCuisinePage />,
     },
     {
-        path: `${routePaths[AppRoutes.SNACKS]}:item`,
+        path: `${routePaths.snacks}:item`,
         element: <VeganCuisinePage />,
     },
 ];
+
+// export enum AppRoutes {
+//     MAIN = 'main',
+//     JUICIEST = 'juiciest',
+//     VEGAN = 'vegan',
+//     SALADS = 'salads',
+//     SNACKS = 'snacks',
+//     FIRST_DISH = 'first-dishes',
+//     SECOND_DISH = 'second-dishes',
+//     DESERTS_BAKERY = 'deserts-bakery',
+//     GRILL = 'grill-dishes',
+//     CHILDREN_DISH = 'children-dishes',
+//     MEDICAL_NUTRITION = 'medical-nutrition',
+//     NATIONAL = 'national',
+//     SAUCES = 'sauces',
+//     PROVISIONS = 'provisions',
+//     DRINKS = 'drinks',
+//     NOT_PAGE = 'not-page',
+// }
+// export const routePaths: RoutePaths = {
+//     [AppRoutes.MAIN]: '/',
+//     [AppRoutes.JUICIEST]: '/juiciest',
+//     [AppRoutes.VEGAN]: '/vegan/',
+//     [AppRoutes.CHILDREN_DISHES]: '/children-dish/',
+//     [AppRoutes.DESERTS]: '/desert-bakery/',
+//     [AppRoutes.DRINKS]: '/drinks/',
+//     [AppRoutes.FIRST_DISHES]: '/first-dish/',
+//     [AppRoutes.GRILL]: '/grill/',
+//     [AppRoutes.MEDICAL_NUTRITION]: '/medical-nutrition/',
+//     [AppRoutes.NATIONAL_DISHES]: '/national/',
+//     [AppRoutes.PROVISIONS]: '/provisions/',
+//     [AppRoutes.SNACKS]: '/snacks/',
+//     [AppRoutes.SECONDARY_DISHES]: '/second-dish/',
+//     [AppRoutes.SAUCES]: '/sauces/',
+//     [AppRoutes.SALADS]: '/salads/',
+
+//     [AppRoutes.NOT_PAGE]: '/*',
+// };

@@ -5,40 +5,54 @@ import {
     AccordionPanel,
     Box,
     Image,
+    Tab,
+    Tabs,
     Text,
 } from '@chakra-ui/react';
-import { FC, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { FC, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
 import ArrowNavbar from '~/shared/assets/icons/components/ArrowNavbar';
 import ArrowNavbarDown from '~/shared/assets/icons/components/ArrowNavbarDown';
-import { classNames } from '~/shared/lib/classNames';
-
-import { getMenuItems } from '../../model/getMenuItems';
-import { MenuFilter } from '../../model/types/filters-types';
-import cls from './MenuArea.module.scss';
+import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
+import { getMenuItems } from '~/shared/lib/getMenuItems';
 
 export const MenuArea: FC = () => {
-    const [isActivated, setIsActivated] = useState(false);
+    const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>();
+    const [activeSubCategoryIndex, setActiveSubCategoryIndex] = useState(0);
+    const { pathname } = useLocation();
 
     const menuItems = getMenuItems();
     const navigate = useNavigate();
-    const onClickMenuItem = (path: string) => () => navigate(path);
 
-    const onActivateMenu = (expandedIndex: number) => {
-        if (expandedIndex >= 0) {
-            setIsActivated(true);
-        } else {
-            setIsActivated(false);
-        }
+    const onClickMenuItem = (path: string) => () => {
+        navigate(path);
     };
+
+    const onChangeCategory = (expandedIndex: number) => {
+        setActiveCategoryIndex(expandedIndex);
+    };
+
+    const onChangeSubCategory = (index: number) => {
+        setActiveSubCategoryIndex(index);
+    };
+
+    useEffect(() => {
+        const tabIndex = getCurrentCategoryByPath(pathname);
+        if (tabIndex !== undefined) {
+            setActiveSubCategoryIndex(tabIndex);
+        } else {
+            setActiveCategoryIndex(-1);
+            setActiveSubCategoryIndex(0);
+        }
+    }, [pathname]);
 
     const accordeonItems = menuItems.map((menuItem, idx) => (
         <AccordionItem border='none' key={idx} w='230px'>
             {({ isExpanded }) => (
                 <>
                     <AccordionButton
-                        data-test-id={menuItem.title === MenuFilter.VEGAN ? 'vegan-cuisine' : ''}
+                        data-test-id={menuItem.category}
                         onClick={onClickMenuItem(menuItem.routePath)}
                         padding='12px 8px'
                         display='flex'
@@ -58,33 +72,51 @@ export const MenuArea: FC = () => {
                     </AccordionButton>
 
                     <AccordionPanel padding='0'>
-                        {menuItem.items.map((item, idx) => (
-                            <Box
-                                display='flex'
-                                alignItems='center'
-                                key={idx}
-                                _hover={{ bg: 'lime.50' }}
-                                padding='6px 8px 6px 52px'
-                            >
-                                <NavLink
-                                    className={({ isActive }) =>
-                                        isActive
-                                            ? classNames(cls.link, { [cls.activeLink]: isActive })
-                                            : cls.link
+                        <Tabs
+                            variant='unstyled'
+                            index={activeSubCategoryIndex}
+                            onChange={onChangeSubCategory}
+                        >
+                            {menuItem.items.map((item, idx) => (
+                                <Tab
+                                    data-test-id={
+                                        activeSubCategoryIndex === idx
+                                            ? `tab-${item.subCategory}-active`
+                                            : ''
                                     }
-                                    to={item.routePath}
+                                    key={idx}
+                                    onClick={onClickMenuItem(item.routePath)}
+                                    w='100%'
+                                    display='flex'
+                                    justifyContent='start'
+                                    alignItems='center'
+                                    textStyle='m'
+                                    padding='6px 0 6px 52px'
+                                    position='relative'
+                                    _hover={{ bg: 'lime.50', textDecoration: 'none' }}
+                                    _selected={{
+                                        fontWeight: '700',
+                                        _after: {
+                                            w: '8px',
+                                            left: '33px',
+                                        },
+                                    }}
+                                    _after={{
+                                        display: 'block',
+                                        content: `""`,
+                                        w: '1px',
+                                        h: '24px',
+                                        position: 'absolute',
+                                        top: '6px',
+                                        left: '40px',
+
+                                        bg: 'lime.300',
+                                    }}
                                 >
-                                    <Text
-                                        as='span'
-                                        width='1px'
-                                        height='24px'
-                                        bg='#c4ff61'
-                                        transition='width 0.2s'
-                                    />
-                                    <Text textStyle='m'>{item.title}</Text>
-                                </NavLink>
-                            </Box>
-                        ))}
+                                    {item.title}
+                                </Tab>
+                            ))}
+                        </Tabs>
                     </AccordionPanel>
                 </>
             )}
@@ -93,16 +125,17 @@ export const MenuArea: FC = () => {
 
     return (
         <Accordion
-            onChange={onActivateMenu}
+            onChange={onChangeCategory}
+            index={activeCategoryIndex}
             allowToggle
             maxHeight='872px'
             w='100%'
-            padding={isActivated ? '10px 4px 10px 10px' : '10px 16px 10px 10px'}
+            padding={activeCategoryIndex !== -1 ? '10px 4px 10px 10px' : '10px 16px 10px 10px'}
             borderRadius='12px'
             overflowY='auto'
             overflowX='hidden'
             boxShadow={
-                isActivated
+                activeCategoryIndex !== -1
                     ? '0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     : ''
             }

@@ -2,8 +2,7 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs, TabsProps, Text } from '@chakr
 import { FC } from 'react';
 import { Outlet } from 'react-router';
 
-import { SubMenuItem } from '~/widgets/menu/model/types/filters-types';
-
+import { SubMenuItem } from '../../../lib/getMenuItems';
 import cls from './PageTabs.module.scss';
 
 type PageTabsProps = {
@@ -41,6 +40,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             >
                 {items.map((item, idx) => (
                     <Tab
+                        data-test-id={`tab-${item.subCategory}-${idx}`}
                         _selected={{
                             color: 'lime.600',
                             borderBottomWidth: '2px',
