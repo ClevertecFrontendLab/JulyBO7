@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router';
 import { RouteConfig, routeConfig } from '~/shared/config/route-config/router';
 
 export const AppRouter = () => {
-    console.log('AppRouter');
     const getRouteElements = useCallback(
         (route: RouteConfig) => (
             <Route key={route.path} path={route.path} element={route.element}>
@@ -22,7 +21,6 @@ export const AppRouter = () => {
     );
 
     const routes = useMemo(() => routeConfig.map(getRouteElements), [getRouteElements]);
-    console.log('AppRouter : ', routes);
 
     return <Routes>{routes}</Routes>;
 };
