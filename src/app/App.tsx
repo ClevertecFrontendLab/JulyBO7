@@ -12,7 +12,11 @@ function App() {
     const { data: _data, isLoading: _isLoading } = useGetPostsQuery();
 
     return (
-        <Box bg='bgColor' position='relative' height='100vh'>
+        <Box
+            bg='bgColor'
+            position='relative'
+            // height='100vh' //for tests
+        >
             <Navbar />
             <Box display='flex'>
                 <Menu />

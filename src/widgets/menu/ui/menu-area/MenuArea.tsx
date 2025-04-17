@@ -3,13 +3,14 @@ import {
     AccordionButton,
     AccordionItem,
     AccordionPanel,
+    AccordionProps,
     Box,
     Image,
     Tab,
     Tabs,
     Text,
 } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, MouseEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import ArrowNavbar from '~/shared/assets/icons/components/ArrowNavbar';
@@ -17,7 +18,11 @@ import ArrowNavbarDown from '~/shared/assets/icons/components/ArrowNavbarDown';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { getMenuItems } from '~/shared/lib/getMenuItems';
 
-export const MenuArea: FC = () => {
+import cls from './MenuArea.module.scss';
+
+type MenuAreaProps = AccordionProps & { isMobile?: boolean };
+
+export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
     const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>();
     const [activeSubCategoryIndex, setActiveSubCategoryIndex] = useState(0);
     const { pathname } = useLocation();
@@ -25,7 +30,8 @@ export const MenuArea: FC = () => {
     const menuItems = getMenuItems();
     const navigate = useNavigate();
 
-    const onClickMenuItem = (path: string) => () => {
+    const onClickMenuItem = (path: string) => (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
         navigate(path);
     };
 
@@ -48,7 +54,7 @@ export const MenuArea: FC = () => {
     }, [pathname]);
 
     const accordeonItems = menuItems.map((menuItem, idx) => (
-        <AccordionItem border='none' key={idx} w='230px'>
+        <AccordionItem border='none' key={idx}>
             {({ isExpanded }) => (
                 <>
                     <AccordionButton
@@ -128,17 +134,19 @@ export const MenuArea: FC = () => {
             onChange={onChangeCategory}
             index={activeCategoryIndex}
             allowToggle
-            maxHeight='872px'
             w='100%'
+            bg='bgColor'
             padding={activeCategoryIndex !== -1 ? '10px 4px 10px 10px' : '10px 16px 10px 10px'}
             borderRadius='12px'
             overflowY='auto'
             overflowX='hidden'
             boxShadow={
-                activeCategoryIndex !== -1
+                activeCategoryIndex !== -1 && !isMobile
                     ? '0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     : ''
             }
+            className={cls.menuArea}
+            {...rest}
         >
             {accordeonItems}
         </Accordion>

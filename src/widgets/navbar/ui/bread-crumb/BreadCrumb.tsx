@@ -1,17 +1,20 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbProps } from '@chakra-ui/react';
 import { FC } from 'react';
 import { Link } from 'react-router';
 
+import cls from './BreadCrumb.module.scss';
+
 export type BreadCrumbItem = { text: string; path: string };
-type BreadCrumbProps = {
-    items: BreadCrumbItem[];
-};
-export const BreadCrumb: FC<BreadCrumbProps> = ({ items }) => (
+type BreadCrumbProps = BreadcrumbProps & { items: BreadCrumbItem[] };
+
+export const BreadCrumb: FC<BreadCrumbProps> = ({ items, ...rest }) => (
     <Breadcrumb
-        display={{ base: 'none', lg: 'block' }}
+        data-test-id='breadcrumbs'
         spacing='8px'
         separator={<ChevronRightIcon color='gray.500' />}
+        className={cls.breadCrimb}
+        {...rest}
     >
         {items.map((item, idx) => {
             const currentPage = idx === items.length - 1;
