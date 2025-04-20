@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import { RouteProps } from 'react-router';
 
 import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
+import { RecipePage } from '~/pages/recipe-page/ui/RecipePage';
 import {
     BakeryPage,
     FirstDishesPage,
@@ -14,7 +14,7 @@ import { DrinksPage } from '~/pages/vegan-cuisine-page/ui/drinks-page/DrinksPage
 import { RawFoodDishesPage } from '~/pages/vegan-cuisine-page/ui/raw-food-dishes-page/RawFoodDishesPage';
 import { SecondDishesPage } from '~/pages/vegan-cuisine-page/ui/second-dishes-page/SecondDishesPage';
 import { SideDishesPage } from '~/pages/vegan-cuisine-page/ui/side-dishes-page/SideDishesPage';
-import { Category, SubCategory } from '~/shared/types/categories';
+import { Category } from '~/shared/types/categories';
 
 type AppRoutes = Category | 'main' | 'juiciest' | 'not-page';
 
@@ -24,7 +24,7 @@ export type RoutePaths = {
 
 export const routePaths: RoutePaths = {
     main: '/',
-    juiciest: '/juiciest',
+    juiciest: '/juiciest/',
     vegan: '/vegan/',
     'children-dish': '/children-dish/',
     'desert-bakery': '/desert-bakery/',
@@ -44,7 +44,15 @@ export const routePaths: RoutePaths = {
 export type RouteConfig = {
     path: string;
     element: ReactElement;
-    childrenRoutes?: (Omit<RouteProps, 'path'> & { path: SubCategory })[];
+    childrenRoutes?: {
+        path: string;
+        element: ReactElement;
+
+        childrenRoute?: {
+            path: string;
+            element: ReactElement;
+        };
+    }[];
 };
 export const routeConfig: RouteConfig[] = [
     {
@@ -55,12 +63,21 @@ export const routeConfig: RouteConfig[] = [
         path: routePaths.juiciest,
         element: <JuiciestPage />,
     },
+    {
+        path: `${routePaths.juiciest}:recipeId`,
+        element: <RecipePage />,
+    },
 
     {
         path: `${routePaths.vegan}`,
         element: <VeganCuisinePage />,
         childrenRoutes: [
-            { path: 'snacks', element: <SnacksPage />, index: true },
+            {
+                path: 'snacks',
+                element: <SnacksPage />,
+                // index: true,
+                childrenRoute: { path: ':recipeId', element: <RecipePage /> },
+            },
             { path: 'first-dish', element: <FirstDishesPage /> },
             { path: 'second-dish', element: <SecondDishesPage /> },
             { path: 'side-dishes', element: <SideDishesPage /> },

@@ -5,32 +5,32 @@ import { FC, useMemo } from 'react';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { PageBlock } from '~/pages/main-page/model/mockData';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
 import { BadgeColor } from '~/shared/components/badge/ui/Badge';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
+import { Recipe } from '~/shared/types/recipe';
 
 import { useSwiper } from '../model/useSwiper';
 
 type NewRecipesBlockProps = {
-    items: PageBlock[];
+    items: Recipe[];
 };
 export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSwiper();
 
     const newRecipeCards = useMemo(
         () =>
-            items.map((data: PageBlock, idx: number) => (
+            items.map((data: Recipe, idx: number) => (
                 <SwiperSlide key={idx} style={{ flexShrink: 1 }}>
                     <VerticalCard
+                        id={data.id}
                         title={data.title}
-                        text={data.text}
-                        badgeImage={data.badgeImage}
-                        badgeText={data.badgeText}
+                        category={data.category[0]}
+                        text={data.description}
                         image={data.image}
-                        bookmarkCount={data.bookmarkCount}
-                        emojiCount={data.emojiCount}
+                        bookmarkCount={data.bookmarks}
+                        likesCount={data.likes}
                         badgeColor={BadgeColor.SECONDARY}
                     />
                 </SwiperSlide>

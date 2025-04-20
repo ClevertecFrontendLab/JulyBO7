@@ -7,16 +7,16 @@ export type NutritionValue = {
     carbohydrates: number;
 };
 
-type Ingredient = {
+export type Ingredient = {
     title: string;
     count: string;
     measureUnit: string;
 };
 
-type Step = {
+export type Step = {
     stepNumber: number;
     description: string;
-    image: string;
+    image?: string;
 };
 
 export type Recipe = {
@@ -33,7 +33,7 @@ export type Recipe = {
     nutritionValue: NutritionValue;
     ingredients: Ingredient[];
     steps: Step[];
-    portions?: number;
+    portions: number;
     meat?: string;
     side?: string;
 };

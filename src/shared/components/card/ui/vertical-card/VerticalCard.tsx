@@ -3,35 +3,24 @@ import { FC } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import { Category } from '~/shared/types/categories';
 
 import { Badge, BadgeColor } from '../../../badge/ui/Badge';
 
 type VerticalCardProps = {
+    id: string;
     title: string;
     text: string;
-    badgeImage: string;
-    badgeText: string;
+    category: Category;
     image?: string;
-    alt?: string;
     bookmarkCount?: number;
-    emojiCount?: number;
+    likesCount?: number;
     badgeColor?: BadgeColor;
     style?: CardProps;
 };
 
 export const VerticalCard: FC<VerticalCardProps> = (props) => {
-    const {
-        alt,
-        title,
-        text,
-        badgeImage,
-        bookmarkCount,
-        emojiCount,
-        badgeText,
-        image,
-        badgeColor,
-        style,
-    } = props;
+    const { title, text, category, bookmarkCount, likesCount, image, badgeColor, style } = props;
 
     return (
         <Card
@@ -50,7 +39,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                 borderTopLeftRadius='8px'
                 borderTopRightRadius='8px'
                 src={image}
-                alt={alt}
+                alt={title}
             />
 
             <VStack
@@ -83,8 +72,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                 </Box>
                 <Box display='flex' alignItems='flex-start' justifyContent='space-between' w='100%'>
                     <Badge
-                        image={badgeImage}
-                        text={badgeText}
+                        category={category}
                         badgeColor={badgeColor}
                         style={{
                             position: { base: 'absolute', lg: 'static' },
@@ -99,7 +87,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                                 <Text fontSize='12px'>123</Text>
                             </Button>
                         )}
-                        {emojiCount && (
+                        {likesCount && (
                             <Button variant='withIcon' color='lime.600' h='24px'>
                                 <Emoji />
                                 <Text fontSize='12px'>12</Text>

@@ -1,17 +1,23 @@
 import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 
+import { Category } from '~/shared/types/categories';
+
+import { mappedCategoryData } from '../model/mappedCategoriesData';
+
 export enum BadgeTheme {
-    DEFAULT = 'default',
+    CATEGORY = 'category',
     RECOMEND = 'recomend',
 }
 export enum BadgeColor {
     PRIMARY = 'lime.50',
     SECONDARY = 'lime.150',
 }
+
 type BadgeProps = {
-    image: string;
-    text: string | number;
+    category?: Category;
+    userName?: string;
+    avatar?: string;
     style?: BoxProps;
     theme?: BadgeTheme;
     badgeColor?: BadgeColor;
@@ -19,14 +25,17 @@ type BadgeProps = {
 
 export const Badge: FC<BadgeProps> = (props) => {
     const {
-        image,
-        text,
         style,
-        theme = BadgeTheme.DEFAULT,
+        theme = BadgeTheme.CATEGORY,
         badgeColor = BadgeColor.PRIMARY,
+        userName,
+        avatar,
+        category,
     } = props;
 
-    const badgeText = theme === BadgeTheme.RECOMEND ? `${text} рекомендует` : text;
+    const categoryData = category && mappedCategoryData[category];
+    const badgeText =
+        theme === BadgeTheme.RECOMEND ? `${userName} рекомендует` : categoryData?.text;
 
     return (
         <Box
@@ -45,7 +54,11 @@ export const Badge: FC<BadgeProps> = (props) => {
             gap='2px'
             {...style}
         >
-            <Image src={image} h='16px' w='16px' />
+            <Image
+                src={theme === BadgeTheme.RECOMEND ? avatar : categoryData?.image}
+                h='16px'
+                w='16px'
+            />
             <Text textStyle='s'>{badgeText}</Text>
         </Box>
     );

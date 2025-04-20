@@ -5,24 +5,31 @@ import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { routePaths } from '~/shared/config/route-config/router';
-
-import { mainPageData } from '../../model/mockData';
+// import { mainPageData } from '../../model/mockData';
+import { recipes } from '~/shared/recipes';
 
 export const JuisiestBlock: FC = () => {
     const navigate = useNavigate();
-    const juiciestCards = mainPageData.juiciest.map((data, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={data.title}
-            text={data.text}
-            badgeImage={data.badgeImage}
-            badgeText={data.badgeText}
-            image={data.image}
-            bookmarkCount={data.bookmarkCount}
-            emojiCount={data.emojiCount}
-            recomend={data.recomend}
-        />
-    ));
+    const recipeItems = recipes.slice(0, 4);
+
+    const juiciestCards = recipeItems.map((data, idx) => {
+        // const handleCook = () => navigate(`/${data.category[0]}/${data.subcategory[0]}/${data.id}`);
+        const handleCook = () => navigate(`juiciest/${data.id}`);
+
+        return (
+            <HorizontalCard
+                key={idx}
+                id={data.id}
+                category={data.category[0]}
+                title={data.title}
+                text={data.description}
+                image={data.image}
+                bookmarkCount={data.bookmarks}
+                likesCount={data.likes}
+                onCook={handleCook}
+            />
+        );
+    });
     return (
         <Box>
             <HStack justify='space-between'>

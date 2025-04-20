@@ -10,10 +10,17 @@ export const AppRouter = () => {
                 {route.childrenRoutes?.map((childrenRoute, idx) => (
                     <Route
                         path={childrenRoute.path}
-                        index={childrenRoute.index}
+                        // index={childrenRoute.index}
                         key={idx}
                         element={childrenRoute.element}
-                    />
+                    >
+                        {childrenRoute.childrenRoute && (
+                            <Route
+                                path={childrenRoute.childrenRoute.path}
+                                element={childrenRoute.childrenRoute.element}
+                            />
+                        )}
+                    </Route>
                 ))}
             </Route>
         ),

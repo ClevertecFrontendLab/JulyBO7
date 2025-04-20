@@ -3,8 +3,6 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbProps } from '@ch
 import { FC } from 'react';
 import { Link } from 'react-router';
 
-import cls from './BreadCrumb.module.scss';
-
 export type BreadCrumbItem = { text: string; path: string };
 type BreadCrumbProps = BreadcrumbProps & { items: BreadCrumbItem[] };
 
@@ -13,7 +11,6 @@ export const BreadCrumb: FC<BreadCrumbProps> = ({ items, ...rest }) => (
         data-test-id='breadcrumbs'
         spacing='8px'
         separator={<ChevronRightIcon color='gray.500' />}
-        className={cls.breadCrimb}
         {...rest}
     >
         {items.map((item, idx) => {

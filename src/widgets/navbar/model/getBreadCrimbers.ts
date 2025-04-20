@@ -14,7 +14,7 @@ const mapPathTitle = [
     },
 ];
 
-export const getBreadCrimbers = (path: string) => {
+export const getBreadCrimbers = (path: string, params?: BreadCrumbItem) => {
     const breadCrimbers: BreadCrumbItem[] = [{ text: 'Главная', path: '/' }];
 
     const currentPathSegments = path.split('/');
@@ -34,6 +34,9 @@ export const getBreadCrimbers = (path: string) => {
                 path: currentSubItemMenu.routePath,
             });
         }
+    }
+    if (params) {
+        breadCrimbers.push({ text: params.text, path: params.path });
     }
     return breadCrimbers;
 };
