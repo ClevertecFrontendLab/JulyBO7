@@ -28,8 +28,7 @@ type HorizontalCardProps = {
     bookmarkCount?: number;
     likesCount?: number;
     recomend?: { user: string; avatar: string };
-    style?: CardProps;
-};
+} & CardProps;
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
     const {
@@ -42,7 +41,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
         bookmarkCount,
         recomend,
         category,
-        style,
+        ...rest
     } = props;
 
     return (
@@ -55,7 +54,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
             width={{ base: '328px', md: '356px', lg: '880px', '2xl': '668px' }}
             height={{ base: '128px', lg: '244px' }}
             position='relative'
-            {...style}
+            {...rest}
         >
             <Image
                 width={{ base: '158px', lg: '346px' }}

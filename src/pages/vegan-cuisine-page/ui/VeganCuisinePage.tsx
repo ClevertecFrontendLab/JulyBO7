@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 import { Page } from '~/shared/components/page/ui/Page';
 import { PageFooter } from '~/shared/components/page-footer/PageFooter';
@@ -12,23 +12,21 @@ import { getMenuItems } from '~/shared/lib/getMenuItems';
 import { veganPageData } from '../model/mockData';
 
 export const VeganCuisinePage: FC = () => {
-    //TODO: ВЫНЕСТИ ВЕСЬ КОД В ХУК ДЛЯ PAGETABS:
-    const [activeTabIndex, setcurrentTabIndex] = useState(0);
+    const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const { pathname } = useLocation();
     const veganCuisineItems = useMemo(
         () => getMenuItems().find((item) => item.category === 'vegan')!.items,
         [],
     );
 
-    const navigate = useNavigate();
     const onChangeTab = (ind: number) => {
-        navigate(veganCuisineItems[ind].routePath);
-        setcurrentTabIndex(ind);
+        setCurrentTabIndex(ind);
     };
+
     useEffect(() => {
         const tabIndex = getCurrentCategoryByPath(pathname);
         if (tabIndex !== undefined) {
-            setcurrentTabIndex(tabIndex);
+            setCurrentTabIndex(tabIndex);
         }
     }, [pathname]);
 
@@ -43,7 +41,7 @@ export const VeganCuisinePage: FC = () => {
                 <PageTabs
                     onChangeTab={onChangeTab}
                     items={veganCuisineItems}
-                    tabIndex={activeTabIndex}
+                    tabIndex={currentTabIndex}
                 />
             </VStack>
             <PageFooter

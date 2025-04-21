@@ -14,12 +14,12 @@ export const AppRouter = () => {
                         key={idx}
                         element={childrenRoute.element}
                     >
-                        {childrenRoute.childrenRoute && (
+                        {/* {childrenRoute.childrenRoute && (
                             <Route
                                 path={childrenRoute.childrenRoute.path}
                                 element={childrenRoute.childrenRoute.element}
                             />
-                        )}
+                        )} */}
                     </Route>
                 ))}
             </Route>

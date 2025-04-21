@@ -12,6 +12,7 @@ type VerticalCardProps = {
     title: string;
     text: string;
     category: Category;
+    onClick?: () => void;
     image?: string;
     bookmarkCount?: number;
     likesCount?: number;
@@ -20,7 +21,11 @@ type VerticalCardProps = {
 };
 
 export const VerticalCard: FC<VerticalCardProps> = (props) => {
-    const { title, text, category, bookmarkCount, likesCount, image, badgeColor, style } = props;
+    const { title, text, category, bookmarkCount, likesCount, image, badgeColor, style, onClick } =
+        props;
+    const handleClickCard = () => {
+        onClick?.();
+    };
 
     return (
         <Card
@@ -30,6 +35,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
             width={{ base: '158px', lg: '277px', '2xl': '322px' }}
             height={{ base: '220px', lg: '402px', '2xl': '414px' }}
             flexShrink={0}
+            onClick={handleClickCard}
             {...style}
         >
             <Image

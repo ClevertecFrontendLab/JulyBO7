@@ -1,5 +1,6 @@
 import { VStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useParams } from 'react-router';
 
 import avatar1 from '~/shared/assets/images/Avatar.png';
 import { UserCard } from '~/shared/components/card/ui/user-card/UserCard';
@@ -13,7 +14,9 @@ import { HeaderRecipe } from './header-recipe/HeaderRecipe';
 import { IngredientsBlock } from './ingredients-block/IngredientsBlock';
 
 export const RecipePage: FC = () => {
-    const recipe = recipes[7];
+    const { recipeId } = useParams<{ recipeId: string }>();
+    const recipe = recipes[Number(recipeId)];
+
     return (
         <Page>
             <VStack align='center' spacing={{ base: '24px', lg: '40px' }} border='1px solid red'>

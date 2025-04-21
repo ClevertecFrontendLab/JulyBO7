@@ -2,6 +2,7 @@ import 'swiper/scss';
 
 import { Box, Button, Heading } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,32 +10,39 @@ import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
 import { BadgeColor } from '~/shared/components/badge/ui/Badge';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { Recipe } from '~/shared/types/recipe';
 
-import { useSwiper } from '../model/useSwiper';
+import { useSlider } from '../model/useSlider';
 
 type NewRecipesBlockProps = {
     items: Recipe[];
 };
 export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
-    const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSwiper();
+    const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
+    const navigate = useNavigate();
 
     const newRecipeCards = useMemo(
         () =>
-            items.map((data: Recipe, idx: number) => (
-                <SwiperSlide key={idx} style={{ flexShrink: 1 }}>
-                    <VerticalCard
-                        id={data.id}
-                        title={data.title}
-                        category={data.category[0]}
-                        text={data.description}
-                        image={data.image}
-                        bookmarkCount={data.bookmarks}
-                        likesCount={data.likes}
-                        badgeColor={BadgeColor.SECONDARY}
-                    />
-                </SwiperSlide>
-            )),
+            items.map((data: Recipe, idx: number) => {
+                const handleCard = getRecipeCardHandler(data, navigate);
+
+                return (
+                    <SwiperSlide key={idx} style={{ flexShrink: 1 }}>
+                        <VerticalCard
+                            id={data.id}
+                            title={data.title}
+                            category={data.category[0]}
+                            text={data.description}
+                            image={data.image}
+                            bookmarkCount={data.bookmarks}
+                            likesCount={data.likes}
+                            badgeColor={BadgeColor.SECONDARY}
+                            onClick={handleCard}
+                        />
+                    </SwiperSlide>
+                );
+            }),
         [items],
     );
 

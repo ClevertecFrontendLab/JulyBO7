@@ -1,23 +1,33 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-
-import { subPageMockData } from '../../model/subPageMockData';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
+import { recipes } from '~/shared/recipes';
 
 export const RawFoodDishesPage: FC = () => {
-    const cards = subPageMockData.map((card, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={card.title}
-            text={card.text}
-            badgeImage={card.badgeImage}
-            badgeText={card.badgeText}
-            image={card.image}
-            bookmarkCount={card.bookmarkCount}
-            emojiCount={card.emojiCount}
-        />
-    ));
+    const secondDishesSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'vegetables');
+    const navigate = useNavigate();
+
+    const cards = secondDishesSubcatRecipes.map((recipe) => {
+        const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'vegetables');
+
+        return (
+            <HorizontalCard
+                key={recipe.id}
+                onCook={handleCook}
+                id={recipe.id}
+                category={recipe.category[0]}
+                title={recipe.title}
+                text={recipe.description}
+                image={recipe.image}
+                bookmarkCount={recipe.bookmarks}
+                likesCount={recipe.likes}
+            />
+        );
+    });
     return (
         <>
             <Stack

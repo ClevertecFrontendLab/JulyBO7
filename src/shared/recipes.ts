@@ -4,9 +4,7 @@ import image4 from './assets/images/main-page-images/oladi.jpg';
 import image5 from './assets/images/main-page-images/salat.jpg';
 import image6 from './assets/images/main-page-images/solyanka.jpg';
 import image7 from './assets/images/main-page-images/tom.jpg';
-import image8 from './assets/images/main-page-images/vetchina.jpg';
 import image1 from './assets/images/recipe-page/recipe-lapsha.png';
-import step6 from './assets/images/recipe-page/steep6.png';
 import step1 from './assets/images/recipe-page/step1.png';
 import step2 from './assets/images/recipe-page/step2.png';
 import step3 from './assets/images/recipe-page/step3.png';
@@ -40,22 +38,22 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Нарезать картошку и перец.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Обжарить лук до золотистого цвета.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Добавить картошку, перец и фасоль, залить соусом.',
-                image: 'url',
+                image: step3,
             },
             {
                 stepNumber: 4,
                 description: 'Тушить на медленном огне 30 минут.',
-                image: 'url',
+                image: step4,
             },
         ],
         meat: '',
@@ -85,17 +83,17 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Отварить картошку и сделать пюре.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Обжарить грибы до готовности.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Сформировать рулетики и обжарить.',
-                image: 'url',
+                image: step3,
             },
         ],
         side: 'potatoes',
@@ -124,17 +122,17 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Приготовить соусы.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Сложить слои лазаньи.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Запекать 30 минут.',
-                image: 'url',
+                image: step3,
             },
         ],
     },
@@ -162,17 +160,17 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Смешать булгур и чечевицу.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Сформировать тефтели и запечь.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Подавать с соусом.',
-                image: 'url',
+                image: step3,
             },
         ],
     },
@@ -200,17 +198,17 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Очистить и нарезать картошку.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Обжарить с чесноком.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Подавать горячей.',
-                image: 'url',
+                image: step3,
             },
         ],
         side: 'potatoes',
@@ -238,17 +236,17 @@ export const recipes: Recipe[] = [
             {
                 stepNumber: 1,
                 description: 'Нарезать капусту и отварить.',
-                image: 'url',
+                image: step1,
             },
             {
                 stepNumber: 2,
                 description: 'Смешать с мукой и сформировать котлеты.',
-                image: 'url',
+                image: step2,
             },
             {
                 stepNumber: 3,
                 description: 'Обжарить до золотистой корочки.',
-                image: 'url',
+                image: step3,
             },
         ],
     },
@@ -290,89 +288,89 @@ export const recipes: Recipe[] = [
             },
         ],
     },
-    {
-        id: '7',
-        title: 'Лапша с курицей и шафраном',
-        description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
-        category: ['second-dish'],
-        subcategory: ['poultry-dish'],
-        image: image1,
-        bookmarks: 258,
-        likes: 1342,
-        date: '2024-03-08T00:00:00Z',
-        time: '40 минут',
-        portions: 4,
-        nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
-        ingredients: [
-            { title: 'лапша', count: '200', measureUnit: 'г' },
-            { title: 'курица', count: '300', measureUnit: 'г' },
-            { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
-            { title: 'лук', count: '1', measureUnit: 'шт.' },
-        ],
-        steps: [
-            {
-                stepNumber: 1,
-                description: 'Отварить лапшу.',
-                image: step1,
-            },
-            {
-                stepNumber: 2,
-                description: 'Обжарить курицу с луком и шафраном.',
-                image: step2,
-            },
-            {
-                stepNumber: 3,
-                description: 'Смешать лапшу с курицей и подавать.',
-                image: step3,
-            },
-            {
-                stepNumber: 4,
-                description:
-                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-            },
-            {
-                stepNumber: 5,
-                description:
-                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-                image: step4,
-            },
-            {
-                stepNumber: 6,
-                description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
-                image: step6,
-            },
-        ],
-    },
-    {
-        id: '8',
-        title: 'Гриль-салат с овощами',
-        description: 'Салат с обжаренными на гриле овощами и легкой заправкой.',
-        category: ['salads'],
-        subcategory: ['warm-salads'],
-        image: image8,
-        bookmarks: 10,
-        likes: 80,
-        date: '2023-03-20T00:00:00Z',
-        time: '25 минут',
-        portions: 4, //добавила сама
-        nutritionValue: { calories: 150, proteins: 4, fats: 6, carbohydrates: 20 },
-        ingredients: [
-            { title: 'цуккини', count: '1', measureUnit: 'шт.' },
-            { title: 'болгарский перец', count: '1', measureUnit: 'шт.' },
-            { title: 'баклажан', count: '1', measureUnit: 'шт.' },
-            { title: 'оливковое масло', count: '0', measureUnit: 'по вкусу' },
-        ],
-        steps: [
-            {
-                stepNumber: 1,
-                description: 'Обжарить овощи на гриле.',
-                image: 'url',
-            },
-            {
-                stepNumber: 2,
-                description: 'Смешать с заправкой и подавать.',
-                image: 'url',
-            },
-        ],
-    },
+    // {
+    //     id: '7',
+    //     title: 'Лапша с курицей и шафраном',
+    //     description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
+    //     category: ['second-dish'],
+    //     subcategory: ['poultry-dish'],
+    //     image: image1,
+    //     bookmarks: 258,
+    //     likes: 1342,
+    //     date: '2024-03-08T00:00:00Z',
+    //     time: '40 минут',
+    //     portions: 4,
+    //     nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
+    //     ingredients: [
+    //         { title: 'лапша', count: '200', measureUnit: 'г' },
+    //         { title: 'курица', count: '300', measureUnit: 'г' },
+    //         { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
+    //         { title: 'лук', count: '1', measureUnit: 'шт.' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Отварить лапшу.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Обжарить курицу с луком и шафраном.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Смешать лапшу с курицей и подавать.',
+    //             image: step3,
+    //         },
+    //         {
+    //             stepNumber: 4,
+    //             description:
+    //                 'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+    //         },
+    //         {
+    //             stepNumber: 5,
+    //             description:
+    //                 'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+    //             image: step4,
+    //         },
+    //         {
+    //             stepNumber: 6,
+    //             description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
+    //             image: step6,
+    //         },
+    //     ],
+    // },
+    // {
+    //     id: '8',
+    //     title: 'Гриль-салат с овощами',
+    //     description: 'Салат с обжаренными на гриле овощами и легкой заправкой.',
+    //     category: ['salads'],
+    //     subcategory: ['warm-salads'],
+    //     image: image8,
+    //     bookmarks: 10,
+    //     likes: 80,
+    //     date: '2023-03-20T00:00:00Z',
+    //     time: '25 минут',
+    //     portions: 4, //добавила сама
+    //     nutritionValue: { calories: 150, proteins: 4, fats: 6, carbohydrates: 20 },
+    //     ingredients: [
+    //         { title: 'цуккини', count: '1', measureUnit: 'шт.' },
+    //         { title: 'болгарский перец', count: '1', measureUnit: 'шт.' },
+    //         { title: 'баклажан', count: '1', measureUnit: 'шт.' },
+    //         { title: 'оливковое масло', count: '0', measureUnit: 'по вкусу' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Обжарить овощи на гриле.',
+    //             image: 'url',
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Смешать с заправкой и подавать.',
+    //             image: 'url',
+    //         },
+    //     ],
+    // },
 ];

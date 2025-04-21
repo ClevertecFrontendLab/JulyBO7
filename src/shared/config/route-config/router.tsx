@@ -24,7 +24,7 @@ export type RoutePaths = {
 
 export const routePaths: RoutePaths = {
     main: '/',
-    juiciest: '/juiciest/',
+    juiciest: '/juiciest',
     vegan: '/vegan/',
     'children-dish': '/children-dish/',
     'desert-bakery': '/desert-bakery/',
@@ -67,23 +67,50 @@ export const routeConfig: RouteConfig[] = [
         path: `${routePaths.juiciest}:recipeId`,
         element: <RecipePage />,
     },
+    {
+        path: `${routePaths.vegan}snacks/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}first-dish/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}second-dish/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}side-dishes/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}deserts/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}bakery/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}vegetables/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.vegan}drinks/:recipeId`,
+        element: <RecipePage />,
+    },
 
     {
         path: `${routePaths.vegan}`,
         element: <VeganCuisinePage />,
         childrenRoutes: [
-            {
-                path: 'snacks',
-                element: <SnacksPage />,
-                // index: true,
-                childrenRoute: { path: ':recipeId', element: <RecipePage /> },
-            },
+            { path: 'snacks', element: <SnacksPage /> },
             { path: 'first-dish', element: <FirstDishesPage /> },
             { path: 'second-dish', element: <SecondDishesPage /> },
             { path: 'side-dishes', element: <SideDishesPage /> },
             { path: 'deserts', element: <DesertsPage /> },
             { path: 'bakery', element: <BakeryPage /> },
-            { path: 'raw-food-dishes', element: <RawFoodDishesPage /> },
+            { path: 'vegetables', element: <RawFoodDishesPage /> },
             { path: 'drinks', element: <DrinksPage /> },
         ],
     },

@@ -1,27 +1,36 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { Page } from '~/shared/components/page/ui/Page';
 import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { recipes } from '~/shared/recipes';
 
 import { juiciestPageData } from '../model/mockData';
 
 export const JuiciestPage: FC = () => {
-    const cards = juiciestPageData.content.map((data, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={data.title}
-            text={data.text}
-            badgeImage={data.badgeImage}
-            badgeText={data.badgeText}
-            image={data.image}
-            bookmarkCount={data.bookmarkCount}
-            emojiCount={data.emojiCount}
-            recomend={data.recomend}
-        />
-    ));
+    const navigate = useNavigate();
+
+    const cards = recipes.map((data, idx) => {
+        const handleCook = getRecipeCardHandler(data, navigate);
+        return (
+            <HorizontalCard
+                id={data.id}
+                category={data.category[0]}
+                key={idx}
+                title={data.title}
+                text={data.description}
+                image={data.image}
+                bookmarkCount={data.bookmarks}
+                likesCount={data.likes}
+                onCook={handleCook}
+                // recomend={data.recomend}
+            />
+        );
+    });
 
     return (
         <Page>

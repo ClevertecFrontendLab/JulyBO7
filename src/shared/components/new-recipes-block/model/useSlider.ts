@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { SwiperClass } from 'swiper/react';
 
-export const useSwiper = () => {
+export const useSlider = () => {
     const swiperRef = useRef<null | SwiperClass>(null);
 
     const handleNext = () => {

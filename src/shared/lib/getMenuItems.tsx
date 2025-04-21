@@ -310,8 +310,8 @@ export const getMenuItems = () => {
                 },
                 {
                     title: 'Сыроедческие блюда',
-                    routePath: `${routePaths.vegan}raw-food-dishes`,
-                    subCategory: 'raw-food-dishes',
+                    routePath: `${routePaths.vegan}vegetables`,
+                    subCategory: 'vegetables',
                 },
                 {
                     title: 'Напитки',

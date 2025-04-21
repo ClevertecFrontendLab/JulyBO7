@@ -1,6 +1,6 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs, TabsProps, Text } from '@chakra-ui/react';
 import { FC } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
 import { SubMenuItem } from '../../../lib/getMenuItems';
 import cls from './PageTabs.module.scss';
@@ -13,7 +13,32 @@ type PageTabsProps = {
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
+    const navigate = useNavigate();
     const { onChangeTab, items, tabIndex, style } = props;
+
+    const tabList = items.map((item, idx) => {
+        const state = [{ title: item.title, path: item.routePath }];
+        const handleTab = () => {
+            navigate(item.routePath, { state });
+        };
+        return (
+            <Tab
+                data-test-id={`tab-${item.subCategory}-${idx}`}
+                onClick={handleTab}
+                _selected={{
+                    color: 'lime.600',
+                    borderBottomWidth: '2px',
+                    borderBottomStyle: 'solid',
+                    borderBottomColor: 'lime.600',
+                }}
+                flexShrink={0}
+                padding={{ base: '4px 16px', lg: '8px 16px' }}
+                key={idx}
+            >
+                <Text textStyle={{ base: 'md', lg: 'm' }}>{item.title}</Text>
+            </Tab>
+        );
+    });
 
     return (
         <Tabs
@@ -38,22 +63,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
                 borderBottomColor='gray.200'
                 borderBottomStyle='solid'
             >
-                {items.map((item, idx) => (
-                    <Tab
-                        data-test-id={`tab-${item.subCategory}-${idx}`}
-                        _selected={{
-                            color: 'lime.600',
-                            borderBottomWidth: '2px',
-                            borderBottomStyle: 'solid',
-                            borderBottomColor: 'lime.600',
-                        }}
-                        flexShrink={0}
-                        padding={{ base: '4px 16px', lg: '8px 16px' }}
-                        key={idx}
-                    >
-                        <Text textStyle={{ base: 'md', lg: 'm' }}>{item.title}</Text>
-                    </Tab>
-                ))}
+                {tabList}
             </TabList>
             <TabPanels>
                 {items.map((_, idx) => (

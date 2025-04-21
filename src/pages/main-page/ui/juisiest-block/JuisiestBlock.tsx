@@ -4,17 +4,20 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-import { routePaths } from '~/shared/config/route-config/router';
-// import { mainPageData } from '../../model/mockData';
 import { recipes } from '~/shared/recipes';
+
+import { getCardHandler } from '../../model/getCardHandler';
 
 export const JuisiestBlock: FC = () => {
     const navigate = useNavigate();
     const recipeItems = recipes.slice(0, 4);
 
+    const handleSelection = () => {
+        const state = [{ title: 'Самое сочное', path: '/juiciest' }];
+        navigate('/juiciest', { state });
+    };
     const juiciestCards = recipeItems.map((data, idx) => {
-        // const handleCook = () => navigate(`/${data.category[0]}/${data.subcategory[0]}/${data.id}`);
-        const handleCook = () => navigate(`juiciest/${data.id}`);
+        const handleCook = getCardHandler(data, navigate);
 
         return (
             <HorizontalCard
@@ -36,7 +39,7 @@ export const JuisiestBlock: FC = () => {
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
                 <Button
                     data-test-id='juiciest-link'
-                    onClick={() => navigate(routePaths.juiciest)}
+                    onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
                     variant='solid'
@@ -60,7 +63,7 @@ export const JuisiestBlock: FC = () => {
                 {juiciestCards}
                 <Button
                     data-test-id='juiciest-link-mobile'
-                    onClick={() => navigate(routePaths.juiciest)}
+                    onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'
                     variant='solid'

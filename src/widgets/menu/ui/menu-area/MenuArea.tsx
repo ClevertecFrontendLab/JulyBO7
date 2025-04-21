@@ -30,10 +30,12 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
     const menuItems = getMenuItems();
     const navigate = useNavigate();
 
-    const onClickMenuItem = (path: string) => (e: MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        navigate(path);
-    };
+    const onClickMenuItem =
+        (path: string, state: { title: string; path: string }[]) =>
+        (e: MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation();
+            navigate(path, { state });
+        };
 
     const onChangeCategory = (expandedIndex: number) => {
         setActiveCategoryIndex(expandedIndex);
@@ -53,81 +55,88 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
         }
     }, [pathname]);
 
-    const accordeonItems = menuItems.map((menuItem, idx) => (
-        <AccordionItem border='none' key={idx}>
-            {({ isExpanded }) => (
-                <>
-                    <AccordionButton
-                        data-test-id={menuItem.category}
-                        onClick={onClickMenuItem(menuItem.routePath)}
-                        padding='12px 8px'
-                        display='flex'
-                        alignItems='center'
-                        justifyContent='space-between'
-                        _hover={{ bg: 'lime.50' }}
-                        _expanded={{ bg: 'lime.100', fontWeight: '700' }}
-                    >
-                        <Box display='flex' gap='12px'>
-                            <Image src={menuItem.icon} />
-                            <Text textStyle='m' fontWeight={isExpanded ? '700' : '500'}>
-                                {menuItem.title}
-                            </Text>
-                        </Box>
-
-                        {isExpanded ? <ArrowNavbarDown /> : <ArrowNavbar />}
-                    </AccordionButton>
-
-                    <AccordionPanel padding='0'>
-                        <Tabs
-                            variant='unstyled'
-                            index={activeSubCategoryIndex}
-                            onChange={onChangeSubCategory}
+    const accordeonItems = menuItems.map((menuItem, idx) => {
+        const state = [{ title: menuItem.title, path: menuItem.routePath }];
+        return (
+            <AccordionItem border='none' key={idx}>
+                {({ isExpanded }) => (
+                    <>
+                        <AccordionButton
+                            data-test-id={menuItem.category}
+                            onClick={onClickMenuItem(menuItem.routePath, state)}
+                            padding='12px 8px'
+                            display='flex'
+                            alignItems='center'
+                            justifyContent='space-between'
+                            _hover={{ bg: 'lime.50' }}
+                            _expanded={{ bg: 'lime.100', fontWeight: '700' }}
                         >
-                            {menuItem.items.map((item, idx) => (
-                                <Tab
-                                    data-test-id={
-                                        activeSubCategoryIndex === idx
-                                            ? `tab-${item.subCategory}-active`
-                                            : ''
-                                    }
-                                    key={idx}
-                                    onClick={onClickMenuItem(item.routePath)}
-                                    w='100%'
-                                    display='flex'
-                                    justifyContent='start'
-                                    alignItems='center'
-                                    textStyle='m'
-                                    padding='6px 0 6px 52px'
-                                    position='relative'
-                                    _hover={{ bg: 'lime.50', textDecoration: 'none' }}
-                                    _selected={{
-                                        fontWeight: '700',
-                                        _after: {
-                                            w: '8px',
-                                            left: '33px',
-                                        },
-                                    }}
-                                    _after={{
-                                        display: 'block',
-                                        content: `""`,
-                                        w: '1px',
-                                        h: '24px',
-                                        position: 'absolute',
-                                        top: '6px',
-                                        left: '40px',
+                            <Box display='flex' gap='12px'>
+                                <Image src={menuItem.icon} />
+                                <Text textStyle='m' fontWeight={isExpanded ? '700' : '500'}>
+                                    {menuItem.title}
+                                </Text>
+                            </Box>
 
-                                        bg: 'lime.300',
-                                    }}
-                                >
-                                    {item.title}
-                                </Tab>
-                            ))}
-                        </Tabs>
-                    </AccordionPanel>
-                </>
-            )}
-        </AccordionItem>
-    ));
+                            {isExpanded ? <ArrowNavbarDown /> : <ArrowNavbar />}
+                        </AccordionButton>
+
+                        <AccordionPanel padding='0'>
+                            <Tabs
+                                variant='unstyled'
+                                index={activeSubCategoryIndex}
+                                onChange={onChangeSubCategory}
+                            >
+                                {menuItem.items.map((item, idx) => {
+                                    const state = [{ title: item.title, path: item.routePath }];
+
+                                    return (
+                                        <Tab
+                                            data-test-id={
+                                                activeSubCategoryIndex === idx
+                                                    ? `tab-${item.subCategory}-active`
+                                                    : ''
+                                            }
+                                            key={idx}
+                                            onClick={onClickMenuItem(item.routePath, state)}
+                                            w='100%'
+                                            display='flex'
+                                            justifyContent='start'
+                                            alignItems='center'
+                                            textStyle='m'
+                                            padding='6px 0 6px 52px'
+                                            position='relative'
+                                            _hover={{ bg: 'lime.50', textDecoration: 'none' }}
+                                            _selected={{
+                                                fontWeight: '700',
+                                                _after: {
+                                                    w: '8px',
+                                                    left: '33px',
+                                                },
+                                            }}
+                                            _after={{
+                                                display: 'block',
+                                                content: `""`,
+                                                w: '1px',
+                                                h: '24px',
+                                                position: 'absolute',
+                                                top: '6px',
+                                                left: '40px',
+
+                                                bg: 'lime.300',
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Tab>
+                                    );
+                                })}
+                            </Tabs>
+                        </AccordionPanel>
+                    </>
+                )}
+            </AccordionItem>
+        );
+    });
 
     return (
         <Accordion

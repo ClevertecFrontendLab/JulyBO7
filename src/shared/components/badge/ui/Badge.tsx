@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { Category } from '~/shared/types/categories';
 
-import { mappedCategoryData } from '../model/mappedCategoriesData';
+import { mappedCategoryData } from '../../../mappedCategoriesData';
 
 export enum BadgeTheme {
     CATEGORY = 'category',
@@ -35,7 +35,7 @@ export const Badge: FC<BadgeProps> = (props) => {
 
     const categoryData = category && mappedCategoryData[category];
     const badgeText =
-        theme === BadgeTheme.RECOMEND ? `${userName} рекомендует` : categoryData?.text;
+        theme === BadgeTheme.RECOMEND ? `${userName} рекомендует` : categoryData?.title;
 
     return (
         <Box
