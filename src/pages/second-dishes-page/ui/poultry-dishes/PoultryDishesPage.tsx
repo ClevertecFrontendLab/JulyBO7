@@ -7,19 +7,18 @@ import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
 import { recipes } from '~/shared/recipes';
 
-export const SecondDishesPage: FC = () => {
-    const secondDishesSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'second-dish');
+export const PoultryDishesPage: FC = () => {
+    const subcatRecipes = getSubcategoryRecipes(recipes, 'second-dish', 'poultry-dish');
     const navigate = useNavigate();
 
-    const cards = secondDishesSubcatRecipes.map((recipe) => {
-        const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'second-dish');
-
+    const cards = subcatRecipes.map((recipe) => {
+        const handleCook = getRecipeCardHandler(recipe, navigate, 'second-dish', 'poultry-dish');
         return (
             <HorizontalCard
                 key={recipe.id}
                 onCook={handleCook}
-                id={recipe.id}
                 category={recipe.category[0]}
+                id={recipe.id}
                 title={recipe.title}
                 text={recipe.description}
                 image={recipe.image}

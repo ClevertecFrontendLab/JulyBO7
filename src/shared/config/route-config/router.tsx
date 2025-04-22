@@ -4,16 +4,31 @@ import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
 import { RecipePage } from '~/pages/recipe-page/ui/RecipePage';
 import {
+    DumplingsPage,
+    FishPage,
+    FlourSideDishesPage,
+    MashroomPage,
+    MeetPage,
+    OffalPage,
+    PizzaPage,
+    PoultryDishesPage,
+    SecondDishesPage,
+    SteamedDishesPage,
+    SushiPage,
+    VegetableGarnishPage,
+    VegetablesPage,
+} from '~/pages/second-dishes-page';
+import {
     BakeryPage,
     FirstDishesPage,
     SnacksPage,
     VeganCuisinePage,
 } from '~/pages/vegan-cuisine-page';
-import { DesertsPage } from '~/pages/vegan-cuisine-page/ui/deserts-page/DesertsPage';
-import { DrinksPage } from '~/pages/vegan-cuisine-page/ui/drinks-page/DrinksPage';
-import { RawFoodDishesPage } from '~/pages/vegan-cuisine-page/ui/raw-food-dishes-page/RawFoodDishesPage';
-import { SecondDishesPage } from '~/pages/vegan-cuisine-page/ui/second-dishes-page/SecondDishesPage';
-import { SideDishesPage } from '~/pages/vegan-cuisine-page/ui/side-dishes-page/SideDishesPage';
+import { SecondDishPage } from '~/pages/vegan-cuisine-page';
+import { DesertsPage } from '~/pages/vegan-cuisine-page';
+import { DrinksPage } from '~/pages/vegan-cuisine-page';
+import { RawFoodDishesPage } from '~/pages/vegan-cuisine-page';
+import { SideDishesPage } from '~/pages/vegan-cuisine-page';
 import { Category } from '~/shared/types/categories';
 
 type AppRoutes = Category | 'main' | 'juiciest' | 'not-page';
@@ -67,6 +82,7 @@ export const routeConfig: RouteConfig[] = [
         path: `${routePaths.juiciest}:recipeId`,
         element: <RecipePage />,
     },
+    //vegan category:
     {
         path: `${routePaths.vegan}snacks/:recipeId`,
         element: <RecipePage />,
@@ -106,7 +122,7 @@ export const routeConfig: RouteConfig[] = [
         childrenRoutes: [
             { path: 'snacks', element: <SnacksPage /> },
             { path: 'first-dish', element: <FirstDishesPage /> },
-            { path: 'second-dish', element: <SecondDishesPage /> },
+            { path: 'second-dish', element: <SecondDishPage /> },
             { path: 'side-dishes', element: <SideDishesPage /> },
             { path: 'deserts', element: <DesertsPage /> },
             { path: 'bakery', element: <BakeryPage /> },
@@ -114,6 +130,75 @@ export const routeConfig: RouteConfig[] = [
             { path: 'drinks', element: <DrinksPage /> },
         ],
     },
+    //second-dish category:
+    {
+        path: `${routePaths['second-dish']}`,
+        element: <SecondDishesPage />,
+        childrenRoutes: [
+            { path: 'meet', element: <MeetPage /> },
+            { path: 'fish', element: <FishPage /> },
+            { path: 'vegetables', element: <VegetablesPage /> },
+            { path: 'poultry-dish', element: <PoultryDishesPage /> },
+            { path: 'mashroom', element: <MashroomPage /> },
+            { path: 'offal', element: <OffalPage /> },
+            { path: 'steamed-dishes', element: <SteamedDishesPage /> },
+            { path: 'dumplings', element: <DumplingsPage /> },
+            { path: 'flour-side-dishes', element: <FlourSideDishesPage /> },
+            { path: 'vegetable-garnish', element: <VegetableGarnishPage /> },
+            { path: 'pizza', element: <PizzaPage /> },
+            { path: 'sushi', element: <SushiPage /> },
+        ],
+    },
+    {
+        path: `${routePaths['second-dish']}meet/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}fish/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}vegetables/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}poultry-dish/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}mashroom/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}offal/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}steamed-dishes/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}dumplings/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}flour-side-dishes/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}vegetable-garnish/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}pizza/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths['second-dish']}sushi/:recipeId`,
+        element: <RecipePage />,
+    },
+
+    //children dishes category:
     {
         path: `${routePaths['children-dish']}:item`,
         element: <VeganCuisinePage />,
@@ -150,10 +235,7 @@ export const routeConfig: RouteConfig[] = [
         path: `${routePaths.sauces}:item`,
         element: <VeganCuisinePage />,
     },
-    {
-        path: `${routePaths['second-dish']}:item`,
-        element: <VeganCuisinePage />,
-    },
+
     {
         path: `${routePaths.snacks}:item`,
         element: <VeganCuisinePage />,

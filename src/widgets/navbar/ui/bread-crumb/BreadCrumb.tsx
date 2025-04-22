@@ -15,7 +15,7 @@ export const BreadCrumb: FC = () => {
 
         navigate(path, { state: newState });
     };
-
+    console.log('STATE: ', state);
     return (
         <Breadcrumb
             data-test-id='breadcrumbs'

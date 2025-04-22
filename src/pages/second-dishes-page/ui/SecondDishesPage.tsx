@@ -9,17 +9,17 @@ import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { getMenuItems } from '~/shared/lib/getMenuItems';
 
-import { veganPageData } from '../model/mockData';
+import { secondDishesPageData } from '../model/mockData';
 
-export const VeganCuisinePage: FC = () => {
+export const SecondDishesPage: FC = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const { pathname } = useLocation();
 
     const categoryData = useMemo(
-        () => getMenuItems().find((item) => item.category === 'vegan')!,
+        () => getMenuItems().find((item) => item.category === 'second-dish')!,
         [],
     );
-    const veganCuisineSubcategory = categoryData.items;
+    const secondDishesSubcategory = categoryData.items;
 
     const pathCategory = categoryData.routePath;
     const titleCategory = categoryData.title;
@@ -39,23 +39,23 @@ export const VeganCuisinePage: FC = () => {
         <Page>
             <VStack align='center'>
                 <PageHeader
-                    title={veganPageData.headerPage.title}
-                    text={veganPageData.headerPage.text}
+                    title={secondDishesPageData.headerPage.title}
+                    text={secondDishesPageData.headerPage.text}
                 />
 
                 <PageTabs
                     onChangeTab={onChangeTab}
-                    items={veganCuisineSubcategory}
+                    items={secondDishesSubcategory}
                     tabIndex={currentTabIndex}
                     titleCategory={titleCategory}
                     pathCategory={pathCategory}
                 />
             </VStack>
             <PageFooter
-                title={veganPageData.footerPage.title}
-                text={veganPageData.footerPage.text}
-                withoutImageCardData={veganPageData.footerPage.withoutImageCards}
-                withoutTextCardData={veganPageData.footerPage.withoutTextCards}
+                title={secondDishesPageData.footerPage.title}
+                text={secondDishesPageData.footerPage.text}
+                withoutImageCardData={secondDishesPageData.footerPage.withoutImageCards}
+                withoutTextCardData={secondDishesPageData.footerPage.withoutTextCards}
             />
         </Page>
     );

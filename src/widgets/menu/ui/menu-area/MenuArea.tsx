@@ -56,7 +56,10 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
     }, [pathname]);
 
     const accordeonItems = menuItems.map((menuItem, idx) => {
-        const state = [{ title: menuItem.title, path: menuItem.routePath }];
+        const state = [
+            { title: menuItem.title, path: menuItem.routePath },
+            { title: menuItem.items[0].title, path: menuItem.items[0].routePath },
+        ];
         return (
             <AccordionItem border='none' key={idx}>
                 {({ isExpanded }) => (
@@ -88,7 +91,10 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
                                 onChange={onChangeSubCategory}
                             >
                                 {menuItem.items.map((item, idx) => {
-                                    const state = [{ title: item.title, path: item.routePath }];
+                                    const state = [
+                                        { title: menuItem.title, path: menuItem.routePath },
+                                        { title: item.title, path: item.routePath },
+                                    ];
 
                                     return (
                                         <Tab

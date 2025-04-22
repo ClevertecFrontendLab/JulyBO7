@@ -45,6 +45,42 @@ export const mappedCategoryData: MappedCategoryData = {
             ['drinks']: { title: 'Напитки' },
         },
     },
+    ['second-dish']: {
+        image: frying,
+        title: 'Вторые блюда',
+        defaultPath: '/second-dish/meet',
+        subcategory: [
+            'meet',
+            'fish',
+            'vegetables',
+            'poultry-dish',
+            'mashroom',
+            'offal',
+            'steamed-dishes',
+            'dumplings',
+            'flour-side-dishes',
+            'vegetable-garnish',
+            'pizza',
+            'sushi',
+        ],
+        subcategoryData: {
+            ['meet']: { title: 'Мясные' },
+            ['fish']: { title: 'Рыбные' },
+            ['vegetables']: { title: 'Овощные' },
+            ['poultry-dish']: { title: 'Из птицы' },
+            ['mashroom']: { title: 'Из грибов' },
+            ['steamed-dishes']: { title: 'На пару' },
+            ['dumplings']: { title: 'Пельмени, вареники' },
+            ['flour-side-dishes']: { title: 'Мучные гарниры' },
+            ['vegetable-garnish']: { title: 'Овощные гарниры' },
+            ['pizza']: { title: 'Пицца' },
+            ['sushi']: { title: 'Суши' },
+        },
+    },
+    ['snacks']: {
+        image: snacks,
+        title: 'Закуски',
+    },
     ['children-dish']: {
         image: child,
         title: 'Детские блюда',
@@ -52,13 +88,5 @@ export const mappedCategoryData: MappedCategoryData = {
     ['national']: {
         image: international,
         title: 'Национальные',
-    },
-    ['second-dish']: {
-        image: frying,
-        title: 'Вторые блюда',
-    },
-    ['snacks']: {
-        image: snacks,
-        title: 'Закуски',
     },
 };

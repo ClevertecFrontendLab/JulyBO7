@@ -135,51 +135,63 @@ export const getMenuItems = () => {
                 {
                     title: 'Мясные',
                     routePath: `${routePaths['second-dish']}meet`,
+                    subCategory: 'meet',
                 },
 
                 {
                     title: 'Рыбные',
                     routePath: `${routePaths['second-dish']}fish`,
+                    subCategory: 'fish',
                 },
                 {
                     title: 'Овощные',
                     routePath: `${routePaths['second-dish']}vegetables`,
+                    subCategory: 'vegetables',
                 },
                 {
                     title: 'Из птицы',
-                    routePath: `${routePaths['second-dish']}poultry`,
+                    routePath: `${routePaths['second-dish']}poultry-dish`,
+                    subCategory: 'poultry-dish',
                 },
                 {
                     title: 'Из грибов',
                     routePath: `${routePaths['second-dish']}mashroom`,
+                    subCategory: 'mashroom',
                 },
                 {
                     title: 'Из субпродуктов',
                     routePath: `${routePaths['second-dish']}offal`,
+                    subCategory: 'offal',
                 },
                 {
                     title: 'На пару',
-                    routePath: `${routePaths['second-dish']}for-a-couple`,
+                    routePath: `${routePaths['second-dish']}steamed-dishes`,
+                    subCategory: 'steamed-dishes',
                 },
                 {
                     title: 'Пельмени, вареники',
                     routePath: `${routePaths['second-dish']}dumplings`,
+                    subCategory: 'dumplings',
                 },
                 {
                     title: 'Мучные гарниры',
                     routePath: `${routePaths['second-dish']}flour-side-dishes`,
+                    subCategory: 'flour-side-dishes',
                 },
                 {
                     title: 'Овощные гарниры',
                     routePath: `${routePaths['second-dish']}vegetable-garnish`,
+                    subCategory: 'vegetable-garnish',
                 },
                 {
                     title: 'Пицца',
                     routePath: `${routePaths['second-dish']}pizza`,
+                    subCategory: 'pizza',
                 },
                 {
                     title: 'Суши',
                     routePath: `${routePaths['second-dish']}sushi`,
+                    subCategory: 'sushi',
                 },
             ],
             icon: FryingPan,

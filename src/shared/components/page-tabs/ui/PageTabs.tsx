@@ -8,16 +8,22 @@ import cls from './PageTabs.module.scss';
 type PageTabsProps = {
     onChangeTab: (index: number) => void;
     items: SubMenuItem[];
+    titleCategory: string;
+    pathCategory: string;
     tabIndex?: number;
     style?: TabsProps;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
     const navigate = useNavigate();
-    const { onChangeTab, items, tabIndex, style } = props;
+    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory } = props;
 
     const tabList = items.map((item, idx) => {
-        const state = [{ title: item.title, path: item.routePath }];
+        const state = [
+            { title: titleCategory, path: pathCategory },
+            { title: item.title, path: item.routePath },
+        ];
+
         const handleTab = () => {
             navigate(item.routePath, { state });
         };

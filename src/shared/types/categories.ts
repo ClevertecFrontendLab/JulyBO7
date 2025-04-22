@@ -41,4 +41,17 @@ export type SubCategory =
     | 'vegetable-soups'
     | 'broths'
     | 'cold-soups'
-    | 'diet-soups';
+    | 'diet-soups'
+    //second-dishes:
+    | 'meet'
+    | 'fish'
+    | 'vegetables'
+    | 'poultry-dish'
+    | 'mashroom'
+    | 'offal'
+    | 'steamed-dishes'
+    | 'dumplings'
+    | 'flour-side-dishes'
+    | 'vegetable-garnish'
+    | 'pizza'
+    | 'sushi';

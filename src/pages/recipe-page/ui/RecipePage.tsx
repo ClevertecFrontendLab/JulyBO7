@@ -16,7 +16,7 @@ import { IngredientsBlock } from './ingredients-block/IngredientsBlock';
 export const RecipePage: FC = () => {
     const { recipeId } = useParams<{ recipeId: string }>();
     const recipe = recipes[Number(recipeId)];
-
+    console.log('RecipePage: ', recipe);
     return (
         <Page>
             <VStack align='center' spacing={{ base: '24px', lg: '40px' }} border='1px solid red'>

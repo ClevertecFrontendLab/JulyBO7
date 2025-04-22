@@ -5,6 +5,7 @@ import image5 from './assets/images/main-page-images/salat.jpg';
 import image6 from './assets/images/main-page-images/solyanka.jpg';
 import image7 from './assets/images/main-page-images/tom.jpg';
 import image1 from './assets/images/recipe-page/recipe-lapsha.png';
+import step6 from './assets/images/recipe-page/steep6.png';
 import step1 from './assets/images/recipe-page/step1.png';
 import step2 from './assets/images/recipe-page/step2.png';
 import step3 from './assets/images/recipe-page/step3.png';
@@ -288,59 +289,59 @@ export const recipes: Recipe[] = [
             },
         ],
     },
-    // {
-    //     id: '7',
-    //     title: 'Лапша с курицей и шафраном',
-    //     description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
-    //     category: ['second-dish'],
-    //     subcategory: ['poultry-dish'],
-    //     image: image1,
-    //     bookmarks: 258,
-    //     likes: 1342,
-    //     date: '2024-03-08T00:00:00Z',
-    //     time: '40 минут',
-    //     portions: 4,
-    //     nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
-    //     ingredients: [
-    //         { title: 'лапша', count: '200', measureUnit: 'г' },
-    //         { title: 'курица', count: '300', measureUnit: 'г' },
-    //         { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
-    //         { title: 'лук', count: '1', measureUnit: 'шт.' },
-    //     ],
-    //     steps: [
-    //         {
-    //             stepNumber: 1,
-    //             description: 'Отварить лапшу.',
-    //             image: step1,
-    //         },
-    //         {
-    //             stepNumber: 2,
-    //             description: 'Обжарить курицу с луком и шафраном.',
-    //             image: step2,
-    //         },
-    //         {
-    //             stepNumber: 3,
-    //             description: 'Смешать лапшу с курицей и подавать.',
-    //             image: step3,
-    //         },
-    //         {
-    //             stepNumber: 4,
-    //             description:
-    //                 'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-    //         },
-    //         {
-    //             stepNumber: 5,
-    //             description:
-    //                 'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-    //             image: step4,
-    //         },
-    //         {
-    //             stepNumber: 6,
-    //             description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
-    //             image: step6,
-    //         },
-    //     ],
-    // },
+    {
+        id: '7',
+        title: 'Лапша с курицей и шафраном',
+        description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
+        category: ['second-dish'],
+        subcategory: ['poultry-dish'],
+        image: image1,
+        bookmarks: 258,
+        likes: 1342,
+        date: '2024-03-08T00:00:00Z',
+        time: '40 минут',
+        portions: 4,
+        nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
+        ingredients: [
+            { title: 'лапша', count: '200', measureUnit: 'г' },
+            { title: 'курица', count: '300', measureUnit: 'г' },
+            { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
+            { title: 'лук', count: '1', measureUnit: 'шт.' },
+        ],
+        steps: [
+            {
+                stepNumber: 1,
+                description: 'Отварить лапшу.',
+                image: step1,
+            },
+            {
+                stepNumber: 2,
+                description: 'Обжарить курицу с луком и шафраном.',
+                image: step2,
+            },
+            {
+                stepNumber: 3,
+                description: 'Смешать лапшу с курицей и подавать.',
+                image: step3,
+            },
+            {
+                stepNumber: 4,
+                description:
+                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+            },
+            {
+                stepNumber: 5,
+                description:
+                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+                image: step4,
+            },
+            {
+                stepNumber: 6,
+                description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
+                image: step6,
+            },
+        ],
+    },
     // {
     //     id: '8',
     //     title: 'Гриль-салат с овощами',
@@ -364,12 +365,12 @@ export const recipes: Recipe[] = [
     //         {
     //             stepNumber: 1,
     //             description: 'Обжарить овощи на гриле.',
-    //             image: 'url',
+    //             image: step1,
     //         },
     //         {
     //             stepNumber: 2,
     //             description: 'Смешать с заправкой и подавать.',
-    //             image: 'url',
+    //             image: step2,
     //         },
     //     ],
     // },
