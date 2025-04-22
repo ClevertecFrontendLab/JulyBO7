@@ -4,14 +4,13 @@ import { FC } from 'react';
 import { MenuArea } from '~/widgets/menu/ui/menu-area/MenuArea';
 import { MenuFooter } from '~/widgets/menu/ui/menu-footer/MenuFooter';
 
-import { BreadCrumb, BreadCrumbItem } from '../bread-crumb/BreadCrumb';
+import { BreadCrumb } from '../bread-crumb/BreadCrumb';
 
 type MobileMenuProps = {
     onClose: () => void;
-    breadCrimbers: BreadCrumbItem[];
 };
 
-export const MobileMenu: FC<MobileMenuProps> = ({ onClose, breadCrimbers }) => (
+export const MobileMenu: FC<MobileMenuProps> = ({ onClose }) => (
     <Box
         position='fixed'
         zIndex='1000'
@@ -28,7 +27,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ onClose, breadCrimbers }) => (
         flexShrink={0}
         boxShadow='0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1)'
     >
-        <BreadCrumb items={breadCrimbers} padding='0px 20px' onClick={onClose} />
+        <BreadCrumb padding='0px 20px' onClick={onClose} />
         <MenuArea isMobile padding='8px 16px 10px 10px' />
         <MenuFooter />
     </Box>

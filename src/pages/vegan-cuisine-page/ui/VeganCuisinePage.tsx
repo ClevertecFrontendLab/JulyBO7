@@ -48,6 +48,7 @@ export const VeganCuisinePage: FC = () => {
                     items={veganCuisineSubcategory}
                     tabIndex={currentTabIndex}
                     titleCategory={titleCategory}
+                    category='vegan'
                     pathCategory={pathCategory}
                 />
             </VStack>

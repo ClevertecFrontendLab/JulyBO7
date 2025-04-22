@@ -49,6 +49,7 @@ export const SecondDishesPage: FC = () => {
                     tabIndex={currentTabIndex}
                     titleCategory={titleCategory}
                     pathCategory={pathCategory}
+                    category='second-dish'
                 />
             </VStack>
             <PageFooter

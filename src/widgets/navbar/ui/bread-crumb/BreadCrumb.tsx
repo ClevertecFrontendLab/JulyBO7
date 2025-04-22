@@ -1,26 +1,26 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbProps } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-type BreadCrumbState = { title: string; path: string };
+import { Category } from '~/shared/types/categories';
 
-export const BreadCrumb: FC = () => {
+import { getCrumbHandler } from '../../model/getCrumbHandler';
+
+export type CrumbState = { title: string; path: string; category?: Category };
+
+export const BreadCrumb: FC<BreadcrumbProps> = (props) => {
     const { state } = useLocation();
     const navigate = useNavigate();
 
-    const handleCrumb = (path: string, title: string) => {
-        const index = state.findIndex((item: BreadCrumbState) => item.title === title);
-        const newState = state.slice(0, index + 1);
+    const handleCrumb = getCrumbHandler(navigate, state);
 
-        navigate(path, { state: newState });
-    };
-    console.log('STATE: ', state);
     return (
         <Breadcrumb
             data-test-id='breadcrumbs'
             spacing='8px'
             separator={<ChevronRightIcon color='gray.500' />}
+            {...props}
         >
             <BreadcrumbItem>
                 <BreadcrumbLink
@@ -31,14 +31,14 @@ export const BreadCrumb: FC = () => {
                 </BreadcrumbLink>
             </BreadcrumbItem>
             {state &&
-                state.map((item: BreadCrumbState, idx: number) => {
+                state.map((item: CrumbState, idx: number) => {
                     const currentPage = idx === state.length - 1;
                     return (
                         <BreadcrumbItem key={idx}>
                             <BreadcrumbLink
                                 color={currentPage ? 'primaryColor' : 'gray.150'}
                                 isCurrentPage={currentPage}
-                                onClick={() => handleCrumb(item.path, item.title)}
+                                onClick={() => handleCrumb(item.path, item.title, item.category)}
                             >
                                 {item.title}
                             </BreadcrumbLink>

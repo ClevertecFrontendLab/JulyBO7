@@ -1,14 +1,13 @@
 import { Box, HStack, Text } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 
 import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
 import avatar from '~/shared/assets/images/Avatar.png';
 import { routePaths } from '~/shared/config/route-config/router';
 
-import { getBreadCrimbers } from '../model/getBreadCrimbers';
 import { AvatarBlock } from './avatar-block/AvatarBlock';
 import { BreadCrumb } from './bread-crumb/BreadCrumb';
 import { MobileMenu } from './mobile-menu/MobileMenu';
@@ -17,7 +16,7 @@ import { UserInfoBlock } from './user-info-block/UserInfoBlock';
 
 export const Navbar: FC = () => {
     const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
-    const { pathname } = useLocation();
+    // const { pathname } = useLocation();
 
     const userName = 'Екатерина Константинопольская';
     const userEmail = '@bake_and_pie';
@@ -25,7 +24,6 @@ export const Navbar: FC = () => {
     const bookmarkCount = 185;
     const emojiCount = 587;
     const peopleCount = 589;
-    const breadCrimbers = getBreadCrimbers(pathname);
 
     const handleToggleMobileMenu = () => {
         setIsOpenMobileMenu(!isOpenMobileMenu);
@@ -68,7 +66,7 @@ export const Navbar: FC = () => {
                             <LogoSecond />
                         </Text>
                     </ChakraLink>
-                    <BreadCrumb items={breadCrimbers} display={{ base: 'none', lg: 'block' }} />
+                    <BreadCrumb display={{ base: 'none', lg: 'block' }} />
                 </Box>
                 <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
                 <UserInfoBlock
@@ -92,9 +90,7 @@ export const Navbar: FC = () => {
                     onClick={handleCloseMobileMenu}
                 />
             )}
-            {isOpenMobileMenu && (
-                <MobileMenu onClose={handleCloseMobileMenu} breadCrimbers={breadCrimbers} />
-            )}
+            {isOpenMobileMenu && <MobileMenu onClose={handleCloseMobileMenu} />}
         </>
     );
 };

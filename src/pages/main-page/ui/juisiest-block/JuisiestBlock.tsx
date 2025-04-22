@@ -4,9 +4,8 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { recipes } from '~/shared/recipes';
-
-import { getCardHandler } from '../../model/getCardHandler';
 
 export const JuisiestBlock: FC = () => {
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const JuisiestBlock: FC = () => {
         navigate('/juiciest', { state });
     };
     const juiciestCards = recipeItems.map((data, idx) => {
-        const handleCook = getCardHandler(data, navigate);
+        const handleCook = getRecipeCardHandler(data, navigate);
 
         return (
             <HorizontalCard

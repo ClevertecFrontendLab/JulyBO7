@@ -1,6 +1,6 @@
 import { NavigateFunction } from 'react-router';
 
-import { CategoryData, mappedCategoryData } from '../mappedCategoriesData';
+import { mappedCategoryData } from '../mappedCategoriesData';
 import { Category, SubCategory } from '../types/categories';
 import { Recipe } from '../types/recipe';
 import { getCategoryAndSubcatFromRecipe } from './getCategoryAndSubcategoryFromRecipe';
@@ -11,41 +11,42 @@ export const getRecipeCardHandler = (
     category?: Category,
     subcategory?: SubCategory,
 ) => {
-    let currentCategory: Partial<CategoryData>;
-    let currentSubcategory: SubCategory;
     let handleCard: () => void;
 
     if (category && subcategory) {
-        currentCategory = mappedCategoryData[category];
-        currentSubcategory = subcategory;
+        const currentCategoryData = mappedCategoryData[category];
+
         handleCard = () => {
             const state = [
                 {
-                    title: currentCategory.title,
-                    path: currentCategory.defaultPath,
+                    title: currentCategoryData.title,
+                    path: currentCategoryData.defaultPath,
+                    category,
                 },
                 {
-                    title: currentCategory.subcategoryData[currentSubcategory]?.title,
-                    path: `/${category}/${currentSubcategory}`,
+                    title: currentCategoryData.subcategoryData[subcategory]?.title,
+                    path: `/${category}/${subcategory}`,
                 },
                 {
                     title: data.title,
-                    path: `/${category}/${currentSubcategory}/${data.id}`,
+                    path: `/${category}/${subcategory}/${data.id}`,
                 },
             ];
-            navigate(`/${category}/${currentSubcategory}/${data.id}`, { state });
+            navigate(`/${category}/${subcategory}/${data.id}`, { state });
         };
     } else {
-        currentCategory = getCategoryAndSubcatFromRecipe(data).currentCategory; //для слайдера и самое вкусное - 1-ая категория и 1ая подходящую под категорию подкатегория
-        currentSubcategory = getCategoryAndSubcatFromRecipe(data).currentSubcategory;
+        const { currentCategoryData, currentSubcategory, currentCategory } =
+            getCategoryAndSubcatFromRecipe(data); //для слайдера и самое вкусное - 1-ая категория и 1ая подходящая под категорию подкатегория
+
         handleCard = () => {
             const state = [
                 {
-                    title: currentCategory.title,
-                    path: currentCategory.defaultPath,
+                    title: currentCategoryData.title,
+                    path: currentCategoryData.defaultPath,
+                    category: currentCategory,
                 },
                 {
-                    title: currentCategory.subcategoryData[currentSubcategory]?.title,
+                    title: currentCategoryData.subcategoryData[currentSubcategory]?.title,
                     path: `/${data.category[0]}/${currentSubcategory}`,
                 },
                 {

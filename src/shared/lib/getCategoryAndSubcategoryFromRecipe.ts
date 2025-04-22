@@ -3,7 +3,8 @@ import { SubCategory } from '../types/categories';
 import { Recipe } from '../types/recipe';
 
 export const getCategoryAndSubcatFromRecipe = (data: Recipe) => {
-    const currentCategory = mappedCategoryData[data.category[0]];
+    const currentCategoryData = mappedCategoryData[data.category[0]];
+    const currentCategory = data.category[0];
 
     let currentSubcategory: SubCategory;
 
@@ -15,6 +16,7 @@ export const getCategoryAndSubcatFromRecipe = (data: Recipe) => {
         if (currentSubcategory) break;
     }
     return {
+        currentCategoryData,
         currentCategory,
         currentSubcategory,
     };

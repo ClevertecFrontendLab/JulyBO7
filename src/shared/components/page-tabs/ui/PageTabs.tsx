@@ -2,6 +2,8 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs, TabsProps, Text } from '@chakr
 import { FC } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 
+import { Category } from '~/shared/types/categories';
+
 import { SubMenuItem } from '../../../lib/getMenuItems';
 import cls from './PageTabs.module.scss';
 
@@ -10,17 +12,18 @@ type PageTabsProps = {
     items: SubMenuItem[];
     titleCategory: string;
     pathCategory: string;
+    category: Category;
     tabIndex?: number;
     style?: TabsProps;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
     const navigate = useNavigate();
-    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory } = props;
+    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory, category } = props;
 
     const tabList = items.map((item, idx) => {
         const state = [
-            { title: titleCategory, path: pathCategory },
+            { title: titleCategory, path: pathCategory, category },
             { title: item.title, path: item.routePath },
         ];
 

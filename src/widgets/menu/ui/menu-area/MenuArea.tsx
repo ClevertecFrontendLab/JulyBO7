@@ -27,7 +27,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
     const [activeSubCategoryIndex, setActiveSubCategoryIndex] = useState(0);
     const { pathname } = useLocation();
 
-    const menuItems = getMenuItems();
+    const menuCategories = getMenuItems();
     const navigate = useNavigate();
 
     const onClickMenuItem =
@@ -55,9 +55,9 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
         }
     }, [pathname]);
 
-    const accordeonItems = menuItems.map((menuItem, idx) => {
+    const accordeonItems = menuCategories.map((menuItem, idx) => {
         const state = [
-            { title: menuItem.title, path: menuItem.routePath },
+            { title: menuItem.title, path: menuItem.routePath, category: menuItem.category },
             { title: menuItem.items[0].title, path: menuItem.items[0].routePath },
         ];
         return (
@@ -92,7 +92,11 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
                             >
                                 {menuItem.items.map((item, idx) => {
                                     const state = [
-                                        { title: menuItem.title, path: menuItem.routePath },
+                                        {
+                                            title: menuItem.title,
+                                            path: menuItem.routePath,
+                                            category: menuItem.category,
+                                        },
                                         { title: item.title, path: item.routePath },
                                     ];
 
