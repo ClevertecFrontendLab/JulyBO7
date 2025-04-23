@@ -1,5 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
 
+import { checkboxTheme } from './components/checkbox';
+import { inputTheme } from './components/input';
+import { switchTheme } from './components/switch';
+
 export const theme = extendTheme({
     styles: {
         global: {
@@ -38,6 +42,7 @@ export const theme = extendTheme({
             200: 'rgba(0, 0, 0, 0.08)',
             250: 'rgba(0, 0, 0, 0.8)',
             300: 'rgba(0, 0, 0, 0.06)',
+            350: 'rgba(0, 0, 0, 0.16)',
         },
     },
     fontSizes: {
@@ -217,5 +222,23 @@ export const theme = extendTheme({
                 },
             },
         },
+        Input: inputTheme,
+
+        Checkbox: checkboxTheme,
+        Badge: {
+            variants: {
+                outline_lime: {
+                    border: '1px solid #b1ff2e',
+                    borderRadius: '6px',
+                    p: '0px 8px',
+                    color: 'lime.600',
+                    textTransform: 'capitalize',
+                    bg: 'inherit',
+                    fontWeight: 500,
+                    fontSize: 'xs',
+                },
+            },
+        },
+        Switch: switchTheme,
     },
 });

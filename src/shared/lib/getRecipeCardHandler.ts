@@ -5,6 +5,8 @@ import { Category, SubCategory } from '../types/categories';
 import { Recipe } from '../types/recipe';
 import { getCategoryAndSubcatFromRecipe } from './getCategoryAndSubcategoryFromRecipe';
 
+//* возвращает фцнкцию для onCook карточки рецепта (для карточки в слайдере)
+
 export const getRecipeCardHandler = (
     data: Recipe,
     navigate: NavigateFunction,

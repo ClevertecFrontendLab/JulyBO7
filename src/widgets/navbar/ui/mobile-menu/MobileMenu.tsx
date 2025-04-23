@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { MenuArea } from '~/widgets/menu/ui/menu-area/MenuArea';
-import { MenuFooter } from '~/widgets/menu/ui/menu-footer/MenuFooter';
+import { MenuArea } from '~/widgets/menu';
+import { MenuFooter } from '~/widgets/menu';
 
 import { BreadCrumb } from '../bread-crumb/BreadCrumb';
 
