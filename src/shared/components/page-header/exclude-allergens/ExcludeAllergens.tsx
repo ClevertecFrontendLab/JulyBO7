@@ -1,5 +1,5 @@
 import { Badge, FormControl, FormLabel, HStack, Switch } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 
 import { Checkbox } from '../../checkbox/ui/Checkbox';
 import { Select } from '../../select/Select';
@@ -10,15 +10,23 @@ const allergens = [
     'Рыба',
     'Моллюски',
     'Орехи',
-    'Томат (помидор)',
+    'Томат',
     'Цитрусовые',
     'Клубника (ягоды)',
     'Шоколад',
 ];
-
-export const ExcludeAllergens = () => {
+type ExcludeAllergensProps = {
+    selectedAllergens: string[];
+    onAllergenSelect: (value: string[]) => void;
+    onSwitchClick?: (value: boolean) => void;
+};
+export const ExcludeAllergens: FC<ExcludeAllergensProps> = ({
+    onSwitchClick,
+    onAllergenSelect,
+    selectedAllergens,
+}) => {
     const [isExcludeAllergens, setIsExcludeAllergens] = useState<boolean>(false);
-    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
+    // const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
     const [anotherAllergen, setAnotherAllergen] = useState<string>();
 
     //обработчик switch:
@@ -26,22 +34,26 @@ export const ExcludeAllergens = () => {
         const checked = e.currentTarget.checked;
         setIsExcludeAllergens(checked);
         if (!checked) {
-            setSelectedAllergens([]);
+            // setSelectedAllergens([]);
+            onAllergenSelect([]);
+            // onSwitchClick?.([])
             setAnotherAllergen('');
         }
+        onSwitchClick?.(checked);
     };
     //обработчик чекбокса = добавление аллергена:
     const handleAllergenSelect = (allergen: string) => (checked: boolean) => {
         if (checked) {
-            setSelectedAllergens([...selectedAllergens, allergen]);
+            // setSelectedAllergens([...selectedAllergens, allergen]);
+            onAllergenSelect([...selectedAllergens, allergen]);
         } else {
-            setSelectedAllergens(selectedAllergens.filter((item) => item !== allergen));
+            onAllergenSelect(selectedAllergens.filter((item) => item !== allergen));
         }
     };
     //обработчик кнопки = добавление своего аллергена:
     const handleAllergenAddition = () => {
         if (anotherAllergen) {
-            setSelectedAllergens([...selectedAllergens, anotherAllergen]);
+            onAllergenSelect([...selectedAllergens, anotherAllergen]);
             setAnotherAllergen('');
         }
     };

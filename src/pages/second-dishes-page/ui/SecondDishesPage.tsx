@@ -8,21 +8,26 @@ import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { getMenuItems } from '~/shared/lib/getMenuItems';
+import { recipes } from '~/shared/recipes';
+import { OutletContext } from '~/shared/types/common';
 
 import { secondDishesPageData } from '../model/mockData';
 
 export const SecondDishesPage: FC = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
     const { pathname } = useLocation();
+
+    const context: OutletContext = { recipes: recipes, allergenFilter: selectedAllergens };
+
+    const handleAllergenChange = (value: string[]) => {
+        setSelectedAllergens(value);
+    };
 
     const categoryData = useMemo(
         () => getMenuItems().find((item) => item.category === 'second-dish')!,
         [],
     );
-    const secondDishesSubcategory = categoryData.items;
-
-    const pathCategory = categoryData.routePath;
-    const titleCategory = categoryData.title;
 
     const onChangeTab = (ind: number) => {
         setCurrentTabIndex(ind);
@@ -41,15 +46,18 @@ export const SecondDishesPage: FC = () => {
                 <PageHeader
                     title={secondDishesPageData.headerPage.title}
                     text={secondDishesPageData.headerPage.text}
+                    selectedAllergens={selectedAllergens}
+                    onAllergenChange={handleAllergenChange}
                 />
 
                 <PageTabs
                     onChangeTab={onChangeTab}
-                    items={secondDishesSubcategory}
+                    items={categoryData.items}
                     tabIndex={currentTabIndex}
-                    titleCategory={titleCategory}
-                    pathCategory={pathCategory}
+                    titleCategory={categoryData.title}
+                    pathCategory={categoryData.routePath}
                     category='second-dish'
+                    context={context}
                 />
             </VStack>
             <PageFooter

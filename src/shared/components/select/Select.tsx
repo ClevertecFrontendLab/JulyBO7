@@ -29,8 +29,6 @@ export const Select: React.FC<SelectProps> = (props) => {
     } = props;
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    console.log('SELECT is open', isOpen);
-    console.log('OPRIONS: ', options);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         onInputChange?.(e.currentTarget.value);

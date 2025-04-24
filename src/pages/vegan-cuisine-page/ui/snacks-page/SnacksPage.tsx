@@ -1,17 +1,26 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
-import { recipes } from '~/shared/recipes';
+import { OutletContext } from '~/shared/types/common';
+// import { recipes } from '~/shared/recipes';
 
 export const SnacksPage: FC = () => {
-    const snacksSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'snacks');
     const navigate = useNavigate();
+    const { recipes, allergenFilter } = useOutletContext<OutletContext>();
 
-    const cards = snacksSubcatRecipes.map((recipe) => {
+    const snacksSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'snacks');
+
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
+        snacksSubcatRecipes,
+        allergenFilter,
+    );
+
+    const cards = filteredRecipesByAllergen.map((recipe) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'snacks');
         return (
             <HorizontalCard

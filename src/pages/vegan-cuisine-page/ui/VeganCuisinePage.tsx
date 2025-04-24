@@ -8,21 +8,38 @@ import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { getMenuItems } from '~/shared/lib/getMenuItems';
+import { recipes } from '~/shared/recipes';
+import { OutletContext } from '~/shared/types/common';
 
 import { veganPageData } from '../model/mockData';
+// const allergens = [
+//     'Молочные продукты',
+//     'Яйцо',
+//     'Рыба',
+//     'Моллюски',
+//     'Орехи',
+//     'Томат',
+//     'Цитрусовые',
+//     'Клубника (ягоды)',
+//     'Шоколад',
+//     // 'сыр',
+// ];
 
 export const VeganCuisinePage: FC = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
     const { pathname } = useLocation();
+
+    const context: OutletContext = { recipes: recipes, allergenFilter: selectedAllergens };
+
+    const handleAllergenChange = (value: string[]) => {
+        setSelectedAllergens(value);
+    };
 
     const categoryData = useMemo(
         () => getMenuItems().find((item) => item.category === 'vegan')!,
         [],
     );
-    const veganCuisineSubcategory = categoryData.items;
-
-    const pathCategory = categoryData.routePath;
-    const titleCategory = categoryData.title;
 
     const onChangeTab = (ind: number) => {
         setCurrentTabIndex(ind);
@@ -41,15 +58,18 @@ export const VeganCuisinePage: FC = () => {
                 <PageHeader
                     title={veganPageData.headerPage.title}
                     text={veganPageData.headerPage.text}
+                    onAllergenChange={handleAllergenChange}
+                    selectedAllergens={selectedAllergens}
                 />
 
                 <PageTabs
                     onChangeTab={onChangeTab}
-                    items={veganCuisineSubcategory}
+                    items={categoryData.items}
                     tabIndex={currentTabIndex}
-                    titleCategory={titleCategory}
+                    titleCategory={categoryData.title}
                     category='vegan'
-                    pathCategory={pathCategory}
+                    pathCategory={categoryData.routePath}
+                    context={context}
                 />
             </VStack>
             <PageFooter

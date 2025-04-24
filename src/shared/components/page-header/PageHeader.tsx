@@ -14,25 +14,39 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import FilterButton from '~/shared/assets/icons/components/Filter';
 
 import { ExcludeAllergens } from './exclude-allergens/ExcludeAllergens';
 
 type PageHeaderProps = {
+    onAllergenChange: (value: string[]) => void;
+    selectedAllergens: string[];
     title?: string;
     text?: string;
 };
 
 export const PageHeader: FC<PageHeaderProps> = (props) => {
-    const { title, text } = props;
+    const { title, text, onAllergenChange, selectedAllergens } = props;
+    const [isActive, setIsActive] = useState(false);
+
+    const handleBlockClick = (value: boolean) => {
+        setIsActive(value);
+    };
 
     return (
         <VStack
             w={{ base: '328px', md: '727px' }}
             paddingTop={{ base: '16px', lg: '32px' }}
+            paddingBottom={{ base: '16px', lg: '32px' }}
             align='center'
+            boxShadow={
+                isActive
+                    ? '0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                    : 'none'
+            }
+            borderRadius='24px'
         >
             <Heading
                 mb={{ base: '16px', lg: '32px' }}
@@ -85,7 +99,11 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                         </InputRightElement>
                     </InputGroup>
                 </HStack>
-                <ExcludeAllergens />
+                <ExcludeAllergens
+                    onSwitchClick={handleBlockClick}
+                    onAllergenSelect={onAllergenChange}
+                    selectedAllergens={selectedAllergens}
+                />
             </Box>
         </VStack>
     );

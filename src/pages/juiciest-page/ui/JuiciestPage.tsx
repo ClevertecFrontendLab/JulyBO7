@@ -1,11 +1,12 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { Page } from '~/shared/components/page/ui/Page';
 import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
+import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { recipes } from '~/shared/recipes';
 
@@ -13,8 +14,15 @@ import { juiciestPageData } from '../model/mockData';
 
 export const JuiciestPage: FC = () => {
     const navigate = useNavigate();
+    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
 
-    const cards = recipes.map((data, idx) => {
+    const filteredRecipes = getFilteredRecipesByAllergens(recipes, selectedAllergens);
+
+    const handleAllergenChange = (value: string[]) => {
+        setSelectedAllergens(value);
+    };
+
+    const cards = filteredRecipes.map((data, idx) => {
         const handleCook = getRecipeCardHandler(data, navigate);
         return (
             <HorizontalCard
@@ -35,7 +43,11 @@ export const JuiciestPage: FC = () => {
     return (
         <Page>
             <VStack align='center'>
-                <PageHeader title={juiciestPageData.headerPage.title} />
+                <PageHeader
+                    title={juiciestPageData.headerPage.title}
+                    onAllergenChange={handleAllergenChange}
+                    selectedAllergens={selectedAllergens}
+                />
             </VStack>
             <Stack
                 direction='row'

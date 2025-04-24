@@ -4,6 +4,7 @@ import image4 from './assets/images/main-page-images/oladi.jpg';
 import image5 from './assets/images/main-page-images/salat.jpg';
 import image6 from './assets/images/main-page-images/solyanka.jpg';
 import image7 from './assets/images/main-page-images/tom.jpg';
+// import image8 from './assets/images/main-page-images/tom.jpg';
 import image1 from './assets/images/recipe-page/recipe-lapsha.png';
 import step6 from './assets/images/recipe-page/steep6.png';
 import step1 from './assets/images/recipe-page/step1.png';
@@ -373,5 +374,256 @@ export const recipes: Recipe[] = [
     //             image: step2,
     //         },
     //     ],
+    // },
+
+    //МОИ - ПРОДУБЛИРОВАЛА ТЕ ЧТО ВЫШЕ!!!!! МЕНТОР ПИСАЛ ТАК НЕ ДЕЛАТЬ!!!!
+    // {
+    //     id: '0',
+    //     title: 'Картошка, тушенная с болгарским перцем и фасолью в томатном соусе',
+    //     description:
+    //         'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, - вариант сытного блюда на каждый день. Фасоль в данном случае заменяет мясо, делая рагу сытным и питательным. Чтобы сократить время приготовления, возьмём консервированную фасоль. Блюдо хоть и простое, но в полной мере наполнено ароматами и имеет выразительный вкус за счёт добавления томатной пасты.',
+    //     category: ['vegan', 'second-dish'],
+    //     subcategory: ['snacks', 'vegetables'],
+    //     image: image2,
+    //     bookmarks: 85,
+    //     likes: 152,
+    //     date: '2025-02-28T00:00:00Z',
+    //     time: '40 минут',
+    //     portions: 2,
+    //     nutritionValue: { calories: 250, proteins: 5, fats: 8, carbohydrates: 40 },
+    //     ingredients: [
+    //         { title: 'рыба', count: '4', measureUnit: 'шт.' },
+    //         { title: 'болгарский перец', count: '2', measureUnit: 'шт.' },
+    //         { title: 'фасоль', count: '200', measureUnit: 'г' },
+    //         { title: 'томатный соус', count: '200', measureUnit: 'мл' },
+    //         { title: 'лук', count: '1', measureUnit: 'шт.' },
+    //         { title: 'специи', count: '0', measureUnit: 'по вкусу' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Нарезать картошку и перец.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Обжарить лук до золотистого цвета.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Добавить картошку, перец и фасоль, залить соусом.',
+    //             image: step3,
+    //         },
+    //         {
+    //             stepNumber: 4,
+    //             description: 'Тушить на медленном огне 30 минут.',
+    //             image: step4,
+    //         },
+    //     ],
+    //     meat: '',
+    //     side: 'potatoes',
+    // },
+    // {
+    //     id: '1',
+    //     title: 'Картофельные рулетики с грибами',
+    //     description:
+    //         'Рекомендую всем приготовить постное блюдо из картофеля и грибов. Готовится это блюдо без яиц, без мяса и без сыра, из самых простых ингредиентов, а получается очень вкусно и сытно. Постный рецепт картофельных рулетиков с грибами, в томатном соусе, - на обед, ужин и даже на праздничный стол!',
+    //     category: ['vegan', 'snacks'],
+    //     subcategory: ['snacks', 'warm-snacks'],
+    //     image: image3,
+    //     bookmarks: 85,
+    //     likes: 1152,
+    //     date: '2024-02-20T00:00:00Z',
+    //     time: '30 минут',
+    //     portions: 2,
+    //     nutritionValue: { calories: 180, proteins: 4, fats: 6, carbohydrates: 28 },
+    //     ingredients: [
+    //         { title: 'яйцо', count: '3', measureUnit: 'шт.' },
+    //         { title: 'грибы', count: '200', measureUnit: 'г' },
+    //         { title: 'мука', count: '100', measureUnit: 'г' },
+    //         { title: 'специи', count: '0', measureUnit: 'по вкусу' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Отварить картошку и сделать пюре.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Обжарить грибы до готовности.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Сформировать рулетики и обжарить.',
+    //             image: step3,
+    //         },
+    //     ],
+    //     side: 'potatoes',
+    // },
+    // {
+    //     id: '2',
+    //     title: 'Овощная лазанья из лаваша',
+    //     description:
+    //         'Большое, сытное блюдо для ценителей блюд без мяса! Такая лазанья готовится с овощным соусом и соусом бешамель, а вместо листов для лазаньи используется тонкий лаваш.',
+    //     category: ['vegan', 'second-dish', 'national'],
+    //     subcategory: ['second-dish', 'vegetables', 'italian', 'snacks'],
+    //     image: image4,
+    //     bookmarks: 85,
+    //     likes: 152,
+    //     date: '2023-01-25T00:00:00Z',
+    //     time: '1 час',
+    //     portions: 1,
+    //     nutritionValue: { calories: 300, proteins: 12, fats: 8, carbohydrates: 45 },
+    //     ingredients: [
+    //         { title: 'моллюски', count: '3', measureUnit: 'листов' },
+    //         { title: 'овощной соус', count: '300', measureUnit: 'мл' },
+    //         { title: 'соус бешамель', count: '200', measureUnit: 'мл' },
+    //         { title: 'сыр', count: '100', measureUnit: 'г' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Приготовить соусы.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Сложить слои лазаньи.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Запекать 30 минут.',
+    //             image: step3,
+    //         },
+    //     ],
+    // },
+    //vegan-snacks:
+    // {
+    //     id: '2',
+    //     title: 'Овощная лазанья из лаваша',
+    //     description:
+    //         'Большое, сытное блюдо для ценителей блюд без мяса! Такая лазанья готовится с овощным соусом и соусом бешамель, а вместо листов для лазаньи используется тонкий лаваш.',
+    //     category: ['vegan', 'second-dish', 'national'],
+    //     subcategory: ['second-dish', 'vegetables', 'italian', 'snacks'],
+    //     image: image4,
+    //     bookmarks: 85,
+    //     likes: 152,
+    //     date: '2023-01-25T00:00:00Z',
+    //     time: '1 час',
+    //     portions: 1,
+    //     nutritionValue: { calories: 300, proteins: 12, fats: 8, carbohydrates: 45 },
+    //     ingredients: [
+    //         { title: 'моллюски', count: '3', measureUnit: 'листов' },
+    //         { title: 'овощной соус', count: '300', measureUnit: 'мл' },
+    //         { title: 'соус бешамель', count: '200', measureUnit: 'мл' },
+    //         // { title: 'сыр', count: '100', measureUnit: 'г' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Приготовить соусы.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Сложить слои лазаньи.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Запекать 30 минут.',
+    //             image: step3,
+    //         },
+    //     ],
+    // },
+    // {
+    //     id: '1',
+    //     title: 'Картофельные рулетики с грибами',
+    //     description:
+    //         'Рекомендую всем приготовить постное блюдо из картофеля и грибов. Готовится это блюдо без яиц, без мяса и без сыра, из самых простых ингредиентов, а получается очень вкусно и сытно. Постный рецепт картофельных рулетиков с грибами, в томатном соусе, - на обед, ужин и даже на праздничный стол!',
+    //     category: ['vegan', 'snacks'],
+    //     subcategory: ['snacks', 'second-dish', 'vegetables'],
+    //     image: image3,
+    //     bookmarks: 85,
+    //     likes: 1152,
+    //     date: '2024-02-20T00:00:00Z',
+    //     time: '30 минут',
+    //     portions: 2,
+    //     nutritionValue: { calories: 180, proteins: 4, fats: 6, carbohydrates: 28 },
+    //     ingredients: [
+    //         // { title: 'яйцо', count: '3', measureUnit: 'шт.' },
+    //         { title: 'грибы', count: '200', measureUnit: 'г' },
+    //         { title: 'мука', count: '100', measureUnit: 'г' },
+    //         { title: 'специи', count: '0', measureUnit: 'по вкусу' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Отварить картошку и сделать пюре.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Обжарить грибы до готовности.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Сформировать рулетики и обжарить.',
+    //             image: step3,
+    //         },
+    //     ],
+    //     side: 'potatoes',
+    // },
+    // {
+    //     id: '0',
+    //     title: 'Картошка, тушенная с болгарским перцем и фасолью в томатном соусе',
+    //     description:
+    //         'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, - вариант сытного блюда на каждый день. Фасоль в данном случае заменяет мясо, делая рагу сытным и питательным. Чтобы сократить время приготовления, возьмём консервированную фасоль. Блюдо хоть и простое, но в полной мере наполнено ароматами и имеет выразительный вкус за счёт добавления томатной пасты.',
+    //     category: ['vegan', 'second-dish'],
+    //     subcategory: ['snacks', 'second-dish', 'vegetables'],
+    //     image: image2,
+    //     bookmarks: 85,
+    //     likes: 152,
+    //     date: '2025-02-28T00:00:00Z',
+    //     time: '40 минут',
+    //     portions: 2,
+    //     nutritionValue: { calories: 250, proteins: 5, fats: 8, carbohydrates: 40 },
+    //     ingredients: [
+    //         // { title: 'рыба', count: '4', measureUnit: 'шт.' },
+    //         { title: 'болгарский перец', count: '2', measureUnit: 'шт.' },
+    //         { title: 'фасоль', count: '200', measureUnit: 'г' },
+    //         // { title: 'томатный соус', count: '200', measureUnit: 'мл' },
+    //         { title: 'лук', count: '1', measureUnit: 'шт.' },
+    //         { title: 'специи', count: '0', measureUnit: 'по вкусу' },
+    //     ],
+    //     steps: [
+    //         {
+    //             stepNumber: 1,
+    //             description: 'Нарезать картошку и перец.',
+    //             image: step1,
+    //         },
+    //         {
+    //             stepNumber: 2,
+    //             description: 'Обжарить лук до золотистого цвета.',
+    //             image: step2,
+    //         },
+    //         {
+    //             stepNumber: 3,
+    //             description: 'Добавить картошку, перец и фасоль, залить соусом.',
+    //             image: step3,
+    //         },
+    //         {
+    //             stepNumber: 4,
+    //             description: 'Тушить на медленном огне 30 минут.',
+    //             image: step4,
+    //         },
+    //     ],
+    //     meat: '',
+    //     side: 'potatoes',
     // },
 ];
