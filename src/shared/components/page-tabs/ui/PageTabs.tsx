@@ -15,13 +15,11 @@ type PageTabsProps = {
     category: Category;
     tabIndex?: number;
     style?: TabsProps;
-    context?: unknown;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
     const navigate = useNavigate();
-    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory, category, context } =
-        props;
+    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory, category } = props;
 
     const tabList = items.map((item, idx) => {
         const state = [
@@ -79,7 +77,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             <TabPanels>
                 {items.map((_, idx) => (
                     <TabPanel key={idx} padding='12px 0 0 0'>
-                        <Outlet context={context} />
+                        <Outlet />
                     </TabPanel>
                 ))}
             </TabPanels>

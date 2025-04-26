@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 
+import { FilteredRecipesPage } from '~/pages/filtered-resipes';
 import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
 import { RecipePage } from '~/pages/recipe-page/ui/RecipePage';
@@ -81,6 +82,10 @@ export const routeConfig: RouteConfig[] = [
     {
         path: `${routePaths.juiciest}:recipeId`,
         element: <RecipePage />,
+    },
+    {
+        path: '/filtered-recipes',
+        element: <FilteredRecipesPage />,
     },
     //vegan category:
     {

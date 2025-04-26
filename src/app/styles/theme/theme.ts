@@ -226,16 +226,29 @@ export const theme = extendTheme({
 
         Checkbox: checkboxTheme,
         Badge: {
+            baseStyle: {
+                textTransform: 'capitalize',
+            },
             variants: {
                 outline_lime: {
                     border: '1px solid #b1ff2e',
                     borderRadius: '6px',
                     p: '0px 8px',
                     color: 'lime.600',
-                    textTransform: 'capitalize',
                     bg: 'inherit',
                     fontWeight: 500,
                     fontSize: 'xs',
+                },
+                solidWithIcon: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: '8px',
+                    gap: '8px',
+                    bg: 'lime.100',
+                    borderRadius: '6px',
+                    color: 'lime.700',
+                    fontSize: 's',
+                    fontWeight: '500',
                 },
             },
         },

@@ -1,17 +1,25 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
 import { recipes } from '~/shared/recipes';
+import { selectAllergenFilter } from '~/widgets/drawer/model/selectors/selectAllergenFilter';
 
 export const PoultryDishesPage: FC = () => {
-    const subcatRecipes = getSubcategoryRecipes(recipes, 'second-dish', 'poultry-dish');
+    const allergens = useSelector(selectAllergenFilter);
+
     const navigate = useNavigate();
 
-    const cards = subcatRecipes.map((recipe) => {
+    const subcatRecipes = getSubcategoryRecipes(recipes, 'second-dish', 'poultry-dish');
+
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(subcatRecipes, allergens);
+
+    const cards = filteredRecipesByAllergen.map((recipe) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'second-dish', 'poultry-dish');
         return (
             <HorizontalCard

@@ -1,23 +1,22 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useNavigate, useOutletContext } from 'react-router';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
-import { OutletContext } from '~/shared/types/common';
+import { recipes } from '~/shared/recipes';
+import { selectAllergenFilter } from '~/widgets/drawer/model/selectors/selectAllergenFilter';
 
 export const BakeryPage: FC = () => {
     const navigate = useNavigate();
-    const { recipes, allergenFilter } = useOutletContext<OutletContext>();
+    const allergens = useSelector(selectAllergenFilter);
 
     const bakerySubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'bakery');
 
-    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
-        bakerySubcatRecipes,
-        allergenFilter,
-    );
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(bakerySubcatRecipes, allergens);
 
     const cards = filteredRecipesByAllergen.map((recipe) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'bakery');

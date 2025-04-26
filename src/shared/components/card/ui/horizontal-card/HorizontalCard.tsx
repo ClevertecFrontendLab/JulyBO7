@@ -9,7 +9,7 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
@@ -19,7 +19,7 @@ import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
 type HorizontalCardProps = {
     id: string;
-    title: string;
+    title: ReactNode;
     text: string;
     category: Category;
     onSave?: () => void;
@@ -63,7 +63,6 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 borderBottomLeftRadius='8px'
                 borderTopLeftRadius='8px'
                 src={image}
-                alt={title}
             />
 
             {recomend && (
@@ -107,15 +106,20 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 </Box>
 
                 <Box width={{ md: '166px', lg: '486px', '3xl': '274px' }} height={{ lg: '100px' }}>
-                    <Heading
-                        fontSize={{ base: 'm', lg: 'xl' }}
-                        fontWeight={500}
-                        noOfLines={{ base: 2, lg: 1 }}
-                        mb={{ base: '20px', lg: 0 }}
-                        textAlign='left'
-                    >
-                        {title}
-                    </Heading>
+                    {typeof title === 'string' ? (
+                        <Heading
+                            fontSize={{ base: 'm', lg: 'xl' }}
+                            fontWeight={500}
+                            noOfLines={{ base: 2, lg: 1 }}
+                            mb={{ base: '20px', lg: 0 }}
+                            textAlign='left'
+                        >
+                            {title}
+                        </Heading>
+                    ) : (
+                        title
+                    )}
+
                     <Text
                         textStyle='s'
                         marginTop='8px'
