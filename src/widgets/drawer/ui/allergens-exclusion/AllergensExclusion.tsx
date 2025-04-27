@@ -1,15 +1,6 @@
-import { Badge, Box, FormControl, FormLabel, HStack, Switch } from '@chakra-ui/react';
+import { Badge, Box, FormControl, FormLabel, HStack, Switch, Text } from '@chakra-ui/react';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
-import { useAppDispatch } from '~/app/store/hooks';
-
-import { selectAllergenFilter } from '../../model/selectors/selectAllergenFilter';
-import {
-    removeAllAllergensAction,
-    removeAllergenAction,
-    setAllergenAction,
-} from '../../model/slice/filtersSlice';
 import { FiltersSelect } from '../filters-select/FiltersSelect';
 
 const allergens = [
@@ -25,28 +16,40 @@ const allergens = [
 ];
 
 type AllergensExclusionProps = {
+    filteredAllergens: string[];
+    onRemoveAllergen: (value: string) => void;
+    onSetAllergen: (value: string) => void;
     type: 'drawer' | 'header';
     direction?: 'row' | 'column';
     disableSwitch?: boolean;
+    onTurnOfSwitch?: () => void;
+    forTest?: string;
+    forTestSelect?: string;
+    forTestCheckbox?: string;
 };
-export const AllergensExclusion: FC<AllergensExclusionProps> = ({
-    disableSwitch,
-    direction = 'column',
-    type,
-}) => {
+export const AllergensExclusion: FC<AllergensExclusionProps> = (props) => {
+    const {
+        disableSwitch,
+        direction = 'column',
+        type,
+        filteredAllergens,
+        onRemoveAllergen,
+        onSetAllergen,
+        onTurnOfSwitch,
+        forTest,
+        forTestSelect,
+        forTestCheckbox,
+    } = props;
+
     const [enabled, setEnabled] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
-
-    const filteredAllergens = useSelector(selectAllergenFilter);
-
-    const dispatch = useAppDispatch();
 
     const handleInputChange = (value: string) => {
         setInputValue(value);
     };
     const handleInputValueAddition = () => {
         if (inputValue) {
-            dispatch(setAllergenAction(inputValue));
+            onSetAllergen(inputValue);
             setInputValue('');
         }
     };
@@ -55,15 +58,15 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({
         const checked = e.currentTarget.checked;
         setEnabled(checked);
         if (!checked) {
-            dispatch(removeAllAllergensAction());
+            onTurnOfSwitch?.();
             setInputValue('');
         }
     };
     const handleChecked = (checked: boolean, allergen: string) => {
         if (checked) {
-            dispatch(setAllergenAction(allergen));
+            onSetAllergen(allergen);
         } else {
-            dispatch(removeAllergenAction(allergen));
+            onRemoveAllergen(allergen);
         }
     };
     const allergensTags = (
@@ -75,10 +78,21 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({
             ))}
         </HStack>
     );
-    let placeholder = filteredAllergens.length === 0 ? 'Выберите из списка...' : allergensTags;
+    let placeholder =
+        filteredAllergens.length === 0 ? (
+            <Text fontSize='16px' fontWeight={400} color='gray.150'>
+                Выберите из списка...
+            </Text>
+        ) : (
+            allergensTags
+        );
 
     if (!enabled) {
-        placeholder = 'Выберите из списка...';
+        placeholder = (
+            <Text fontSize='16px' fontWeight={400} color='gray.150'>
+                Выберите из списка...
+            </Text>
+        );
     }
 
     useEffect(() => {
@@ -94,6 +108,7 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({
                     Исключить аллергены
                 </FormLabel>
                 <Switch
+                    data-test-id={forTest}
                     isDisabled={disableSwitch}
                     onChange={handleSwitchChange}
                     isChecked={enabled}
@@ -111,6 +126,8 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({
                 onChecked={handleChecked}
                 selectedOptions={filteredAllergens}
                 type={type}
+                forTest={forTestSelect}
+                forTestCheckbox={forTestCheckbox}
             />
         </Box>
     );

@@ -28,6 +28,7 @@ type HorizontalCardProps = {
     bookmarkCount?: number;
     likesCount?: number;
     recomend?: { user: string; avatar: string };
+    indexForTest?: number;
 } & CardProps;
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
@@ -41,6 +42,8 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
         bookmarkCount,
         recomend,
         category,
+        indexForTest,
+
         ...rest
     } = props;
 
@@ -141,7 +144,12 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                             Сохранить
                         </Text>
                     </Button>
-                    <Button onClick={onCook} variant='solid' size={{ base: 's', lg: 'm' }}>
+                    <Button
+                        data-test-id={`card-link-${indexForTest}`}
+                        onClick={onCook}
+                        variant='solid'
+                        size={{ base: 's', lg: 'm' }}
+                    >
                         <Text fontWeight={600}>Готовить</Text>
                     </Button>
                 </ButtonGroup>

@@ -42,7 +42,7 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                 textStyle='md'
             >
                 <Text>{item.title}</Text>
-                <Text as='span' textStyle='s'>
+                <Text data-test-id={`ingredient-quantity-${idx}`} as='span' textStyle='s'>
                     {ingredientCountWithMeasureUnit}
                 </Text>
             </HStack>
@@ -75,8 +75,8 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                     >
                         <NumberInputField />
                         <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
+                            <NumberIncrementStepper data-test-id='increment-stepper' />
+                            <NumberDecrementStepper data-test-id='decrement-stepper' />
                         </NumberInputStepper>
                     </NumberInput>
                 </HStack>

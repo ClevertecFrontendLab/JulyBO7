@@ -20,9 +20,9 @@ import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { recipes } from '~/shared/recipes';
 import { Recipe } from '~/shared/types/recipe';
 
-import { veganPageData } from '../model/mockData';
+import { saladsPageData } from '../model/mockData';
 
-export const VeganCuisinePage: FC = () => {
+export const SaladsPage: FC = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const dispatch = useAppDispatch();
     const { pathname } = useLocation();
@@ -34,7 +34,7 @@ export const VeganCuisinePage: FC = () => {
 
     const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
 
-    const categoryRecipes = getCategoryRecipes(recipes, 'vegan');
+    const categoryRecipes = getCategoryRecipes(recipes, 'salads');
 
     const filteredRecipesByAllergen = getFilteredRecipesByAllergens(categoryRecipes, allergens);
 
@@ -68,7 +68,6 @@ export const VeganCuisinePage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
-                    data-test-id={`food-card-${idx}`}
                     id={data.id}
                     category={data.category[0]}
                     key={idx}
@@ -101,7 +100,7 @@ export const VeganCuisinePage: FC = () => {
     }
     //---------------------------------------------
     const categoryData = useMemo(
-        () => getMenuItems().find((item) => item.category === 'vegan')!,
+        () => getMenuItems().find((item) => item.category === 'salads')!,
         [],
     );
 
@@ -123,8 +122,8 @@ export const VeganCuisinePage: FC = () => {
         <Page>
             <VStack align='center'>
                 <PageHeader
-                    title={veganPageData.headerPage.title}
-                    text={veganPageData.headerPage.text}
+                    title={saladsPageData.headerPage.title}
+                    text={saladsPageData.headerPage.text}
                     onSearch={handleRecipeSearch}
                     inputValue={inputValue}
                     onChange={handleInputChange}
@@ -146,16 +145,16 @@ export const VeganCuisinePage: FC = () => {
                         items={categoryData.items}
                         tabIndex={currentTabIndex}
                         titleCategory={categoryData.title}
-                        category='vegan'
+                        category='salads'
                         pathCategory={categoryData.routePath}
                     />
                 )}
             </VStack>
             <PageFooter
-                title={veganPageData.footerPage.title}
-                text={veganPageData.footerPage.text}
-                withoutImageCardData={veganPageData.footerPage.withoutImageCards}
-                withoutTextCardData={veganPageData.footerPage.withoutTextCards}
+                title={saladsPageData.footerPage.title}
+                text={saladsPageData.footerPage.text}
+                withoutImageCardData={saladsPageData.footerPage.withoutImageCards}
+                withoutTextCardData={saladsPageData.footerPage.withoutTextCards}
             />
         </Page>
     );

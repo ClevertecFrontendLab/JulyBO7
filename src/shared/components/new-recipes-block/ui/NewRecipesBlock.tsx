@@ -22,13 +22,23 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
     const navigate = useNavigate();
 
+    items.sort((a, b) => {
+        const value1 = new Date(a.date).valueOf();
+        const value2 = new Date(b.date).valueOf();
+        return value2 - value1;
+    });
+
     const newRecipeCards = useMemo(
         () =>
             items.map((data: Recipe, idx: number) => {
                 const handleCard = getRecipeCardHandler(data, navigate);
 
                 return (
-                    <SwiperSlide key={idx} style={{ flexShrink: 1 }}>
+                    <SwiperSlide
+                        data-test-id={`carousel-card-${idx}`}
+                        key={idx}
+                        style={{ flexShrink: 1 }}
+                    >
                         <VerticalCard
                             id={data.id}
                             title={data.title}
@@ -43,7 +53,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
                     </SwiperSlide>
                 );
             }),
-        [items],
+        [items, navigate],
     );
 
     return (
@@ -55,6 +65,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
                 Новые рецепты
             </Heading>
             <Swiper
+                data-test-id='carousel'
                 onSwiper={handleSwiperInit}
                 modules={[Navigation]}
                 navigation
@@ -66,6 +77,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
             </Swiper>
 
             <Button
+                data-test-id='carousel-back'
                 display={{ base: 'none', lg: 'flex' }}
                 alignItems='center'
                 h={{ lg: '40px', '2xl': '48px' }}
@@ -80,6 +92,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
                 <ArrowLeftIcon fill='lime.50' />
             </Button>
             <Button
+                data-test-id='carousel-forward'
                 display={{ base: 'none', lg: 'flex' }}
                 alignItems='center'
                 h={{ lg: '40px', '2xl': '48px' }}

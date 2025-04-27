@@ -3,25 +3,26 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import { ApplicationState } from '~/app/store/configure-store';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
 import { recipes } from '~/shared/recipes';
-import { selectAllergenFilter } from '~/widgets/drawer/model/selectors/selectAllergenFilter';
 
 export const SnacksPage: FC = () => {
     const navigate = useNavigate();
-    const allergens = useSelector(selectAllergenFilter);
+    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
 
     const snacksSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'snacks');
 
     const filteredRecipesByAllergen = getFilteredRecipesByAllergens(snacksSubcatRecipes, allergens);
 
-    const cards = filteredRecipesByAllergen.map((recipe) => {
+    const cards = filteredRecipesByAllergen.map((recipe, idx) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'snacks');
         return (
             <HorizontalCard
+                // data-test-id={`card-link-${idx}`}
                 key={recipe.id}
                 onCook={handleCook}
                 category={recipe.category[0]}
@@ -31,6 +32,7 @@ export const SnacksPage: FC = () => {
                 image={recipe.image}
                 bookmarkCount={recipe.bookmarks}
                 likesCount={recipe.likes}
+                indexForTest={idx}
             />
         );
     });

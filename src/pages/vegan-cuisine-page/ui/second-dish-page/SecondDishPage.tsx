@@ -3,16 +3,16 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import { ApplicationState } from '~/app/store/configure-store';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
 import { recipes } from '~/shared/recipes';
-import { selectAllergenFilter } from '~/widgets/drawer/model/selectors/selectAllergenFilter';
 
 export const SecondDishPage: FC = () => {
     const navigate = useNavigate();
-    const allergens = useSelector(selectAllergenFilter);
+    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
 
     const secondDishesSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'second-dish');
 

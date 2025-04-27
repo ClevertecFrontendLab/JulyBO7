@@ -24,6 +24,8 @@ type FiltersSelectProps = {
     inputValue?: string;
     onInputChange?: (value: string) => void;
     onClickInputButton?: () => void;
+    forTest?: string;
+    forTestCheckbox?: string;
 };
 
 export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
@@ -38,6 +40,8 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
         selectedOptions,
         onChecked,
         type,
+        forTest,
+        forTestCheckbox,
     } = props;
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +59,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
     };
     const optionsList = options.map((option, idx) => {
         const isChecked = selectedOptions?.find((selectedOption) => option === selectedOption);
+        const testId = forTestCheckbox === 'allergen' ? `allergen-${idx}` : forTestCheckbox;
 
         return (
             <MenuItem
@@ -65,6 +70,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                 bg={idx % 2 ? 'bgColor' : 'gray.300'}
             >
                 <Checkbox
+                    data-test-id={testId}
                     isChecked={!!isChecked}
                     onChange={handleCheckedFilter(option)}
                     variant='lime'
@@ -79,6 +85,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
             {({ isOpen }) => (
                 <Box position='relative' w='100%'>
                     <MenuButton
+                        data-test-id={forTest}
                         _hover={{ bg: 'transparent' }}
                         _active={{ bg: 'transparent' }}
                         isDisabled={disabled}
@@ -88,7 +95,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                         minH='40px'
                         h='auto'
                         bg='bgColor'
-                        border={isOpen ? '1px solid #c4ff61' : '1px solid  rgba(0, 0, 0, 0.48)'}
+                        border={isOpen ? '1px solid #c4ff61' : '1px solid  rgba(0, 0, 0, 0.08)'}
                         px='16px'
                         rightIcon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                         display='flex'
@@ -101,6 +108,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                         {placeholder}
                     </MenuButton>
                     <MenuList
+                        data-test-id='allergens-menu'
                         w={type === 'drawer' ? { base: '308px', lg: '400px' } : '234px'}
                         zIndex='1000'
                     >
@@ -108,6 +116,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                         {withInput && (
                             <HStack p='8px 8px 8px 24px' w='100%'>
                                 <Input
+                                    data-test-id='add-other-allergen'
                                     value={inputValue}
                                     onChange={handleInputChange}
                                     onKeyDown={handleEnterClick}
@@ -116,6 +125,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                                     size='s'
                                 />
                                 <SmallAddIcon
+                                    data-test-id='add-allergen-button'
                                     as='button'
                                     rounded='50%'
                                     color='bgColor'

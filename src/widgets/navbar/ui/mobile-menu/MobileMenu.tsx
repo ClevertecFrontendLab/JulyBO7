@@ -27,7 +27,7 @@ export const MobileMenu: FC<MobileMenuProps> = ({ onClose }) => (
         flexShrink={0}
         boxShadow='0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1)'
     >
-        <BreadCrumb padding='0px 20px' onClick={onClose} />
+        <BreadCrumb data-test-id='nav' padding='0px 20px' onClick={onClose} />
         <MenuArea isMobile padding='8px 16px 10px 10px' />
         <MenuFooter />
     </Box>

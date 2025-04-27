@@ -1,5 +1,6 @@
 export {
     filterSliceReducer,
+    removeAllFiltersAction,
     setAllergenAction,
     setCategoryAction,
     setMeetTypeAction,

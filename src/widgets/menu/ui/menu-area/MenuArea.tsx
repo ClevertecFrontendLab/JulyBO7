@@ -104,7 +104,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
                                         <Tab
                                             data-test-id={
                                                 activeSubCategoryIndex === idx
-                                                    ? `tab-${item.subCategory}-active`
+                                                    ? `${item.subCategory}-active`
                                                     : ''
                                             }
                                             key={idx}

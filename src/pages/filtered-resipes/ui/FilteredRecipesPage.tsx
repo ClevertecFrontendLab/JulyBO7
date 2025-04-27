@@ -47,6 +47,12 @@ export const FilteredRecipesPage: FC = () => {
             />
         );
     });
+    // useEffect(
+    //     () => () => {
+    //         dispatch(removeAllFiltersAction());
+    //     },
+    //     [],
+    // );
 
     return (
         <Page>

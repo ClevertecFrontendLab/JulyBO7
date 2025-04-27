@@ -9,7 +9,11 @@ import { recipes } from '~/shared/recipes';
 
 export const JuisiestBlock: FC = () => {
     const navigate = useNavigate();
-    const recipeItems = recipes.slice(0, 4);
+
+    const juisiestRecipes = [...recipes];
+    juisiestRecipes.sort((a, b) => b.likes - a.likes);
+
+    const recipeItems = juisiestRecipes.slice(0, 4);
 
     const handleSelection = () => {
         const state = [{ title: 'Самое сочное', path: '/juiciest' }];

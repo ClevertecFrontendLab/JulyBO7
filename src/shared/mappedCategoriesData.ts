@@ -2,6 +2,7 @@ import eggplant from './assets/images/eggplant.png';
 import child from './assets/images/icons/icons8-child-tasty.png';
 import frying from './assets/images/icons/icons8-frying-pan.png';
 import international from './assets/images/icons/icons8-international-food.png';
+import leaf from './assets/images/icons/leaf.png';
 import snacks from './assets/images/icons/mortar.png';
 import { Category, SubCategory } from './types/categories';
 
@@ -21,7 +22,7 @@ type MappedCategoryData = {
 
 export const mappedCategoryData: MappedCategoryData = {
     ['vegan']: {
-        image: eggplant,
+        image: leaf,
         title: 'Веганская кухня',
         defaultPath: '/vegan/snacks',
         subcategory: [
@@ -43,6 +44,18 @@ export const mappedCategoryData: MappedCategoryData = {
             ['bakery']: { title: 'Выпечка' },
             ['vegetables']: { title: 'Сыроедческие блюда' },
             ['drinks']: { title: 'Напитки' },
+        },
+    },
+    ['salads']: {
+        image: eggplant,
+        title: 'Салаты',
+        defaultPath: '/salads/meet-salads',
+        subcategory: ['meet-salads', 'fish-salads', 'vegetable-salads', 'warm-salads'],
+        subcategoryData: {
+            ['meet-salads']: { title: 'Мясные салаты' },
+            ['fish-salads']: { title: 'Рыбные салаты' },
+            ['vegetable-salads']: { title: 'Овощные салаты' },
+            ['warm-salads']: { title: 'Теплые салаты' },
         },
     },
     ['second-dish']: {

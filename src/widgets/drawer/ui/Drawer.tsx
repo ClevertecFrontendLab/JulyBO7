@@ -24,11 +24,13 @@ import { getMenuItems } from '~/shared/lib/getMenuItems';
 
 import { selectFilters } from '../model/selectors/selectFilters';
 import {
+    removeAllergenAction,
     removeAllFiltersAction,
     removeAuthorAction,
     removeCategoryAction,
     removeMeetTypeAction,
     removeSideTypeAction,
+    setAllergenAction,
     setAuthorAction,
     setCategoryAction,
     setMeetTypeAction,
@@ -148,6 +150,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
 
         return (
             <Checkbox
+                data-test-id={side === 'Картошка' && 'checkbox-картошка'}
                 key={side}
                 variant='lime'
                 isChecked={!!checked}
@@ -187,16 +190,19 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
         navigate('/filtered-recipes');
         onClose();
     };
+    const handleAllergenItemRemove = (allergen: string) => {
+        dispatch(removeAllergenAction(allergen));
+    };
+    const handleAllergenItemSet = (allergen: string) => {
+        dispatch(setAllergenAction(allergen));
+    };
+
     return (
         <>
-            <Modal
-                // initialFocusRef={initialRef}
-                // finalFocusRef={finalRef}
-                isOpen={isOpen}
-                onClose={handleModalClose}
-            >
+            <Modal isOpen={isOpen} onClose={handleModalClose}>
                 <ModalOverlay backdropFilter='blur(4px)' bg='rgba(0, 0, 0, 0.16)' />
                 <ModalContent
+                    data-test-id='filter-drawer'
                     position='absolute'
                     top={0}
                     bottom={0}
@@ -210,6 +216,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                 >
                     <ModalHeader p={0}>Фильтр</ModalHeader>
                     <ModalCloseButton
+                        data-test-id='close-filter-drawer'
                         top={{ base: '16px', lg: '32px' }}
                         right={{ base: '20px', lg: '32px' }}
                         p={0}
@@ -224,14 +231,24 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                         gap={{ base: '16px', lg: '24px' }}
                     >
                         <FiltersSelect
-                            placeholder='Категория'
+                            placeholder={
+                                <Text fontSize='16px' fontWeight={400} color='gray.150'>
+                                    Категория
+                                </Text>
+                            }
                             options={getMenuItems().map((item) => item.title)}
                             onChecked={handleCheckedCategory}
                             selectedOptions={filters.category}
                             type='drawer'
+                            forTest='filter-menu-button-категория'
+                            forTestCheckbox='checkbox-веганская кухня'
                         />
                         <FiltersSelect
-                            placeholder='Поиск по автору'
+                            placeholder={
+                                <Text fontSize='16px' fontWeight={400} color='gray.150'>
+                                    Поиск по автору
+                                </Text>
+                            }
                             options={authors}
                             onChecked={handleCheckedAuthor}
                             selectedOptions={filters.author}
@@ -248,14 +265,24 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             {sideTypesList}
                         </VStack>
 
-                        <AllergensExclusion type='drawer' />
-                        <HStack wrap='wrap' gap='16px'>
+                        <AllergensExclusion
+                            forTest='allergens-switcher-filter'
+                            type='drawer'
+                            filteredAllergens={filters.allergen}
+                            onRemoveAllergen={handleAllergenItemRemove}
+                            onSetAllergen={handleAllergenItemSet}
+                            onTurnOfSwitch={handleAllFiltersRemove}
+                            forTestSelect='allergens-menu-button-filter'
+                            forTestCheckbox='allergen'
+                        />
+                        <HStack wrap='wrap' gap='16px' data-test-id='filter-tag'>
                             {tagsList}
                         </HStack>
                     </ModalBody>
 
                     <ModalFooter p={0}>
                         <Button
+                            data-test-id='clear-filter-button'
                             variant='outline'
                             border='1px solid rgba(0, 0, 0, 0.48)'
                             bg='bgColor'
@@ -266,6 +293,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             Очистить фильтр
                         </Button>
                         <Button
+                            data-test-id='find-recipe-button'
                             size={{ base: 'm', lg: 'xl' }}
                             onClick={handleFindRecipe}
                             isDisabled={disableFindRecipeBtn}

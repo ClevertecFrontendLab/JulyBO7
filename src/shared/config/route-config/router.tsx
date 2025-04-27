@@ -5,6 +5,13 @@ import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
 import { RecipePage } from '~/pages/recipe-page/ui/RecipePage';
 import {
+    FishSaladsPage,
+    MeatSaladsPage,
+    SaladsPage,
+    VegetableSaladsPage,
+    WarmSaladsPage,
+} from '~/pages/salads';
+import {
     DumplingsPage,
     FishPage,
     FlourSideDishesPage,
@@ -70,6 +77,17 @@ export type RouteConfig = {
         };
     }[];
 };
+// enum VeganPageChildrenRoutes {
+//     SNACKS = 'snacks',
+//     FIRST_DISH = 'first-dish',
+//     SECOND_DISH = 'second-dish',
+//     SIDE_DISH = 'side-dishes',
+//     DESERTS = 'deserts',
+//     BAKERY = 'bakery',
+//     VEGETABLES = 'vegetables',
+//     DRINKS = 'drinks',
+// }
+
 export const routeConfig: RouteConfig[] = [
     {
         path: routePaths.main,
@@ -134,6 +152,33 @@ export const routeConfig: RouteConfig[] = [
             { path: 'vegetables', element: <RawFoodDishesPage /> },
             { path: 'drinks', element: <DrinksPage /> },
         ],
+    },
+    //salads category:
+    {
+        path: `${routePaths.salads}`,
+        element: <SaladsPage />,
+        childrenRoutes: [
+            { path: 'meet-salads', element: <MeatSaladsPage /> },
+            { path: 'fish-salads', element: <FishSaladsPage /> },
+            { path: 'vegetable-salads', element: <VegetableSaladsPage /> },
+            { path: 'warm-salads', element: <WarmSaladsPage /> },
+        ],
+    },
+    {
+        path: `${routePaths.salads}meet-salads/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.salads}fish-salads/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.salads}vegetable-salads/:recipeId`,
+        element: <RecipePage />,
+    },
+    {
+        path: `${routePaths.salads}warm-salads/:recipeId`,
+        element: <RecipePage />,
     },
     //second-dish category:
     {

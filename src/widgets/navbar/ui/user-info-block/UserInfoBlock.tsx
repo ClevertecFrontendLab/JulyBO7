@@ -35,6 +35,7 @@ export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
             </Box>
 
             <Button
+                data-test-id='hamburger-icon'
                 onClick={onClick}
                 h='48px'
                 w='48px'
@@ -44,7 +45,7 @@ export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
                 // aria-label='Options'
                 icon={
                     isOpenMobileMenu ? (
-                        <CloseIcon h='12px' w='12px' />
+                        <CloseIcon data-test-id='close-icon' h='12px' w='12px' />
                     ) : (
                         <HamburgerIcon h='16px' w='16px' />
                     )
