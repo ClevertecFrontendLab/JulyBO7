@@ -8,28 +8,35 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 const baseStyle = definePartsStyle({
     field: {
         color: 'lime.800',
-        _focusVisible: {
-            borderTopColor: 'rgba(0, 0, 0, 0.08)',
-            borderBottomColor: 'rgba(0, 0, 0, 0.08)',
-            borderLeftColor: 'rgba(0, 0, 0, 0.08)',
-            borderRightColor: 'rgba(0, 0, 0, 0.08)',
-            boxShadow: 'none',
-        },
-        _focusWithin: {
-            borderTopColor: 'rgba(0, 0, 0, 0.08)',
-            borderBottomColor: 'rgba(0, 0, 0, 0.08)',
-            borderLeftColor: 'rgba(0, 0, 0, 0.08)',
-            borderRightColor: 'rgba(0, 0, 0, 0.08)',
-            boxShadow: 'none',
-        },
     },
 });
 
 const outline = definePartsStyle({
     field: defineStyle({
         borderStyle: 'solid',
-        borderWith: '1px',
-        borderColor: 'rgba(0, 0, 0, 0.08)',
+        borderWidth: '1px',
+        borderColor: 'gray.200',
+        _focusVisible: {
+            borderTopColor: 'gray.200',
+            borderBottomColor: 'gray.200',
+            borderLeftColor: 'gray.200',
+            borderRightColor: 'gray.200',
+            boxShadow: 'none',
+        },
+        _focusWithin: {
+            borderTopColor: 'gray.200',
+            borderBottomColor: 'gray.200',
+            borderLeftColor: 'gray.200',
+            borderRightColor: 'gray.200',
+            boxShadow: 'none',
+        },
+    }),
+});
+const search = definePartsStyle({
+    field: defineStyle({
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        borderColor: 'gray.100',
     }),
 });
 const s = defineStyle({
@@ -43,4 +50,8 @@ const sizes = {
     s: definePartsStyle({ field: s, addon: s }),
 };
 
-export const inputTheme = defineMultiStyleConfig({ baseStyle, variants: { outline }, sizes });
+export const inputTheme = defineMultiStyleConfig({
+    baseStyle,
+    variants: { outline, search },
+    sizes,
+});

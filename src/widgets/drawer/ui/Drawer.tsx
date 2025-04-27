@@ -139,7 +139,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                 as='li'
                 onChange={handleMeetType(meet)}
             >
-                {meet}
+                <Text textStyle='s'>{meet}</Text>
             </Checkbox>
         );
     });
@@ -154,7 +154,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                 as='li'
                 onChange={handleSideType(side)}
             >
-                {side}
+                <Text textStyle='s'>{side}</Text>
             </Checkbox>
         );
     });
@@ -228,12 +228,14 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             options={getMenuItems().map((item) => item.title)}
                             onChecked={handleCheckedCategory}
                             selectedOptions={filters.category}
+                            type='drawer'
                         />
                         <FiltersSelect
                             placeholder='Поиск по автору'
                             options={authors}
                             onChecked={handleCheckedAuthor}
                             selectedOptions={filters.author}
+                            type='drawer'
                         />
 
                         <VStack as='ul' gap='12px' align='flex-start'>
@@ -246,17 +248,28 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             {sideTypesList}
                         </VStack>
 
-                        <AllergensExclusion />
+                        <AllergensExclusion type='drawer' />
                         <HStack wrap='wrap' gap='16px'>
                             {tagsList}
                         </HStack>
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={handleAllFiltersRemove}>
+                    <ModalFooter p={0}>
+                        <Button
+                            variant='outline'
+                            border='1px solid rgba(0, 0, 0, 0.48)'
+                            bg='bgColor'
+                            size={{ base: 'm', lg: 'xl' }}
+                            mr={3}
+                            onClick={handleAllFiltersRemove}
+                        >
                             Очистить фильтр
                         </Button>
-                        <Button onClick={handleFindRecipe} isDisabled={disableFindRecipeBtn}>
+                        <Button
+                            size={{ base: 'm', lg: 'xl' }}
+                            onClick={handleFindRecipe}
+                            isDisabled={disableFindRecipeBtn}
+                        >
                             Найти рецепт
                         </Button>
                     </ModalFooter>

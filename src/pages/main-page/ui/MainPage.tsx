@@ -20,7 +20,7 @@ import { CulinaryBlogs } from './culinary-blogs/CulinaryBlogs';
 import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 
 export const MainPage: FC = () => {
-    const [foundRecipes, setFoundRecipes] = useState<Recipe[]>([]);
+    const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
     const [inputValue, setInputValue] = useState<string>('');
     const navigate = useNavigate();
     const allergens = useSelector(selectAllergenFilter);
@@ -88,19 +88,24 @@ export const MainPage: FC = () => {
             setFoundRecipes([]);
         }
     };
+    // const inputBorderStyle =
+    //     foundRecipes?.length === 0 && inputValue.length !== 0 && '1px solid red';
 
     return (
         <Page>
             <VStack align='center'>
                 <PageHeader
+                    // inputBorderStyle={inputBorderStyle ? inputBorderStyle : ''}
                     title={mainPageData.headerPage.title}
                     onSearch={handleRecipeSearch}
                     inputValue={inputValue}
                     onChange={handleInputChange}
                 />
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
-                    {(recipes.length !== filteredRecipesByAllergen.length &&
-                        foundRecipes?.length === 0) ||
+                    {/* {(recipes.length !== filteredRecipesByAllergen.length &&
+                        !foundRecipes || length === 0) ||
+                    (foundRecipes && foundRecipes.length > 0 && inputValue.length !== 0)  */}
+                    {recipes.length !== filteredRecipesByAllergen.length ||
                     (foundRecipes && foundRecipes.length > 0 && inputValue.length !== 0) ? (
                         <>
                             <Stack

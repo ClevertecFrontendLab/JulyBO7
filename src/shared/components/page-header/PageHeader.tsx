@@ -21,6 +21,7 @@ type PageHeaderProps = {
     title: ReactElement | string;
     onSearch: () => void;
     text?: string;
+    inputBorderStyle?: string;
 };
 
 export const PageHeader: FC<PageHeaderProps> = (props) => {
@@ -35,7 +36,11 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
         setIsOpenDrawer(true);
     };
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange(e.currentTarget.value);
+        const value = e.currentTarget.value;
+        onChange(value);
+        if (!value) {
+            setIsActive(false);
+        }
     };
     const handleSearch = () => {
         onSearch();
@@ -51,7 +56,7 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
         <VStack
             w={{ base: '328px', md: '727px' }}
             paddingTop={{ base: '16px', lg: '32px' }}
-            paddingBottom={{ base: '16px', lg: '32px' }}
+            paddingBottom={{ lg: '32px' }}
             align='center'
             // boxShadow={
             //     isActive
@@ -78,8 +83,8 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                     {text}
                 </Text>
             )}
-            <Box w={{ base: '328px', md: '448px', lg: '520px' }}>
-                <HStack spacing='12px' h={{ base: '32px', lg: '48px' }}>
+            <VStack w={{ base: '328px', md: '448px', lg: '520px' }} gap='16px'>
+                <HStack spacing='12px' h={{ base: '32px', lg: '48px' }} w='100%'>
                     <Button
                         onClick={handleDrawerOpen}
                         variant='outline'
@@ -92,6 +97,7 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
 
                     <InputGroup h='100%'>
                         <Input
+                            variant='search'
                             h='100%'
                             borderColor='gray.100'
                             borderRadius='6px'
@@ -99,10 +105,14 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                             onChange={handleInputChange}
                             onKeyDown={handleEnterClick}
                             value={inputValue}
-                            borderTopColor={isActive ? ' #2db100' : 'rgba(0, 0, 0, 0.48)'}
-                            borderBottomColor={isActive ? ' #2db100' : 'rgba(0, 0, 0, 0.48)'}
-                            borderLeftColor={isActive ? ' #2db100' : 'rgba(0, 0, 0, 0.48)'}
-                            borderRightColor={isActive ? ' #2db100' : 'rgba(0, 0, 0, 0.48)'}
+                            border={
+                                isActive ? '1px solid  #2db100' : '1px solid rgba(0, 0, 0, 0.48)'
+                            }
+                            // border={
+                            //     isActive && inputBorderStyle
+                            //         ? inputBorderStyle
+                            //         : '1px solid rgba(0, 0, 0, 0.48)'
+                            // }
                         />
                         <InputRightElement h='100%'>
                             <Button
@@ -115,8 +125,10 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                         </InputRightElement>
                     </InputGroup>
                 </HStack>
-                <AllergensExclusion />
-            </Box>
+                <Box display={{ base: 'none', lg: 'block' }} w='100%'>
+                    <AllergensExclusion direction='row' type='header' />
+                </Box>
+            </VStack>
             <Drawer isOpen={isOpenDrawer} onClose={handleDrawerClose} />
         </VStack>
     );

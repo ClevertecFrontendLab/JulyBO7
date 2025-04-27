@@ -1,4 +1,4 @@
-import { Badge, FormControl, FormLabel, HStack, Switch } from '@chakra-ui/react';
+import { Badge, Box, FormControl, FormLabel, HStack, Switch } from '@chakra-ui/react';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -25,9 +25,15 @@ const allergens = [
 ];
 
 type AllergensExclusionProps = {
+    type: 'drawer' | 'header';
+    direction?: 'row' | 'column';
     disableSwitch?: boolean;
 };
-export const AllergensExclusion: FC<AllergensExclusionProps> = ({ disableSwitch }) => {
+export const AllergensExclusion: FC<AllergensExclusionProps> = ({
+    disableSwitch,
+    direction = 'column',
+    type,
+}) => {
     const [enabled, setEnabled] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -69,11 +75,10 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({ disableSwitch 
             ))}
         </HStack>
     );
-    let placeholder =
-        filteredAllergens.length === 0 ? 'Выберите из списка аллергенов...' : allergensTags;
+    let placeholder = filteredAllergens.length === 0 ? 'Выберите из списка...' : allergensTags;
 
     if (!enabled) {
-        placeholder = 'Выберите из списка аллергенов...';
+        placeholder = 'Выберите из списка...';
     }
 
     useEffect(() => {
@@ -83,7 +88,7 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({ disableSwitch 
     }, [disableSwitch]);
 
     return (
-        <>
+        <Box display='flex' flexDirection={direction} gap={{ base: '8px' }}>
             <FormControl display='flex' alignItems='center'>
                 <FormLabel textStyle='m' mr='8px' mb='0'>
                     Исключить аллергены
@@ -105,7 +110,8 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = ({ disableSwitch 
                 onClickInputButton={handleInputValueAddition}
                 onChecked={handleChecked}
                 selectedOptions={filteredAllergens}
+                type={type}
             />
-        </>
+        </Box>
     );
 };
