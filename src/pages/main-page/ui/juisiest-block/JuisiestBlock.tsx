@@ -14,7 +14,10 @@ export const JuisiestBlock: FC = () => {
     const juisiestRecipes = [...recipes];
     juisiestRecipes.sort((a, b) => b.likes - a.likes);
 
+    console.log('JuisiestBlock', juisiestRecipes);
+
     const recipeItems = juisiestRecipes.slice(0, 4);
+    console.log('recipeItems', recipeItems);
 
     const handleSelection = () => {
         // const state = [{ title: 'Самое сочное', path: routePaths.juiciest }]; // будет выполняться проверка из url

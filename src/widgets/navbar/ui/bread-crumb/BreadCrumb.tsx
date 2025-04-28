@@ -1,5 +1,10 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbProps } from '@chakra-ui/react';
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbProps as ChakraBreadcrumbProps,
+} from '@chakra-ui/react';
 import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -7,10 +12,13 @@ import { routePaths } from '~/shared/config/route-config/router';
 import { Category } from '~/shared/types/categories';
 
 import { getCrumbHandler } from '../../model/getCrumbHandler';
+import cls from './BreadCrumb.module.scss';
 
 export type CrumbState = { title: string; path: string; category?: Category };
 
-export const BreadCrumb: FC<BreadcrumbProps> = (props) => {
+type BreadcrumbProps = ChakraBreadcrumbProps & { className?: string };
+
+export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -23,6 +31,8 @@ export const BreadCrumb: FC<BreadcrumbProps> = (props) => {
             data-test-id='breadcrumbs'
             spacing='8px'
             separator={<ChevronRightIcon color='gray.500' />}
+            // className={className}
+            className={cls.breadCrimb}
             {...props}
         >
             <BreadcrumbItem>

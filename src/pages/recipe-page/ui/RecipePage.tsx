@@ -15,7 +15,7 @@ import { IngredientsBlock } from './ingredients-block/IngredientsBlock';
 
 export const RecipePage: FC = () => {
     const { recipeId } = useParams<{ recipeId: string }>();
-    const recipe = recipes[Number(recipeId)];
+    const recipe = recipes.find((recip) => recip.id === recipeId)!;
     console.log('RecipePage: ', recipe);
     return (
         <Page>

@@ -81,11 +81,6 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
             paddingTop={{ base: '16px', lg: '32px' }}
             paddingBottom={{ lg: '32px' }}
             align='center'
-            // boxShadow={
-            //     isActive
-            //         ? '0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 20px 25px -5px rgba(0, 0, 0, 0.1)'
-            //         : 'none'
-            // }
             borderRadius='24px'
         >
             <Heading

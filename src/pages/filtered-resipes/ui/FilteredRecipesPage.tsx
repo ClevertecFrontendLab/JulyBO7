@@ -19,6 +19,8 @@ import { selectFilters } from '~/widgets/drawer/model/selectors/selectFilters';
 export const FilteredRecipesPage: FC = () => {
     const navigate = useNavigate();
     const filters = useSelector(selectFilters);
+    const [inputValue, setInputValue] = useState<string>('');
+    const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
 
     const filteredRecipesByAllergens = getFilteredRecipesByAllergens(recipes, filters.allergen);
 
@@ -31,13 +33,10 @@ export const FilteredRecipesPage: FC = () => {
         filteredRecipesByCategory,
         filters.sideType,
     );
-    console.log('FilteredRecipesPage: ', filters);
     const filteredRecipesByMeat = getFilteredRecipesByMeet(filteredRecipesBySide, filters.meetType);
     const filteredRecipesByAllFilters = filteredRecipesByMeat;
 
     const isNotFoundWithoutAllergen = filteredRecipesByAllergens.length === 0;
-    const [inputValue, setInputValue] = useState<string>('');
-    const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
 
     const handleInputChange = (value: string) => {
         setInputValue(value);
@@ -113,7 +112,7 @@ export const FilteredRecipesPage: FC = () => {
         <Page>
             <VStack align='center'>
                 <PageHeader
-                    title='отфильтрванные рецепты'
+                    title='Приятного аппетита'
                     onSearch={handleRecipeSearch}
                     inputValue={inputValue}
                     onChange={handleInputChange}
