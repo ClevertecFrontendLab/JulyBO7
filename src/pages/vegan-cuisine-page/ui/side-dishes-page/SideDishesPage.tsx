@@ -22,10 +22,11 @@ export const SideDishesPage: FC = () => {
         allergens,
     );
 
-    const cards = filteredRecipesByAllergen.map((recipe) => {
+    const cards = filteredRecipesByAllergen.map((recipe, idx) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'side-dishes');
         return (
             <HorizontalCard
+                data-test-id={`food-card-${idx}`}
                 key={recipe.id}
                 onCook={handleCook}
                 category={recipe.category[0]}

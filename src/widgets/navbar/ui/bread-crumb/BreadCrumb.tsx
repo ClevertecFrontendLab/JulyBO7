@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbProps } from '@ch
 import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
+import { routePaths } from '~/shared/config/route-config/router';
 import { Category } from '~/shared/types/categories';
 
 import { getCrumbHandler } from '../../model/getCrumbHandler';
@@ -12,6 +13,8 @@ export type CrumbState = { title: string; path: string; category?: Category };
 export const BreadCrumb: FC<BreadcrumbProps> = (props) => {
     const { state } = useLocation();
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+    console.log('BreadCrumb: ', pathname);
 
     const handleCrumb = getCrumbHandler(navigate, state);
 
@@ -25,11 +28,21 @@ export const BreadCrumb: FC<BreadcrumbProps> = (props) => {
             <BreadcrumbItem>
                 <BreadcrumbLink
                     color={state ? 'gray.150' : 'primaryColor'}
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate(routePaths.main)}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
+            {pathname === routePaths.juiciest && (
+                <BreadcrumbItem>
+                    <BreadcrumbLink
+                        color={state ? 'gray.150' : 'primaryColor'}
+                        onClick={() => navigate(routePaths.juiciest)}
+                    >
+                        Самое сочное
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+            )}
             {state &&
                 state.map((item: CrumbState, idx: number) => {
                     const currentPage = idx === state.length - 1;

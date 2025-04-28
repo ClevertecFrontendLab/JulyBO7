@@ -20,15 +20,15 @@ import { getMenuItems } from '~/shared/lib/getMenuItems';
 
 import cls from './MenuArea.module.scss';
 
-type MenuAreaProps = AccordionProps & { isMobile?: boolean };
+type MenuAreaProps = AccordionProps & { isMobile?: boolean; forTest?: boolean };
 
-export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
+export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest }) => {
     const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>();
     const [activeSubCategoryIndex, setActiveSubCategoryIndex] = useState(0);
     const { pathname } = useLocation();
+    const navigate = useNavigate();
 
     const menuCategories = getMenuItems();
-    const navigate = useNavigate();
 
     const onClickMenuItem =
         (path: string, state: { title: string; path: string }[]) =>
@@ -60,12 +60,13 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
             { title: menuItem.title, path: menuItem.routePath, category: menuItem.category },
             { title: menuItem.items[0].title, path: menuItem.items[0].routePath },
         ];
+        const id = menuItem.category === 'vegan' ? 'vegan-cuisine' : menuItem.category;
         return (
             <AccordionItem border='none' key={idx}>
                 {({ isExpanded }) => (
                     <>
                         <AccordionButton
-                            data-test-id={menuItem.category}
+                            data-test-id={id}
                             onClick={onClickMenuItem(menuItem.routePath, state)}
                             padding='12px 8px'
                             display='flex'
@@ -150,6 +151,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, ...rest }) => {
 
     return (
         <Accordion
+            data-test-id='nav'
             onChange={onChangeCategory}
             index={activeCategoryIndex}
             allowToggle

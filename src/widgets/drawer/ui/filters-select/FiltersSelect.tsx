@@ -7,11 +7,10 @@ import {
     Input,
     Menu,
     MenuButton,
-    MenuItem,
     MenuList,
     Text,
 } from '@chakra-ui/react';
-import { ChangeEvent, FC, KeyboardEvent, ReactNode } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, ReactNode, useRef } from 'react';
 
 type FiltersSelectProps = {
     type: 'drawer' | 'header';
@@ -43,7 +42,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
         forTest,
         forTestCheckbox,
     } = props;
-
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         onInputChange?.(e.currentTarget.value);
     };
@@ -56,13 +55,21 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
 
     const handleCheckedFilter = (filterValue: string) => (e: ChangeEvent<HTMLInputElement>) => {
         onChecked?.(e.currentTarget.checked, filterValue);
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
     };
     const optionsList = options.map((option, idx) => {
         const isChecked = selectedOptions?.find((selectedOption) => option === selectedOption);
-        const testId = forTestCheckbox === 'allergen' ? `allergen-${idx}` : forTestCheckbox;
+        let testId;
+        if (forTestCheckbox === 'checkbox-веганская кухня' && option === 'Веганская кухня') {
+            testId = 'checkbox-веганская кухня';
+        } else if (forTestCheckbox === 'allergen') {
+            testId = `allergen-${idx}`;
+        }
 
         return (
-            <MenuItem
+            <Box
                 key={option}
                 _hover={{ bg: 'lime.100' }}
                 h='32px'
@@ -74,10 +81,11 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                     isChecked={!!isChecked}
                     onChange={handleCheckedFilter(option)}
                     variant='lime'
+                    autoFocus={false}
                 >
                     <Text textStyle='s'>{option}</Text>
                 </Checkbox>
-            </MenuItem>
+            </Box>
         );
     });
     return (
@@ -107,34 +115,38 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                     >
                         {placeholder}
                     </MenuButton>
-                    <MenuList
-                        data-test-id='allergens-menu'
-                        w={type === 'drawer' ? { base: '308px', lg: '400px' } : '234px'}
-                        zIndex='1000'
-                    >
-                        {optionsList}
-                        {withInput && (
-                            <HStack p='8px 8px 8px 24px' w='100%'>
-                                <Input
-                                    data-test-id='add-other-allergen'
-                                    value={inputValue}
-                                    onChange={handleInputChange}
-                                    onKeyDown={handleEnterClick}
-                                    placeholder='Другой аллерген'
-                                    variant='outline'
-                                    size='s'
-                                />
-                                <SmallAddIcon
-                                    data-test-id='add-allergen-button'
-                                    as='button'
-                                    rounded='50%'
-                                    color='bgColor'
-                                    bg='lime.600'
-                                    onClick={onClickInputButton}
-                                />
-                            </HStack>
-                        )}
-                    </MenuList>
+                    {!isOpen ? null : (
+                        <MenuList
+                            data-test-id='allergens-menu'
+                            w={type === 'drawer' ? { base: '308px', lg: '400px' } : '234px'}
+                            zIndex='1000'
+                        >
+                            {optionsList}
+                            {withInput && (
+                                <HStack p='8px 8px 8px 24px' w='100%'>
+                                    <Input
+                                        ref={inputRef}
+                                        autoFocus={true}
+                                        data-test-id='add-other-allergen'
+                                        value={inputValue}
+                                        onChange={handleInputChange}
+                                        onKeyDown={handleEnterClick}
+                                        placeholder='Другой аллерген'
+                                        variant='outline'
+                                        size='s'
+                                    />
+                                    <SmallAddIcon
+                                        data-test-id='add-allergen-button'
+                                        as='button'
+                                        rounded='50%'
+                                        color='bgColor'
+                                        bg='lime.600'
+                                        onClick={onClickInputButton}
+                                    />
+                                </HStack>
+                            )}
+                        </MenuList>
+                    )}
                 </Box>
             )}
         </Menu>

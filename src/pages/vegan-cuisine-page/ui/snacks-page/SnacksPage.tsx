@@ -22,7 +22,7 @@ export const SnacksPage: FC = () => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'snacks');
         return (
             <HorizontalCard
-                // data-test-id={`card-link-${idx}`}
+                data-test-id={`food-card-${idx}`}
                 key={recipe.id}
                 onCook={handleCook}
                 category={recipe.category[0]}

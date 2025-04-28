@@ -47,7 +47,7 @@ export type RoutePaths = {
 
 export const routePaths: RoutePaths = {
     main: '/',
-    juiciest: '/juiciest',
+    juiciest: '/the-juiciest',
     vegan: '/vegan/',
     'children-dish': '/children-dish/',
     'desert-bakery': '/desert-bakery/',
@@ -98,7 +98,7 @@ export const routeConfig: RouteConfig[] = [
         element: <JuiciestPage />,
     },
     {
-        path: `${routePaths.juiciest}:recipeId`,
+        path: `${routePaths.juiciest}/:recipeId`,
         element: <RecipePage />,
     },
     {
@@ -107,40 +107,40 @@ export const routeConfig: RouteConfig[] = [
     },
     //vegan category:
     {
-        path: `${routePaths.vegan}snacks/:recipeId`,
+        path: `${routePaths['vegan']}snacks/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}first-dish/:recipeId`,
+        path: `${routePaths['vegan']}first-dish/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}second-dish/:recipeId`,
+        path: `${routePaths['vegan']}second-dish/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}side-dishes/:recipeId`,
+        path: `${routePaths['vegan']}side-dishes/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}deserts/:recipeId`,
+        path: `${routePaths['vegan']}deserts/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}bakery/:recipeId`,
+        path: `${routePaths['vegan']}bakery/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}vegetables/:recipeId`,
+        path: `${routePaths['vegan']}vegetables/:recipeId`,
         element: <RecipePage />,
     },
     {
-        path: `${routePaths.vegan}drinks/:recipeId`,
+        path: `${routePaths['vegan']}drinks/:recipeId`,
         element: <RecipePage />,
     },
 
     {
-        path: `${routePaths.vegan}`,
+        path: `${routePaths['vegan']}`,
         element: <VeganCuisinePage />,
         childrenRoutes: [
             { path: 'snacks', element: <SnacksPage /> },

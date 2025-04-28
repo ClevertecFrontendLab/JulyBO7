@@ -16,8 +16,11 @@ type UserInfoBlockProps = {
 
 export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
     const { bookmarkCount, emojiCount, peopleCount, onClick, isOpenMobileMenu } = props;
+    // const [isSmallerThan1440] = useMediaQuery('(max-width: 1439px)');
 
     return (
+        // <>
+        //     {!isSmallerThan1440 ? null : (
         <Box display={{ base: 'flex', lg: 'none' }} alignItems='center'>
             <Box display={isOpenMobileMenu ? 'none' : 'flex'}>
                 <Button variant='withIcon' color='lime.600' padding='0px 8px'>
@@ -35,25 +38,27 @@ export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {
             </Box>
 
             <Button
-                data-test-id='hamburger-icon'
+                pointerEvents={{ base: 'auto', lg: 'none' }}
                 onClick={onClick}
                 h='48px'
                 w='48px'
                 variant='clear'
-                // padding='0px 12px'
                 as={IconButton}
-                // aria-label='Options'
                 icon={
                     isOpenMobileMenu ? (
                         <CloseIcon data-test-id='close-icon' h='12px' w='12px' />
                     ) : (
-                        <HamburgerIcon h='16px' w='16px' />
+                        <HamburgerIcon
+                            data-test-id='hamburger-icon'
+                            h='16px'
+                            w='16px'
+                            // visibility={{ base: 'auto', lg: 'none' }}
+                        />
                     )
                 }
-                // border='none'
-                // color='primaryColor'
-                // bg='transparent'
             />
         </Box>
+        //     )}
+        // </>
     );
 };

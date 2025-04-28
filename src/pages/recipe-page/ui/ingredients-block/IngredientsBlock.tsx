@@ -27,8 +27,9 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
 
         const roundedCount = Math.round(ingredientCount * 10) / 10;
 
-        const ingredientCountWithMeasureUnit =
-            roundedCount === 0 ? '' : roundedCount + ' ' + item.measureUnit;
+        // const ingredientCountWithMeasureUnit =
+        //     roundedCount === 0 ? '' : roundedCount + ' ' + item.measureUnit;
+        const ingredientCountWithMeasureUnit = roundedCount === 0 ? '' : roundedCount;
         return (
             <HStack
                 key={idx}
@@ -45,6 +46,9 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                 <Text data-test-id={`ingredient-quantity-${idx}`} as='span' textStyle='s'>
                     {ingredientCountWithMeasureUnit}
                 </Text>
+                {/* <Text as='span' textStyle='s'>
+                    {item.measureUnit}
+                </Text> */}
             </HStack>
         );
     });

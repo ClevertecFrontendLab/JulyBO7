@@ -1,5 +1,5 @@
 import { Stack, VStack } from '@chakra-ui/react';
-import { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -11,12 +11,12 @@ import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { removeAllAllergensAction } from '~/shared/components/page-header';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
-import { getCategoryRecipes } from '~/shared/lib/getCategoryRecipes';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
 import { getMenuItems } from '~/shared/lib/getMenuItems';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
 import { recipes } from '~/shared/recipes';
 import { Recipe } from '~/shared/types/recipe';
 
@@ -33,10 +33,18 @@ export const VeganCuisinePage: FC = () => {
     const [inputValue, setInputValue] = useState<string>('');
 
     const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
+    const isFound = useRef<boolean>(false);
 
-    const categoryRecipes = getCategoryRecipes(recipes, 'vegan');
+    const currentSubcut = getMenuItems()
+        .find((item) => item.category === 'vegan')!
+        .items.find((item) => item.routePath === pathname)!.subCategory!;
 
-    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(categoryRecipes, allergens);
+    const currentSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', currentSubcut);
+
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
+        currentSubcatRecipes,
+        allergens,
+    );
 
     const handleRecipeSearch = () => {
         const recipes = filteredRecipesByAllergen.filter((recip) => {
@@ -44,7 +52,13 @@ export const VeganCuisinePage: FC = () => {
             return recip.title.match(reg);
         });
         setFoundRecipes(recipes);
+        if (recipes.length === 0) {
+            isFound.current = false;
+        } else {
+            isFound.current = true;
+        }
     };
+
     const handleInputChange = (value: string) => {
         setInputValue(value);
         if (!value) {
@@ -128,6 +142,7 @@ export const VeganCuisinePage: FC = () => {
                     onSearch={handleRecipeSearch}
                     inputValue={inputValue}
                     onChange={handleInputChange}
+                    isFound={isFound.current}
                 />
 
                 {foundRecipes && foundRecipes.length > 0 ? (

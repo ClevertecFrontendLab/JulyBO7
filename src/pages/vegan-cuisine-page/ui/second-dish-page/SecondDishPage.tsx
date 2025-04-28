@@ -21,10 +21,11 @@ export const SecondDishPage: FC = () => {
         allergens,
     );
 
-    const cards = filteredRecipesByAllergen.map((recipe) => {
+    const cards = filteredRecipesByAllergen.map((recipe, idx) => {
         const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'second-dish');
         return (
             <HorizontalCard
+                data-test-id={`food-card-${idx}`}
                 key={recipe.id}
                 onCook={handleCook}
                 id={recipe.id}

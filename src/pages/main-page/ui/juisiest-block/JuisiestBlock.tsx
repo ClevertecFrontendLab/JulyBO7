@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { routePaths } from '~/shared/config/route-config/router';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { recipes } from '~/shared/recipes';
 
@@ -16,14 +17,15 @@ export const JuisiestBlock: FC = () => {
     const recipeItems = juisiestRecipes.slice(0, 4);
 
     const handleSelection = () => {
-        const state = [{ title: 'Самое сочное', path: '/juiciest' }];
-        navigate('/juiciest', { state });
+        // const state = [{ title: 'Самое сочное', path: routePaths.juiciest }]; // будет выполняться проверка из url
+        navigate(routePaths.juiciest);
     };
     const juiciestCards = recipeItems.map((data, idx) => {
         const handleCook = getRecipeCardHandler(data, navigate);
 
         return (
             <HorizontalCard
+                indexForTest={idx}
                 key={idx}
                 id={data.id}
                 category={data.category[0]}

@@ -19,7 +19,7 @@ export const RecipePage: FC = () => {
     console.log('RecipePage: ', recipe);
     return (
         <Page>
-            <VStack align='center' spacing={{ base: '24px', lg: '40px' }} border='1px solid red'>
+            <VStack align='center' spacing={{ base: '24px', lg: '40px' }}>
                 <HeaderRecipe recipe={recipe} />
                 <NutritionValueBlock nutritionValue={recipe.nutritionValue} />
                 <IngredientsBlock items={recipe.ingredients} portions={recipe.portions} />

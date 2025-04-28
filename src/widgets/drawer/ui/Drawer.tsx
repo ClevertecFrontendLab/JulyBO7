@@ -14,7 +14,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -77,6 +77,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
         ...filters.category,
         ...filters.meetType,
         ...filters.sideType,
+        ...filters.allergen,
     ];
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {
@@ -162,7 +163,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
         );
     });
     const tagsList = filtersTags.map((tag) => (
-        <Badge key={tag} variant='solidWithIcon'>
+        <Badge data-test-id='filter-tag' key={tag} variant='solidWithIcon'>
             <Text as='span'>{tag}</Text>
             <CloseIconChakra
                 onClick={handleFilterRemove(tag)}
@@ -196,6 +197,11 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
     const handleAllergenItemSet = (allergen: string) => {
         dispatch(setAllergenAction(allergen));
     };
+    useEffect(() => {
+        if (isOpen) {
+            dispatch(removeAllFiltersAction());
+        }
+    }, [isOpen, dispatch]);
 
     return (
         <>
@@ -275,7 +281,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             forTestSelect='allergens-menu-button-filter'
                             forTestCheckbox='allergen'
                         />
-                        <HStack wrap='wrap' gap='16px' data-test-id='filter-tag'>
+                        <HStack wrap='wrap' gap='16px'>
                             {tagsList}
                         </HStack>
                     </ModalBody>
@@ -297,6 +303,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             size={{ base: 'm', lg: 'xl' }}
                             onClick={handleFindRecipe}
                             isDisabled={disableFindRecipeBtn}
+                            pointerEvents={disableFindRecipeBtn ? 'none' : 'auto'}
                         >
                             Найти рецепт
                         </Button>

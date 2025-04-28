@@ -60,6 +60,7 @@ export const MainPage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
+                    data-test-id={`food-card-${idx}`}
                     id={data.id}
                     category={data.category[0]}
                     key={idx}

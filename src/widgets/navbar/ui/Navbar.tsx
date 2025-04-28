@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text, useMediaQuery } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -16,7 +16,7 @@ import { UserInfoBlock } from './user-info-block/UserInfoBlock';
 
 export const Navbar: FC = () => {
     const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
-    // const { pathname } = useLocation();
+    const [isSmallerThan768] = useMediaQuery('(max-width: 770px)');
 
     const userName = 'Екатерина Константинопольская';
     const userEmail = '@bake_and_pie';
@@ -66,7 +66,9 @@ export const Navbar: FC = () => {
                             <LogoSecond />
                         </Text>
                     </ChakraLink>
-                    <BreadCrumb display={{ base: 'none', lg: 'block' }} />
+                    {isSmallerThan768 ? null : (
+                        <BreadCrumb display={{ base: 'none', lg: 'block' }} />
+                    )}
                 </Box>
                 <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
                 <UserInfoBlock

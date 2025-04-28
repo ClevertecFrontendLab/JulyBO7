@@ -21,7 +21,6 @@ import { AllergensExclusion, Drawer } from '~/widgets/drawer';
 import { removeAllergenAction, setAllergenAction } from './model/slice/page-slice';
 
 type PageHeaderProps = {
-    isFound?: boolean;
     isNotFoundWithoutAllergen?: boolean;
     inputValue: string;
     onChange: (value: string) => void;
@@ -29,6 +28,7 @@ type PageHeaderProps = {
     onSearch: () => void;
     text?: string;
     inputBorderStyle?: string;
+    isFound?: boolean;
 };
 
 export const PageHeader: FC<PageHeaderProps> = (props) => {
@@ -138,6 +138,7 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                                 variant='clear'
                                 isDisabled={inputValue?.length < 3}
                                 onClick={handleSearch}
+                                pointerEvents={inputValue?.length < 3 ? 'none' : 'auto'}
                             >
                                 <SearchIcon color='primaryColor' />
                             </Button>
