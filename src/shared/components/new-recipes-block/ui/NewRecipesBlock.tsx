@@ -66,6 +66,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
             </Heading>
             <Swiper
                 data-test-id='carousel'
+                speed={200}
                 onSwiper={handleSwiperInit}
                 modules={[Navigation]}
                 navigation

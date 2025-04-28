@@ -110,9 +110,6 @@ export const MainPage: FC = () => {
                     isNotFoundWithoutAllergen={isNotFoundWithoutAllergen}
                 />
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
-                    {/* {(recipes.length !== filteredRecipesByAllergen.length &&
-                        !foundRecipes || length === 0) ||
-                    (foundRecipes && foundRecipes.length > 0 && inputValue.length !== 0)  */}
                     {recipes.length !== filteredRecipesByAllergen.length ||
                     (foundRecipes && foundRecipes.length > 0 && inputValue.length !== 0) ? (
                         <>
