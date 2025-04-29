@@ -3,7 +3,7 @@ export { DesertsPage } from './ui/deserts-page/DesertsPage';
 export { DrinksPage } from './ui/drinks-page/DrinksPage';
 export { FirstDishesPage } from './ui/first-dishes-page/FirstDishesPage';
 export { RawFoodDishesPage } from './ui/raw-food-dishes-page/RawFoodDishesPage';
-export { SecondDishesPage } from './ui/second-dishes-page/SecondDishesPage';
+export { SecondDishPage } from './ui/second-dish-page/SecondDishPage';
 export { SideDishesPage } from './ui/side-dishes-page/SideDishesPage';
 export { SnacksPage } from './ui/snacks-page/SnacksPage';
 export { VeganCuisinePage } from './ui/VeganCuisinePage';

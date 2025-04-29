@@ -18,7 +18,7 @@ export type WithoutImageCardProps = {
 };
 
 export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
-    const { title, text, badgeImage, bookmarkCount, emojiCount, badgeText } = props;
+    const { title, text, bookmarkCount, emojiCount } = props;
 
     return (
         <VStack
@@ -59,7 +59,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                 </Text>
             </Box>
             <Box display='flex' justifyContent='space-between' w='100%'>
-                <Badge image={badgeImage} text={badgeText} style={{ bg: 'lime.50' }} />
+                <Badge category='vegan' style={{ bg: 'lime.50' }} w={{ md: '' }} />
                 <Box display='flex' gap={{ base: '12px', md: '0', lg: '8px' }}>
                     {bookmarkCount && (
                         <Button variant='withIcon' color='lime.600'>

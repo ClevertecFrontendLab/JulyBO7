@@ -14,7 +14,7 @@ function App() {
     return (
         <Box bg='bgColor' position='relative' height='100vh'>
             <Navbar />
-            <Box display='flex'>
+            <Box display='flex' height='100%'>
                 <Menu />
                 <AppRouter />
                 <Sidebar />

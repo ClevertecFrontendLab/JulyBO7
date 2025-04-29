@@ -4,32 +4,50 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-import { AppRoutes, routePaths } from '~/shared/config/route-config/router';
-
-import { mainPageData } from '../../model/mockData';
+import { routePaths } from '~/shared/config/route-config/router';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { recipes } from '~/shared/recipes';
 
 export const JuisiestBlock: FC = () => {
     const navigate = useNavigate();
-    const juiciestCards = mainPageData.juiciest.map((data, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={data.title}
-            text={data.text}
-            badgeImage={data.badgeImage}
-            badgeText={data.badgeText}
-            image={data.image}
-            bookmarkCount={data.bookmarkCount}
-            emojiCount={data.emojiCount}
-            recomend={data.recomend}
-        />
-    ));
+
+    const juisiestRecipes = [...recipes];
+    juisiestRecipes.sort((a, b) => b.likes - a.likes);
+
+    console.log('JuisiestBlock', juisiestRecipes);
+
+    const recipeItems = juisiestRecipes.slice(0, 4);
+    console.log('recipeItems', recipeItems);
+
+    const handleSelection = () => {
+        // const state = [{ title: 'Самое сочное', path: routePaths.juiciest }]; // будет выполняться проверка из url
+        navigate(routePaths.juiciest);
+    };
+    const juiciestCards = recipeItems.map((data, idx) => {
+        const handleCook = getRecipeCardHandler(data, navigate);
+
+        return (
+            <HorizontalCard
+                indexForTest={idx}
+                key={idx}
+                id={data.id}
+                category={data.category[0]}
+                title={data.title}
+                text={data.description}
+                image={data.image}
+                bookmarkCount={data.bookmarks}
+                likesCount={data.likes}
+                onCook={handleCook}
+            />
+        );
+    });
     return (
         <Box>
             <HStack justify='space-between'>
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
                 <Button
                     data-test-id='juiciest-link'
-                    onClick={() => navigate(routePaths[AppRoutes.JUICIEST])}
+                    onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
                     variant='solid'
@@ -53,7 +71,7 @@ export const JuisiestBlock: FC = () => {
                 {juiciestCards}
                 <Button
                     data-test-id='juiciest-link-mobile'
-                    onClick={() => navigate(routePaths[AppRoutes.JUICIEST])}
+                    onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'
                     variant='solid'

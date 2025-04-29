@@ -1,23 +1,44 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import { ApplicationState } from '~/app/store/configure-store';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-
-import { subPageMockData } from '../../model/subPageMockData';
+import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
+import { recipes } from '~/shared/recipes';
 
 export const SideDishesPage: FC = () => {
-    const cards = subPageMockData.map((card, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={card.title}
-            text={card.text}
-            badgeImage={card.badgeImage}
-            badgeText={card.badgeText}
-            image={card.image}
-            bookmarkCount={card.bookmarkCount}
-            emojiCount={card.emojiCount}
-        />
-    ));
+    const navigate = useNavigate();
+
+    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
+
+    const sideDishesSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'side-dishes');
+
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
+        sideDishesSubcatRecipes,
+        allergens,
+    );
+
+    const cards = filteredRecipesByAllergen.map((recipe, idx) => {
+        const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'side-dishes');
+        return (
+            <HorizontalCard
+                data-test-id={`food-card-${idx}`}
+                key={recipe.id}
+                onCook={handleCook}
+                category={recipe.category[0]}
+                id={recipe.id}
+                title={recipe.title}
+                text={recipe.description}
+                image={recipe.image}
+                bookmarkCount={recipe.bookmarks}
+                likesCount={recipe.likes}
+            />
+        );
+    });
     return (
         <>
             <Stack

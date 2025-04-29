@@ -1,24 +1,35 @@
-import { Box, Button, ButtonGroup, Card, Heading, Image, Stack, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Card,
+    CardProps,
+    Heading,
+    Image,
+    Stack,
+    Text,
+} from '@chakra-ui/react';
+import { FC, ReactNode } from 'react';
 
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import { Category } from '~/shared/types/categories';
 
 import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
 type HorizontalCardProps = {
-    title: string;
+    id: string;
+    title: ReactNode;
     text: string;
+    category: Category;
     onSave?: () => void;
     onCook?: () => void;
-    badgeImage: string;
-    badgeText: string;
     image?: string;
-    alt?: string;
     bookmarkCount?: number;
-    emojiCount?: number;
+    likesCount?: number;
     recomend?: { user: string; avatar: string };
-};
+    indexForTest?: number;
+} & CardProps;
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
     const {
@@ -26,12 +37,14 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
         onSave,
         onCook,
         text,
-        badgeImage,
-        badgeText,
         image,
-        emojiCount,
+        likesCount,
         bookmarkCount,
         recomend,
+        category,
+        indexForTest,
+
+        ...rest
     } = props;
 
     return (
@@ -44,6 +57,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
             width={{ base: '328px', md: '356px', lg: '880px', '2xl': '668px' }}
             height={{ base: '128px', lg: '244px' }}
             position='relative'
+            {...rest}
         >
             <Image
                 width={{ base: '158px', lg: '346px' }}
@@ -52,14 +66,13 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 borderBottomLeftRadius='8px'
                 borderTopLeftRadius='8px'
                 src={image}
-                alt='Noodles with chicken'
             />
 
             {recomend && (
                 <Badge
                     theme={BadgeTheme.RECOMEND}
-                    image={recomend.avatar}
-                    text={recomend.user}
+                    avatar={recomend.avatar}
+                    userName={recomend.user}
                     badgeColor={BadgeColor.SECONDARY}
                     style={{
                         position: 'absolute',
@@ -76,8 +89,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
             >
                 <Box display='flex' justifyContent='space-between'>
                     <Badge
-                        image={badgeImage}
-                        text={badgeText}
+                        category={category}
                         style={{
                             position: { base: 'absolute', lg: 'static' },
                             top: { base: '8px' },
@@ -91,21 +103,26 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                         </Button>
                         <Button variant='withIcon' color='lime.600' h='24px'>
                             <Emoji />
-                            <Text fontSize='12px'>{emojiCount}</Text>
+                            <Text fontSize='12px'>{likesCount}</Text>
                         </Button>
                     </Box>
                 </Box>
 
                 <Box width={{ md: '166px', lg: '486px', '3xl': '274px' }} height={{ lg: '100px' }}>
-                    <Heading
-                        fontSize={{ base: 'm', lg: 'xl' }}
-                        fontWeight={500}
-                        noOfLines={{ base: 2, lg: 1 }}
-                        mb={{ base: '20px', lg: 0 }}
-                        textAlign='left'
-                    >
-                        {title}
-                    </Heading>
+                    {typeof title === 'string' ? (
+                        <Heading
+                            fontSize={{ base: 'm', lg: 'xl' }}
+                            fontWeight={500}
+                            noOfLines={{ base: 2, lg: 1 }}
+                            mb={{ base: '20px', lg: 0 }}
+                            textAlign='left'
+                        >
+                            {title}
+                        </Heading>
+                    ) : (
+                        title
+                    )}
+
                     <Text
                         textStyle='s'
                         marginTop='8px'
@@ -127,7 +144,12 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                             Сохранить
                         </Text>
                     </Button>
-                    <Button onClick={onCook} variant='solid' size={{ base: 's', lg: 'm' }}>
+                    <Button
+                        data-test-id={`card-link-${indexForTest}`}
+                        onClick={onCook}
+                        variant='solid'
+                        size={{ base: 's', lg: 'm' }}
+                    >
                         <Text fontWeight={600}>Готовить</Text>
                     </Button>
                 </ButtonGroup>

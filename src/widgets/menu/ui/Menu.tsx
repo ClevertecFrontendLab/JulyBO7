@@ -1,25 +1,31 @@
-import { Box } from '@chakra-ui/react';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { Footer } from './footer/Footer';
-import cls from './Menu.module.scss';
 import { MenuArea } from './menu-area/MenuArea';
+import { MenuFooter } from './menu-footer/MenuFooter';
 
-export const Menu: FC = () => (
-    <Box
-        w='258px'
-        display={{ base: 'none', lg: 'flex' }}
-        flexDirection='column'
-        justifyContent='space-between'
-        pt='24px'
-        className={cls.menu}
-        flexShrink={0}
-        boxShadow='0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12)'
-        position='fixed'
-        left='0'
-        top='80px'
-    >
-        <MenuArea />
-        <Footer />
-    </Box>
-);
+export const Menu: FC = () => {
+    const [isSmallerThan1440] = useMediaQuery('(max-width: 1439px)');
+
+    return (
+        <>
+            {isSmallerThan1440 ? null : (
+                <Box
+                    w='258px'
+                    maxHeight='872px'
+                    display={{ base: 'none', lg: 'flex' }}
+                    flexDirection='column'
+                    justifyContent='space-between'
+                    pt='24px'
+                    flexShrink={0}
+                    position='fixed'
+                    left='0'
+                    top='80px'
+                >
+                    <MenuArea />
+                    <MenuFooter />
+                </Box>
+            )}
+        </>
+    );
+};

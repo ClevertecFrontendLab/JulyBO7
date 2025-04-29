@@ -1,5 +1,9 @@
 import { extendTheme } from '@chakra-ui/react';
 
+import { checkboxTheme } from './components/checkbox';
+import { inputTheme } from './components/input';
+import { switchTheme } from './components/switch';
+
 export const theme = extendTheme({
     styles: {
         global: {
@@ -9,7 +13,6 @@ export const theme = extendTheme({
                 color: 'primaryColor',
                 margin: 0,
                 padding: 0,
-                h: '100%',
             },
             li: {
                 listStyleType: 'none',
@@ -34,9 +37,12 @@ export const theme = extendTheme({
         },
         gray: {
             50: ' rgba(0, 0, 0, 0.24)',
-            100: '  rgba(0, 0, 0, 0.48)',
+            100: 'rgba(0, 0, 0, 0.48)',
             150: 'rgba(0, 0, 0, 0.64)',
             200: 'rgba(0, 0, 0, 0.08)',
+            250: 'rgba(0, 0, 0, 0.8)',
+            300: 'rgba(0, 0, 0, 0.06)',
+            350: 'rgba(0, 0, 0, 0.16)',
         },
     },
     fontSizes: {
@@ -216,5 +222,36 @@ export const theme = extendTheme({
                 },
             },
         },
+        Input: inputTheme,
+
+        Checkbox: checkboxTheme,
+        Badge: {
+            baseStyle: {
+                textTransform: 'capitalize',
+            },
+            variants: {
+                outline_lime: {
+                    border: '1px solid #b1ff2e',
+                    borderRadius: '6px',
+                    p: '0px 8px',
+                    color: 'lime.600',
+                    bg: 'inherit',
+                    fontWeight: 500,
+                    fontSize: 'xs',
+                },
+                solidWithIcon: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: '8px',
+                    gap: '8px',
+                    bg: 'lime.100',
+                    borderRadius: '6px',
+                    color: 'lime.700',
+                    fontSize: 's',
+                    fontWeight: '500',
+                },
+            },
+        },
+        Switch: switchTheme,
     },
 });

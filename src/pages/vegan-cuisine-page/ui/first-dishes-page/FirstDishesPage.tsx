@@ -1,23 +1,43 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import { ApplicationState } from '~/app/store/configure-store';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-
-import { subPageMockData } from '../../model/subPageMockData';
+import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
+import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
+import { recipes } from '~/shared/recipes';
 
 export const FirstDishesPage: FC = () => {
-    const cards = subPageMockData.map((card, idx) => (
-        <HorizontalCard
-            key={idx}
-            title={card.title}
-            text={card.text}
-            badgeImage={card.badgeImage}
-            badgeText={card.badgeText}
-            image={card.image}
-            bookmarkCount={card.bookmarkCount}
-            emojiCount={card.emojiCount}
-        />
-    ));
+    const navigate = useNavigate();
+    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
+
+    const firstDishesSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', 'first-dish');
+
+    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
+        firstDishesSubcatRecipes,
+        allergens,
+    );
+
+    const cards = filteredRecipesByAllergen.map((recipe) => {
+        const handleCook = getRecipeCardHandler(recipe, navigate, 'vegan', 'first-dish');
+
+        return (
+            <HorizontalCard
+                key={recipe.id}
+                onCook={handleCook}
+                id={recipe.id}
+                category={recipe.category[0]}
+                title={recipe.title}
+                text={recipe.description}
+                image={recipe.image}
+                bookmarkCount={recipe.bookmarks}
+                likesCount={recipe.likes}
+            />
+        );
+    });
     return (
         <>
             <Stack
