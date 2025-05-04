@@ -22,10 +22,10 @@ import { removeAllergenAction, setAllergenAction } from './model/slice/page-slic
 
 type PageHeaderProps = {
     isNotFoundWithoutAllergen?: boolean;
-    inputValue: string;
-    onChange: (value: string) => void;
-    title: ReactElement | string;
-    onSearch: () => void;
+    inputValue?: string;
+    onChange?: (value: string) => void;
+    title?: ReactElement | string;
+    onSearch?: () => void;
     text?: string;
     inputBorderStyle?: string;
     isFound?: boolean;

@@ -1,7 +1,8 @@
 import { Badge, Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import { Step } from '~/shared/types/recipe';
+import { Step } from '~/entities/recipe';
+import { IMAGE_API } from '~/shared/constants/imageApi';
 
 type CookingStepsProps = {
     steps: Step[];
@@ -21,7 +22,7 @@ export const CookingSteps: React.FC<CookingStepsProps> = ({ steps }) => (
             >
                 {step.image && (
                     <Image
-                        src={step.image}
+                        src={`${IMAGE_API}${step.image}`}
                         w={{ base: '158px', lg: '346px' }}
                         h={{ base: '128px', lg: '244px' }}
                         borderBottomLeftRadius='8px'

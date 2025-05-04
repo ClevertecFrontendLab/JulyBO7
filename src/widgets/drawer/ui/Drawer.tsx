@@ -19,8 +19,19 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { useAppDispatch } from '~/app/store/hooks';
+import { useGetCategoriesQuery } from '~/entities/category';
 import CloseIcon from '~/shared/assets/icons/components/Close';
-import { getMenuItems } from '~/shared/lib/getMenuItems';
+import {
+    ALLERGEN,
+    ALLERGENS_MENU_BUTTON_FILTER,
+    ALLERGENS_SWITCHER_FILTER,
+    CHECKBOX_VEGAN_CUISINE,
+    CLEAR_FILTER_BUTTON,
+    CLOSE_FILTER_DRAWER,
+    FILTER_DRAWER,
+    FILTER_MENU_BUTTON_CATEGORY,
+    FIND_RECIPE_BUTTON,
+} from '~/shared/constants/tests';
 
 import { selectFilters } from '../model/selectors/selectFilters';
 import {
@@ -69,7 +80,11 @@ type DrawerProps = {
 export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
+    const { data: categories } = useGetCategoriesQuery();
+    const optionsForSelect = categories
+        ?.filter((category) => !category.rootCategoryId)
+        .map((categ) => categ.title);
+    // getMenuItems().map((item) => item.title)
     const filters = useSelector(selectFilters);
 
     const filtersTags = [
@@ -208,7 +223,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
             <Modal isOpen={isOpen} onClose={handleModalClose}>
                 <ModalOverlay backdropFilter='blur(4px)' bg='rgba(0, 0, 0, 0.16)' />
                 <ModalContent
-                    data-test-id='filter-drawer'
+                    data-test-id={FILTER_DRAWER}
                     position='absolute'
                     top={0}
                     bottom={0}
@@ -222,7 +237,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                 >
                     <ModalHeader p={0}>Фильтр</ModalHeader>
                     <ModalCloseButton
-                        data-test-id='close-filter-drawer'
+                        data-test-id={CLOSE_FILTER_DRAWER}
                         top={{ base: '16px', lg: '32px' }}
                         right={{ base: '20px', lg: '32px' }}
                         p={0}
@@ -242,12 +257,12 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                     Категория
                                 </Text>
                             }
-                            options={getMenuItems().map((item) => item.title)}
+                            options={optionsForSelect ?? []}
                             onChecked={handleCheckedCategory}
                             selectedOptions={filters.category}
                             type='drawer'
-                            forTest='filter-menu-button-категория'
-                            forTestCheckbox='checkbox-веганская кухня'
+                            forTest={FILTER_MENU_BUTTON_CATEGORY}
+                            forTestCheckbox={CHECKBOX_VEGAN_CUISINE}
                         />
                         <FiltersSelect
                             placeholder={
@@ -272,14 +287,14 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                         </VStack>
 
                         <AllergensExclusion
-                            forTest='allergens-switcher-filter'
+                            forTest={ALLERGENS_SWITCHER_FILTER}
                             type='drawer'
                             filteredAllergens={filters.allergen}
                             onRemoveAllergen={handleAllergenItemRemove}
                             onSetAllergen={handleAllergenItemSet}
                             onTurnOfSwitch={handleAllFiltersRemove}
-                            forTestSelect='allergens-menu-button-filter'
-                            forTestCheckbox='allergen'
+                            forTestSelect={ALLERGENS_MENU_BUTTON_FILTER}
+                            forTestCheckbox={ALLERGEN}
                         />
                         <HStack wrap='wrap' gap='16px'>
                             {tagsList}
@@ -288,7 +303,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
 
                     <ModalFooter p={0}>
                         <Button
-                            data-test-id='clear-filter-button'
+                            data-test-id={CLEAR_FILTER_BUTTON}
                             variant='outline'
                             border='1px solid rgba(0, 0, 0, 0.48)'
                             bg='bgColor'
@@ -299,7 +314,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             Очистить фильтр
                         </Button>
                         <Button
-                            data-test-id='find-recipe-button'
+                            data-test-id={FIND_RECIPE_BUTTON}
                             size={{ base: 'm', lg: 'xl' }}
                             onClick={handleFindRecipe}
                             isDisabled={disableFindRecipeBtn}

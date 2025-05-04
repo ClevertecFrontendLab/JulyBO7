@@ -10,7 +10,12 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-import { Ingredient } from '~/shared/types/recipe';
+import { Ingredient } from '~/entities/recipe';
+import {
+    DECREMENT_STEPPER,
+    INCREMENT_STEPPER,
+    INGREDIENT_QUANTITY,
+} from '~/shared/constants/tests';
 
 type IngredientsBlockProps = {
     items: Ingredient[];
@@ -27,9 +32,8 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
 
         const roundedCount = Math.round(ingredientCount * 10) / 10;
 
-        // const ingredientCountWithMeasureUnit =
-        //     roundedCount === 0 ? '' : roundedCount + ' ' + item.measureUnit;
-        const ingredientCountWithMeasureUnit = roundedCount === 0 ? '' : roundedCount;
+        const ingredientCountWithMeasureUnit =
+            roundedCount === 0 ? '' : roundedCount + ' ' + item.measureUnit;
         return (
             <HStack
                 key={idx}
@@ -43,12 +47,9 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                 textStyle='md'
             >
                 <Text>{item.title}</Text>
-                <Text data-test-id={`ingredient-quantity-${idx}`} as='span' textStyle='s'>
+                <Text data-test-id={`${INGREDIENT_QUANTITY}-${idx}`} as='span' textStyle='s'>
                     {ingredientCountWithMeasureUnit}
                 </Text>
-                {/* <Text as='span' textStyle='s'>
-                    {item.measureUnit}
-                </Text> */}
             </HStack>
         );
     });
@@ -79,8 +80,8 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                     >
                         <NumberInputField />
                         <NumberInputStepper>
-                            <NumberIncrementStepper data-test-id='increment-stepper' />
-                            <NumberDecrementStepper data-test-id='decrement-stepper' />
+                            <NumberIncrementStepper data-test-id={INCREMENT_STEPPER} />
+                            <NumberDecrementStepper data-test-id={DECREMENT_STEPPER} />
                         </NumberInputStepper>
                     </NumberInput>
                 </HStack>

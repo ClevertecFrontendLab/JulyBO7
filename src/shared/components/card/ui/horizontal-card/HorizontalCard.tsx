@@ -11,41 +11,25 @@ import {
 } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
+import { RecipeBages } from '~/entities/category';
+import { Recipe } from '~/entities/recipe';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
-import { Category } from '~/shared/types/categories';
+import { IMAGE_API } from '~/shared/constants/imageApi';
 
 import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
 type HorizontalCardProps = {
-    id: string;
     title: ReactNode;
-    text: string;
-    category: Category;
     onSave?: () => void;
     onCook?: () => void;
-    image?: string;
-    bookmarkCount?: number;
-    likesCount?: number;
     recomend?: { user: string; avatar: string };
     indexForTest?: number;
+    recipe?: Recipe;
 } & CardProps;
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
-    const {
-        title,
-        onSave,
-        onCook,
-        text,
-        image,
-        likesCount,
-        bookmarkCount,
-        recomend,
-        category,
-        indexForTest,
-
-        ...rest
-    } = props;
+    const { title, onSave, onCook, recomend, indexForTest, recipe, ...rest } = props;
 
     return (
         <Card
@@ -65,7 +49,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 objectFit='cover'
                 borderBottomLeftRadius='8px'
                 borderTopLeftRadius='8px'
-                src={image}
+                src={`${IMAGE_API}${recipe?.image}`}
             />
 
             {recomend && (
@@ -88,22 +72,30 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 border='1px solid gray.200'
             >
                 <Box display='flex' justifyContent='space-between'>
-                    <Badge
+                    {/* <Badge
                         category={category}
                         style={{
                             position: { base: 'absolute', lg: 'static' },
                             top: { base: '8px' },
                             left: { base: '8px' },
                         }}
-                    />
+                    /> */}
+                    <Box
+                        position={{ base: 'absolute', lg: 'static' }}
+                        top={{ base: '8px' }}
+                        left={{ base: '8px' }}
+                    >
+                        <RecipeBages recipe={recipe} onlyFirstCategory />
+                    </Box>
+
                     <Box display='flex' gap='8px'>
                         <Button variant='withIcon' color='lime.600' h='24px'>
                             <Bookmark />
-                            <Text fontSize='12px'>{bookmarkCount}</Text>
+                            <Text fontSize='12px'>{recipe?.bookmarks}</Text>
                         </Button>
                         <Button variant='withIcon' color='lime.600' h='24px'>
                             <Emoji />
-                            <Text fontSize='12px'>{likesCount}</Text>
+                            <Text fontSize='12px'>{recipe?.likes}</Text>
                         </Button>
                     </Box>
                 </Box>
@@ -133,7 +125,7 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                         color={{ base: 'transparent', lg: 'primaryColor' }}
                         top='-1000%'
                     >
-                        {text}
+                        {recipe?.description}
                     </Text>
                 </Box>
 

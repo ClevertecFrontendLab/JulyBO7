@@ -1,17 +1,20 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { apiSlice } from '~/query/create-api';
+import { categoriesSliceReducer } from '~/entities/category';
+import { apiSlice } from '~/shared/api';
 import { pagesSliceReducer } from '~/shared/components/page-header';
 import { filterSliceReducer } from '~/widgets/drawer';
 
 import appReducer, { appSlice } from './app-slice';
 
 const isProduction = false;
+
 const rootReducer = combineReducers({
     [appSlice.name]: appReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     filters: filterSliceReducer,
     pages: pagesSliceReducer,
+    categories: categoriesSliceReducer,
 });
 
 export type ApplicationState = ReturnType<typeof rootReducer>;

@@ -1,20 +1,16 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
-import React from 'react';
+import { FC } from 'react';
+
+import { NutritionValue } from '~/entities/recipe';
 
 import { NutritionValueItem } from './nutrition-value-item/NutritionValueItem';
 
-type NutritionValue = {
-    calories: number;
-    proteins: number;
-    fats: number;
-    carbohydrates: number;
-};
 type NutritionValueBlockProps = {
     nutritionValue: NutritionValue;
 };
 
-export const NutritionValueBlock: React.FC<NutritionValueBlockProps> = (props) => {
-    const { calories, proteins, fats, carbohydrates } = props.nutritionValue;
+export const NutritionValueBlock: FC<NutritionValueBlockProps> = (props) => {
+    const { protein, fats, carbohydrates, calories } = props.nutritionValue;
     return (
         <Box w={{ base: '100%', lg: '578px', '2xl': '668px' }}>
             <Text color='gray.250' mb={{ base: '12px', md: '20px' }}>
@@ -22,7 +18,7 @@ export const NutritionValueBlock: React.FC<NutritionValueBlockProps> = (props) =
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }} gap={{ base: '12px', '2xl': '24px' }}>
                 <NutritionValueItem name='калорийность' value={calories} unit='ккал' />
-                <NutritionValueItem name='белки' value={proteins} unit='грамм' />
+                <NutritionValueItem name='белки' value={protein} unit='грамм' />
                 <NutritionValueItem name='жиры' value={fats} unit='грамм' />
                 <NutritionValueItem name='углеводы' value={carbohydrates} unit='грамм' />
             </Stack>

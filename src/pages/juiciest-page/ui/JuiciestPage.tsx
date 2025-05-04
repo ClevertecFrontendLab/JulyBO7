@@ -4,19 +4,26 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ApplicationState } from '~/app/store/configure-store';
+import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { Page } from '~/shared/components/page/ui/Page';
-import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
+import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { recipes } from '~/shared/recipes';
-import { Recipe } from '~/shared/types/recipe';
 
+// import { recipes } from '~/shared/recipes';
 import { juiciestPageData } from '../model/mockData';
 
 export const JuiciestPage: FC = () => {
+    const { data: recipes } = useGetRecipesQuery({
+        page: 1,
+        limit: 8,
+        sortBy: 'likes',
+        sortOrder: 'desc',
+    });
+
     const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
     const [inputValue, setInputValue] = useState<string>('');
     const isFound = useRef<boolean>(false);
@@ -56,14 +63,9 @@ export const JuiciestPage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
-                    id={data.id}
-                    category={data.category[0]}
+                    //    recipe={}
                     key={idx}
                     title={updatedTitle}
-                    text={data.description}
-                    image={data.image}
-                    bookmarkCount={data.bookmarks}
-                    likesCount={data.likes}
                     onCook={handleCook}
                 />
             );
@@ -73,14 +75,9 @@ export const JuiciestPage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
-                    id={data.id}
-                    category={data.category[0]}
+                    //    recipe={}
                     key={idx}
                     title={data.title}
-                    text={data.description}
-                    image={data.image}
-                    bookmarkCount={data.bookmarks}
-                    likesCount={data.likes}
                     onCook={handleCook}
                 />
             );
@@ -138,12 +135,7 @@ export const JuiciestPage: FC = () => {
                 </Button>
             </VStack>
 
-            <PageFooter
-                title={juiciestPageData.footerPage.title}
-                text={juiciestPageData.footerPage.text}
-                withoutImageCardData={juiciestPageData.footerPage.withoutImageCards}
-                withoutTextCardData={juiciestPageData.footerPage.withoutTextCards}
-            />
+            <RelevantKitchen />
         </Page>
     );
 };

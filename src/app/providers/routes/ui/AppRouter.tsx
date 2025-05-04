@@ -1,25 +1,65 @@
-import { useCallback, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 
-import { RouteConfig, routeConfig } from '~/shared/config/route-config/router';
+import { useGetCategoriesQuery } from '~/entities/category';
+import { CategoryPage } from '~/pages/category-page';
+import { ErrorPage } from '~/pages/error-page';
+import { JuiciestPage } from '~/pages/juiciest-page';
+import { MainPage } from '~/pages/main-page';
+import { RecipePage } from '~/pages/recipe-page';
+import { SubcategoryPage } from '~/pages/subcategory-page';
+import { AppRoutes, routePaths } from '~/shared/config/router';
+import { Category } from '~/shared/types/categories';
 
 export const AppRouter = () => {
-    const getRouteElements = useCallback(
-        (route: RouteConfig) => (
-            <Route key={route.path} path={route.path} element={route.element}>
-                {route.childrenRoutes?.map((childrenRoute, idx) => (
-                    <Route
-                        path={childrenRoute.path}
-                        key={idx}
-                        element={childrenRoute.element}
-                    ></Route>
-                ))}
-            </Route>
-        ),
-        [],
+    const { data } = useGetCategoriesQuery();
+    let recipeRoutes;
+    let categoriesRoutes;
+
+    const getRecipeRoutes = (categoryData: Category) => (
+        <Route key={categoryData._id} path={`/${categoryData.category}/`}>
+            {categoryData.subCategories.map((subcat, idx) => (
+                <Route
+                    path={`${subcat.category}/:recipeId`}
+                    key={idx}
+                    element={<RecipePage />}
+                ></Route>
+            ))}
+        </Route>
     );
 
-    const routes = useMemo(() => routeConfig.map(getRouteElements), [getRouteElements]);
+    const getCategoriesRouteElements = (categoryData: Category) => (
+        <Route
+            key={categoryData._id}
+            path={`/${categoryData.category}/`}
+            element={<CategoryPage categoryId={categoryData._id} />}
+        >
+            {categoryData.subCategories.map((subcat, idx) => (
+                <Route
+                    path={`${subcat.category}`}
+                    key={idx}
+                    element={
+                        <SubcategoryPage categoryId={categoryData._id} subcatId={subcat._id} />
+                    }
+                ></Route>
+            ))}
+        </Route>
+    );
 
-    return <Routes>{routes}</Routes>;
+    if (data) {
+        categoriesRoutes = data
+            .filter((item) => !item.rootCategoryId)
+            .map(getCategoriesRouteElements);
+
+        recipeRoutes = data.filter((item) => !item.rootCategoryId).map(getRecipeRoutes);
+    }
+
+    return (
+        <Routes>
+            <Route path={routePaths[AppRoutes.MAIN]} element={<MainPage />} />
+            <Route path={routePaths[AppRoutes.THE_JUICIEST]} element={<JuiciestPage />} />
+            {categoriesRoutes}
+            {recipeRoutes}
+            <Route path={routePaths[AppRoutes.NOT_PAGE]} element={<ErrorPage />} />
+        </Routes>
+    );
 };

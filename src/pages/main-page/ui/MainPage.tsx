@@ -4,23 +4,26 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ApplicationState } from '~/app/store/configure-store';
+import { useGetCategoriesQuery } from '~/entities/category';
+import { Recipe } from '~/entities/recipe';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { Page } from '~/shared/components/page/ui/Page';
-import { PageFooter } from '~/shared/components/page-footer/PageFooter';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
+import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
+import { FOOD_CARD } from '~/shared/constants/tests';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { recipes } from '~/shared/recipes';
-import { Recipe } from '~/shared/types/recipe';
 
 import { mainPageData } from '../model/mockData';
-import { recipesForSlider } from '../model/mockDataForSlider';
 import { CulinaryBlogs } from './culinary-blogs/CulinaryBlogs';
 import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 
 export const MainPage: FC = () => {
+    const { data: categories } = useGetCategoriesQuery();
+
     const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
     const [inputValue, setInputValue] = useState<string>('');
     const navigate = useNavigate();
@@ -60,16 +63,11 @@ export const MainPage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
-                    data-test-id={`food-card-${idx}`}
-                    id={data.id}
-                    category={data.category[0]}
+                    data-test-id={`${FOOD_CARD}-${idx}`}
                     key={idx}
                     title={updatedTitle}
-                    text={data.description}
-                    image={data.image}
-                    bookmarkCount={data.bookmarks}
-                    likesCount={data.likes}
                     onCook={handleCook}
+                    // recipe={}
                 />
             );
         });
@@ -78,14 +76,9 @@ export const MainPage: FC = () => {
             const handleCook = getRecipeCardHandler(data, navigate);
             return (
                 <HorizontalCard
-                    id={data.id}
-                    category={data.category[0]}
                     key={idx}
                     title={data.title}
-                    text={data.description}
-                    image={data.image}
-                    bookmarkCount={data.bookmarks}
-                    likesCount={data.likes}
+                    //  recipe={}
                     onCook={handleCook}
                 />
             );
@@ -98,6 +91,7 @@ export const MainPage: FC = () => {
         }
     };
 
+    if (!categories) return null;
     return (
         <Page>
             <VStack align='center'>
@@ -134,15 +128,10 @@ export const MainPage: FC = () => {
                         </>
                     ) : (
                         <>
-                            <NewRecipesBlock items={recipesForSlider} />
-                            <JuisiestBlock />
+                            <NewRecipesBlock categories={categories} />
+                            <JuisiestBlock categories={categories} />
                             <CulinaryBlogs />
-                            <PageFooter
-                                title={mainPageData.footerPage.title}
-                                text={mainPageData.footerPage.text}
-                                withoutImageCardData={mainPageData.footerPage.withoutImageCards}
-                                withoutTextCardData={mainPageData.footerPage.withoutTextCards}
-                            />
+                            <RelevantKitchen />
                         </>
                     )}
                 </VStack>

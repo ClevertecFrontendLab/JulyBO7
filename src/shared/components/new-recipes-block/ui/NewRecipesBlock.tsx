@@ -1,60 +1,59 @@
 import 'swiper/scss';
 
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
-import { BadgeColor } from '~/shared/components/badge/ui/Badge';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
+import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { Recipe } from '~/shared/types/recipe';
+import { Category, SubCategory } from '~/shared/types/categories';
 
 import { useSlider } from '../model/useSlider';
 
 type NewRecipesBlockProps = {
-    items: Recipe[];
+    categories: Category[];
 };
-export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
+export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ categories }) => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
     const navigate = useNavigate();
 
-    items.sort((a, b) => {
-        const value1 = new Date(a.date).valueOf();
-        const value2 = new Date(b.date).valueOf();
-        return value2 - value1;
+    const { data: newRecipes } = useGetRecipesQuery({
+        page: 1,
+        limit: 10,
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
     });
 
-    const newRecipeCards = useMemo(
-        () =>
-            items.map((data: Recipe, idx: number) => {
-                const handleCard = getRecipeCardHandler(data, navigate);
+    const newRecipeCards = newRecipes?.data.map((recipe: Recipe, idx: number) => {
+        const subcategory = categories.find(
+            (category) => category._id === recipe.categoriesIds[0],
+        )!;
+        const category = categories.find(
+            (category) => category._id === subcategory.rootCategoryId,
+        )!;
+        const handleCard = getRecipeCardHandler(
+            recipe,
+            navigate,
+            category,
+            subcategory as SubCategory,
+        );
 
-                return (
-                    <SwiperSlide
-                        data-test-id={`carousel-card-${idx}`}
-                        key={idx}
-                        style={{ flexShrink: 1 }}
-                    >
-                        <VerticalCard
-                            id={data.id}
-                            title={data.title}
-                            category={data.category[0]}
-                            text={data.description}
-                            image={data.image}
-                            bookmarkCount={data.bookmarks}
-                            likesCount={data.likes}
-                            badgeColor={BadgeColor.SECONDARY}
-                            onClick={handleCard}
-                        />
-                    </SwiperSlide>
-                );
-            }),
-        [items, navigate],
-    );
+        return (
+            <SwiperSlide
+                data-test-id={`${CAROUSEL_CARD}-${idx}`}
+                key={idx}
+                style={{ flexShrink: 1 }}
+            >
+                <VerticalCard recipe={recipe} onClick={handleCard} />
+            </SwiperSlide>
+        );
+    });
 
     return (
         <Box w='100%' position={{ base: 'static', lg: 'relative' }}>
@@ -65,7 +64,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
                 Новые рецепты
             </Heading>
             <Swiper
-                data-test-id='carousel'
+                data-test-id={CAROUSEL}
                 speed={200}
                 onSwiper={handleSwiperInit}
                 modules={[Navigation]}
@@ -78,7 +77,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
             </Swiper>
 
             <Button
-                data-test-id='carousel-back'
+                data-test-id={CAROUSEL_BACK}
                 display={{ base: 'none', lg: 'flex' }}
                 alignItems='center'
                 h={{ lg: '40px', '2xl': '48px' }}
@@ -93,7 +92,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ items }) => {
                 <ArrowLeftIcon fill='lime.50' />
             </Button>
             <Button
-                data-test-id='carousel-forward'
+                data-test-id={CAROUSEL_FORWARD}
                 display={{ base: 'none', lg: 'flex' }}
                 alignItems='center'
                 h={{ lg: '40px', '2xl': '48px' }}

@@ -3,7 +3,7 @@ import React from 'react';
 
 type NutritionValueItemProps = {
     name: string;
-    value: number;
+    value?: number;
     unit: string;
 };
 

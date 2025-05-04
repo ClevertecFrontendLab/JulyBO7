@@ -1,12 +1,21 @@
-import { getMenuItems } from './getMenuItems';
+import { Category } from '~/shared/types/categories';
 
-export const getCurrentCategoryByPath = (path: string) => {
-    const menuItems = getMenuItems();
-    const pathSegments = path.split('/');
-    const currentMenuItem = menuItems.find((item) => item.category === pathSegments[1]);
+export const getCurrentCategoryByPath = (path: string, data: Category[] | Category) => {
+    let currentMenuItem: Category;
     let index;
+
+    const pathSegments = path.split('/');
+
+    if (Array.isArray(data)) {
+        currentMenuItem = data.find((item) => item.category === pathSegments[1])!;
+    } else {
+        currentMenuItem = data;
+    }
+
     if (currentMenuItem) {
-        index = currentMenuItem.items.findIndex((item) => item.subCategory === pathSegments[2]);
+        index = currentMenuItem.subCategories.findIndex(
+            (item) => item.category === pathSegments[2],
+        );
         if (index === -1) {
             return;
         }

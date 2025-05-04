@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
 import avatar from '~/shared/assets/images/Avatar.png';
-import { routePaths } from '~/shared/config/route-config/router';
+import { AppRoutes, routePaths } from '~/shared/config/router';
+import { HEADER } from '~/shared/constants/tests';
 
 import { AvatarBlock } from './avatar-block/AvatarBlock';
 import { BreadCrumb } from './bread-crumb/BreadCrumb';
@@ -38,7 +39,7 @@ export const Navbar: FC = () => {
     return (
         <>
             <HStack
-                data-test-id='header'
+                data-test-id={HEADER}
                 as='header'
                 w='100%'
                 h={{ base: '64px', lg: '80px' }}
@@ -53,7 +54,7 @@ export const Navbar: FC = () => {
                 <Box as='nav' display='flex' alignItems='center' h='100%'>
                     <ChakraLink
                         as={Link}
-                        to={routePaths.main}
+                        to={routePaths[AppRoutes.MAIN]}
                         display='flex'
                         alignItems='center'
                         gap='7px'
@@ -93,7 +94,6 @@ export const Navbar: FC = () => {
                 />
             )}
             {isOpenMobileMenu && <MobileMenu onClose={handleCloseMobileMenu} />}
-            {/* <MobileMenu onClose={handleCloseMobileMenu} isOpen={isOpenMobileMenu} /> */}
         </>
     );
 };
