@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { Page } from '~/shared/components/page/ui/Page';
-import { PageHeader } from '~/shared/components/page-header/PageHeader';
+import { PageHeader } from '~/shared/components/page-header/ui/SearchPanel';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getFilteredRecipesByCategory } from '~/shared/lib/getFilteredRecipesByCategory';
 import { getFilteredRecipesByMeet } from '~/shared/lib/getFilteredRecipesByMeat';

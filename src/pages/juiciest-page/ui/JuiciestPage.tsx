@@ -7,11 +7,11 @@ import { ApplicationState } from '~/app/store/configure-store';
 import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { Page } from '~/shared/components/page/ui/Page';
-import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
 import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { SearchPanel } from '~/widgets/search-panel';
 
 // import { recipes } from '~/shared/recipes';
 import { juiciestPageData } from '../model/mockData';
@@ -111,10 +111,9 @@ export const JuiciestPage: FC = () => {
     return (
         <Page>
             <VStack align='center'>
-                <PageHeader
+                <SearchPanel
                     title={juiciestPageData.headerPage.title}
                     onSearch={handleRecipeSearch}
-                    inputValue={inputValue}
                     onChange={handleInputChange}
                     isFound={isFound.current}
                     isNotFoundWithoutAllergen={isNotFoundWithoutAllergen}

@@ -3,6 +3,7 @@ export const HEADER = 'header';
 export const BREADCRUMBS = 'breadcrumbs';
 export const FOOTER = 'footer';
 export const FILTER_DRAWER = 'filter-drawer';
+export const FILTER_BUTTON = 'filter-button';
 export const FIND_RECIPE_BUTTON = 'find-recipe-button';
 export const CLEAR_FILTER_BUTTON = 'clear-filter-button';
 export const ALLERGENS_SWITCHER_FILTER = 'allergens-switcher-filter';

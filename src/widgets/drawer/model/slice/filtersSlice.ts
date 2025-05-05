@@ -8,6 +8,7 @@ type InitialState = {
     sideType: string[];
     category: string[];
     author: string[];
+    searchString: string;
 };
 const initialState: InitialState = {
     ['allergen']: [],
@@ -15,13 +16,16 @@ const initialState: InitialState = {
     sideType: [],
     category: [],
     author: [],
+    searchString: '',
 };
 export const filtersSlice = createSlice({
     name: 'filters',
     initialState,
     reducers: {
+        setSearchString(state, action: PayloadAction<string>) {
+            state.searchString = action.payload;
+        },
         setAllergen(state, action: PayloadAction<string>) {
-            // state.allergen = [...state.allergen, action.payload];
             state.allergen.push(action.payload);
         },
         removeAllergen(state, action: PayloadAction<string>) {
@@ -31,11 +35,9 @@ export const filtersSlice = createSlice({
             }
         },
         removeAllAllergens(state) {
-            // state.allergen.splice(0, state.allergen.length);
             state.allergen = [];
         },
         setMeetType(state, action: PayloadAction<string>) {
-            // state.meetType = [...state.meetType, action.payload];
             state.meetType.push(action.payload);
         },
         removeMeetType(state, action: PayloadAction<string>) {
@@ -45,7 +47,6 @@ export const filtersSlice = createSlice({
             }
         },
         setSideType(state, action: PayloadAction<string>) {
-            // state.sideType = [...state.sideType, action.payload];
             state.sideType.push(action.payload);
         },
         removeSideType(state, action: PayloadAction<string>) {
@@ -55,7 +56,6 @@ export const filtersSlice = createSlice({
             }
         },
         setCategory(state, action: PayloadAction<string>) {
-            // state.category = [...state.category, action.payload];
             state.category.push(action.payload);
         },
         removeCategory(state, action: PayloadAction<string>) {
@@ -65,7 +65,6 @@ export const filtersSlice = createSlice({
             }
         },
         setAuthor(state, action: PayloadAction<string>) {
-            // state.author = [...state.author, action.payload];
             state.author.push(action.payload);
         },
         removeAuthor(state, action: PayloadAction<string>) {
@@ -85,6 +84,7 @@ export const filtersSlice = createSlice({
 });
 
 export const {
+    setSearchString: setSearchStringAction,
     setAllergen: setAllergenAction,
     setCategory: setCategoryAction,
     setMeetType: setMeetTypeAction,

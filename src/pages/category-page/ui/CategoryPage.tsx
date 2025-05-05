@@ -9,7 +9,6 @@ import { useGetCategoryByIdQuery } from '~/entities/category';
 import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
 import { Page } from '~/shared/components/page/ui/Page';
 import { removeAllAllergensAction } from '~/shared/components/page-header';
-import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
@@ -17,8 +16,10 @@ import {
     removeAllFiltersAction,
     selectAllergenFilter,
     selectMeetTypeFilter,
+    selectSearchString,
     selectSideTypeFilter,
 } from '~/widgets/drawer';
+import { SearchPanel } from '~/widgets/search-panel';
 
 type CategoryPageProps = {
     categoryId: string;
@@ -33,17 +34,18 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
     const allergen = useSelector(selectAllergenFilter);
     const meatType = useSelector(selectMeetTypeFilter);
     const sideType = useSelector(selectSideTypeFilter);
+    const searchString = useSelector(selectSearchString);
 
     let subcategoriesIds: string[] = [];
     if (category) {
         subcategoriesIds = category.subCategories.map((subcat) => subcat._id);
     }
 
+    const [view, setView] = useState<'default' | 'search'>('default');
     const [canSearch, setCanSearch] = useState(false);
+
     const [page] = useState(1);
     const [limit] = useState(8);
-    const [inputValue, setInputValue] = useState<string>('');
-
     const [sortBy] = useState<'createdAt' | 'likes '>('createdAt');
     const [sortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -52,7 +54,7 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
             page,
             limit,
             allergens: allergen.join(',') === '' ? undefined : allergen.join(','),
-            searchString: inputValue,
+            searchString: searchString,
             meat: meatType.join(',') === '' ? undefined : meatType.join(','),
             garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
             subcategoriesIds:
@@ -67,11 +69,19 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
         setCanSearch(true);
     };
 
-    const handleInputChange = (value: string) => {
-        setInputValue(value);
-        setCanSearch(false);
-    };
-
+    if (
+        recipes &&
+        recipes.data.length > 0 &&
+        view === 'default' &&
+        (allergen.length !== 0 ||
+            meatType.length !== 0 ||
+            sideType.length !== 0 ||
+            searchString.length !== 0)
+    ) {
+        setView('search');
+    } else if (recipes && recipes.data.length === 0 && view === 'search') {
+        setView('default');
+    }
     const onChangeTab = (ind: number) => {
         setCurrentTabIndex(ind);
     };
@@ -107,17 +117,15 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
     return (
         <Page>
             <VStack align='center'>
-                <PageHeader
+                <SearchPanel
                     text={textSearchPanel}
                     title={category.title}
                     onSearch={handleRecipeSearch}
-                    inputValue={inputValue}
-                    onChange={handleInputChange}
                     isFound={isFound.current}
                     onOpenDrawer={() => setCanSearch(false)}
                 />
 
-                {recipes && recipes.data.length > 0 ? (
+                {view == 'search' ? (
                     <VStack justify='center'>
                         <Stack
                             direction='row'
@@ -126,7 +134,12 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
                             rowGap='16px'
                             mt='32px'
                         >
-                            <FoundRecipesCards recipes={recipes.data} searchString={inputValue} />
+                            {recipes && (
+                                <FoundRecipesCards
+                                    recipes={recipes.data}
+                                    searchString={searchString}
+                                />
+                            )}
                         </Stack>
                         <Button
                             variant='solid'
@@ -143,11 +156,7 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
                         <PageTabs
                             categoryData={category}
                             onChangeTab={onChangeTab}
-                            // items={category?.subCategories}
                             tabIndex={currentTabIndex}
-                            // titleCategory={categoryData.title}
-                            // category='vegan'
-                            // pathCategory={categoryData.routePath}
                         />
 
                         <RelevantKitchen category={category.category} />
