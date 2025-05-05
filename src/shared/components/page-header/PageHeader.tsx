@@ -10,12 +10,19 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { ChangeEvent, FC, KeyboardEvent, ReactElement, useState } from 'react';
+import { ChangeEvent, FC, ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ApplicationState } from '~/app/store/configure-store';
 import { useAppDispatch } from '~/app/store/hooks';
 import FilterMenu from '~/shared/assets/icons/components/Filter';
+import {
+    ALLERGEN,
+    ALLERGENS_MENU_BUTTON,
+    ALLERGENS_SWITCHER,
+    SEARCH_BUTTON,
+    SEARCH_INPUT,
+} from '~/shared/constants/tests';
 import {
     AllergensExclusion,
     Drawer,
@@ -72,14 +79,15 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
         }
     };
     const handleSearch = () => {
+        console.log('handleSearch');
         setIsActive(true);
         onSearch && onSearch();
     };
-    const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.code === 'Enter' && inputValue.length >= 3) {
-            handleSearch();
-        }
-    };
+    // const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.code === 'Enter' && inputValue.length >= 3) {
+    //         handleSearch();
+    //     }
+    // };
     const handleAllergenItemRemove = (allergen: string) => {
         dispatch(removeAllergenAction(allergen));
     };
@@ -139,20 +147,20 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
 
                     <InputGroup h='100%'>
                         <Input
-                            data-test-id='search-input'
+                            data-test-id={SEARCH_INPUT}
                             variant='search'
                             h='100%'
                             borderColor='gray.100'
                             borderRadius='6px'
                             placeholder='Название или ингредиент...'
                             onChange={handleInputChange}
-                            onKeyDown={handleEnterClick}
+                            // onKeyDown={handleEnterClick}
                             value={inputValue}
                             border={isNotFoundWithoutAllergen ? ' 2px solid #e53e3e' : inputBorder}
                         />
                         <InputRightElement h='100%'>
                             <Button
-                                data-test-id='search-button'
+                                data-test-id={SEARCH_BUTTON}
                                 variant='clear'
                                 isDisabled={
                                     (inputValue && inputValue.length > 2) || allergens.length > 0
@@ -173,9 +181,9 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                 </HStack>
                 <Box display={{ base: 'none', lg: 'block' }} w='100%'>
                     <AllergensExclusion
-                        forTest='allergens-switcher'
-                        forTestSelect='allergens-menu-button'
-                        forTestCheckbox='allergen'
+                        forTest={ALLERGENS_SWITCHER}
+                        forTestSelect={ALLERGENS_MENU_BUTTON}
+                        forTestCheckbox={ALLERGEN}
                         direction='row'
                         type='header'
                         filteredAllergens={allergens}

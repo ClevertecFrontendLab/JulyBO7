@@ -1,27 +1,24 @@
-import { VStack } from '@chakra-ui/react';
-import { FC } from 'react';
+import { Button, Stack, VStack } from '@chakra-ui/react';
+import { FC, useRef } from 'react';
 import { useEffect, useState } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
-// import { ApplicationState } from '~/app/store/configure-store';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoryByIdQuery } from '~/entities/category';
-// import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
 import { Page } from '~/shared/components/page/ui/Page';
 import { removeAllAllergensAction } from '~/shared/components/page-header';
 import { PageHeader } from '~/shared/components/page-header/PageHeader';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
-
-// import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
-// import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
-// import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-// import { getSubcategoryRecipes } from '~/shared/lib/getSubcategoryRecipes';
-// import { recipes } from '~/shared/recipes';
-// import { Recipe } from '~/shared/types/recipe';
-// import { veganPageData } from '../model/mockData';
+import {
+    removeAllFiltersAction,
+    selectAllergenFilter,
+    selectMeetTypeFilter,
+    selectSideTypeFilter,
+} from '~/widgets/drawer';
 
 type CategoryPageProps = {
     categoryId: string;
@@ -29,113 +26,71 @@ type CategoryPageProps = {
 
 export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
     const { pathname } = useLocation();
-
-    // const categoryData = useAppSelector(getCategoryData(pathname));
     const { data: category } = useGetCategoryByIdQuery(categoryId);
-    console.log('CategoryPage');
-
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const dispatch = useAppDispatch();
 
-    //для поиска в хедере:
-    // const navigate = useNavigate();
-    // const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
-    // const [inputValue, setInputValue] = useState<string>('');
+    const allergen = useSelector(selectAllergenFilter);
+    const meatType = useSelector(selectMeetTypeFilter);
+    const sideType = useSelector(selectSideTypeFilter);
 
-    // const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
-    // const isFound = useRef<boolean>(false);
+    let subcategoriesIds: string[] = [];
+    if (category) {
+        subcategoriesIds = category.subCategories.map((subcat) => subcat._id);
+    }
 
-    // const currentSubcut = category?.subCategories.find
-    //     .find((item) => item.category === 'vegan')!
-    //     .items.find((item) => item.routePath === pathname)!.subCategory!;
-    // // const currentSubcut = getMenuItems()
-    // //     .find((item) => item.category === 'vegan')!
-    // //     .items.find((item) => item.routePath === pathname)!.subCategory!;
+    const [canSearch, setCanSearch] = useState(false);
+    const [page] = useState(1);
+    const [limit] = useState(8);
+    const [inputValue, setInputValue] = useState<string>('');
 
-    // const currentSubcatRecipes = getSubcategoryRecipes(recipes, 'vegan', currentSubcut);
+    const [sortBy] = useState<'createdAt' | 'likes '>('createdAt');
+    const [sortOrder] = useState<'asc' | 'desc'>('asc');
 
-    // const filteredRecipesByAllergen = getFilteredRecipesByAllergens(
-    //     currentSubcatRecipes,
-    //     allergens,
-    // );
+    const { data: recipes } = useGetRecipesQuery(
+        {
+            page,
+            limit,
+            allergens: allergen.join(',') === '' ? undefined : allergen.join(','),
+            searchString: inputValue,
+            meat: meatType.join(',') === '' ? undefined : meatType.join(','),
+            garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
+            subcategoriesIds:
+                subcategoriesIds.join(',') === '' ? undefined : subcategoriesIds.join(','),
+            sortBy,
+            sortOrder,
+        },
+        { skip: !canSearch },
+    );
 
-    // const handleRecipeSearch = () => {
-    //     const recipes = filteredRecipesByAllergen.filter((recip) => {
-    //         const reg = new RegExp(inputValue, 'i');
-    //         return recip.title.match(reg);
-    //     });
-    //     setFoundRecipes(recipes);
-    //     if (recipes.length === 0) {
-    //         isFound.current = false;
-    //     } else {
-    //         isFound.current = true;
-    //     }
-    // };
+    const handleRecipeSearch = () => {
+        setCanSearch(true);
+    };
 
-    // const handleInputChange = (value: string) => {
-    //     setInputValue(value);
-    //     if (!value) {
-    //         setFoundRecipes([]);
-    //     }
-    // };
-    // let cards;
-    // if (foundRecipes && foundRecipes.length > 0) {
-    //     cards = foundRecipes.map((data, idx) => {
-    //         let index;
-    //         const reg = new RegExp(inputValue, 'i');
-    //         const match = data.title.match(reg);
-    //         if (match) {
-    //             index = match['index'];
-    //         }
-    //         const updatedTitle: ReactElement = getFoundRecipesTitle(
-    //             data.title,
-    //             index!,
-    //             inputValue.length,
-    //         );
-    //         const handleCook = getRecipeCardHandler(data, navigate);
-    //         return (
-    //             <HorizontalCard
-    //                 data-test-id={`food-card-${idx}`}
-    //                 id={data.id}
-    //                 category={data.category[0]}
-    //                 key={idx}
-    //                 title={updatedTitle}
-    //                 text={data.description}
-    //                 image={data.image}
-    //                 bookmarkCount={data.bookmarks}
-    //                 likesCount={data.likes}
-    //                 onCook={handleCook}
-    //             />
-    //         );
-    //     });
-    // } else {
-    //     cards = filteredRecipesByAllergen.map((data, idx) => {
-    //         const handleCook = getRecipeCardHandler(data, navigate);
-    //         return (
-    //             <HorizontalCard
-    //                 id={data.id}
-    //                 category={data.category[0]}
-    //                 key={idx}
-    //                 title={data.title}
-    //                 text={data.description}
-    //                 image={data.image}
-    //                 bookmarkCount={data.bookmarks}
-    //                 likesCount={data.likes}
-    //                 onCook={handleCook}
-    //             />
-    //         );
-    //     });
-    // }
-    //---------------------------------------------
-    // const categoryData = useMemo(
-    //     () => getMenuItems().find((item) => item.category === 'vegan')!,
-    //     [],
-    // );
+    const handleInputChange = (value: string) => {
+        setInputValue(value);
+        setCanSearch(false);
+    };
 
     const onChangeTab = (ind: number) => {
         setCurrentTabIndex(ind);
     };
 
+    const textSearchPanel =
+        recipes && recipes.data.length === 0
+            ? 'По вашему запросу ничего не найдено. Попробуйте другой запрос'
+            : category?.description;
+
+    const isFound = useRef<boolean>(false);
+    if (recipes && recipes.data.length > 0) {
+        isFound.current = true;
+    }
+    useEffect(
+        () => () => {
+            dispatch(removeAllFiltersAction());
+        },
+        [dispatch],
+    );
     useEffect(() => {
         if (category) {
             const tabIndex = getCurrentCategoryByPath(pathname, category);
@@ -153,38 +108,52 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
         <Page>
             <VStack align='center'>
                 <PageHeader
-                    title={category?.title}
-                    text={category?.description}
-                    // onSearch={handleRecipeSearch}
-                    // inputValue={inputValue}
-                    // onChange={handleInputChange}
-                    // isFound={isFound.current}
+                    text={textSearchPanel}
+                    title={category.title}
+                    onSearch={handleRecipeSearch}
+                    inputValue={inputValue}
+                    onChange={handleInputChange}
+                    isFound={isFound.current}
+                    onOpenDrawer={() => setCanSearch(false)}
                 />
-                {/* 
-                {foundRecipes && foundRecipes.length > 0 ? (
-                    <Stack
-                        direction='row'
-                        wrap='wrap'
-                        columnGap={{ base: '16px', lg: '24px' }}
-                        rowGap='16px'
-                        mt='32px'
-                    >
-                        {cards}
-                    </Stack>
-                ) : ( */}
 
-                <PageTabs
-                    categoryData={category}
-                    onChangeTab={onChangeTab}
-                    // items={category?.subCategories}
-                    tabIndex={currentTabIndex}
-                    // titleCategory={categoryData.title}
-                    // category='vegan'
-                    // pathCategory={categoryData.routePath}
-                />
-                {/* )} */}
+                {recipes && recipes.data.length > 0 ? (
+                    <VStack justify='center'>
+                        <Stack
+                            direction='row'
+                            wrap='wrap'
+                            columnGap={{ base: '16px', lg: '24px' }}
+                            rowGap='16px'
+                            mt='32px'
+                        >
+                            <FoundRecipesCards recipes={recipes.data} searchString={inputValue} />
+                        </Stack>
+                        <Button
+                            variant='solid'
+                            bg='lime.400'
+                            size='l'
+                            color='primaryColor'
+                            mt='16px'
+                        >
+                            Загрузить еще
+                        </Button>
+                    </VStack>
+                ) : (
+                    <>
+                        <PageTabs
+                            categoryData={category}
+                            onChangeTab={onChangeTab}
+                            // items={category?.subCategories}
+                            tabIndex={currentTabIndex}
+                            // titleCategory={categoryData.title}
+                            // category='vegan'
+                            // pathCategory={categoryData.routePath}
+                        />
+
+                        <RelevantKitchen category={category.category} />
+                    </>
+                )}
             </VStack>
-            <RelevantKitchen category={category.category} />
         </Page>
     );
 };

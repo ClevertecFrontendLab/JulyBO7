@@ -36,6 +36,11 @@ export const RecipeBages: FC<RecipeBagesProps> = ({
         const rootCategories: string[] = [];
         badges = recipe?.categoriesIds.map((subcatId, idx) => {
             const res = rootCategories.find((catId) => ids[subcatId].rootCategoryId === catId);
+            console.log(
+                'RecipeBages',
+                'ids[subcatId].categoryTitle: ',
+                ids[subcatId].categoryTitle,
+            );
             if (!res) {
                 rootCategories.push(ids[subcatId].rootCategoryId);
                 return (

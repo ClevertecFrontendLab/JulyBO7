@@ -14,7 +14,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import React, { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '~/app/store/hooks';
@@ -81,13 +81,8 @@ type DrawerProps = {
     onFindRecipe?: () => void;
     onClearFilters?: () => void;
 };
-export const Drawer: React.FC<DrawerProps> = ({
-    isOpen,
-    onClose,
-    onFindRecipe,
-    onOpen,
-    onClearFilters,
-}) => {
+export const Drawer = memo<DrawerProps>((props) => {
+    const { isOpen, onClose, onFindRecipe, onOpen, onClearFilters } = props;
     const dispatch = useAppDispatch();
     const { data: categories } = useGetCategoriesQuery();
     const filters = useSelector(selectFilters);
@@ -106,7 +101,7 @@ export const Drawer: React.FC<DrawerProps> = ({
         // ...localAllergens,
         ...filters.allergen,
     ];
-    console.log('Drawer', filters.category);
+    // console.log('Drawer', filters.category);
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {
             dispatch(setMeetTypeAction(meetType));
@@ -346,4 +341,4 @@ export const Drawer: React.FC<DrawerProps> = ({
             </Modal>
         </>
     );
-};
+});
