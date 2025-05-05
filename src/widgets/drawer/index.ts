@@ -1,5 +1,8 @@
+export { selectFilters } from './model/selectors/selectFilters';
 export {
     filterSliceReducer,
+    removeAllAllergensAction,
+    removeAllergenAction,
     removeAllFiltersAction,
     setAllergenAction,
     setCategoryAction,

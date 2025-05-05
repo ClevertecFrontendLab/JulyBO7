@@ -16,9 +16,15 @@ import { useSelector } from 'react-redux';
 import { ApplicationState } from '~/app/store/configure-store';
 import { useAppDispatch } from '~/app/store/hooks';
 import FilterMenu from '~/shared/assets/icons/components/Filter';
-import { AllergensExclusion, Drawer } from '~/widgets/drawer';
+import {
+    AllergensExclusion,
+    Drawer,
+    removeAllAllergensAction,
+    removeAllergenAction,
+    setAllergenAction,
+} from '~/widgets/drawer';
 
-import { removeAllergenAction, setAllergenAction } from './model/slice/page-slice';
+// import { removeAllergenAction, setAllergenAction } from './model/slice/page-slice';
 
 type PageHeaderProps = {
     isNotFoundWithoutAllergen?: boolean;
@@ -29,16 +35,28 @@ type PageHeaderProps = {
     text?: string;
     inputBorderStyle?: string;
     isFound?: boolean;
+    onOpenDrawer?: () => void;
+    onClearFilters?: () => void;
 };
 
 export const PageHeader: FC<PageHeaderProps> = (props) => {
-    const { title, text, onSearch, inputValue, onChange, isFound, isNotFoundWithoutAllergen } =
-        props;
+    const {
+        title,
+        text,
+        onSearch,
+        inputValue,
+        onChange,
+        isFound,
+        isNotFoundWithoutAllergen,
+        onOpenDrawer,
+        onClearFilters,
+    } = props;
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isActive, setIsActive] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
-    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
+    // const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
+    const allergens = useSelector((state: ApplicationState) => state.filters.allergen);
 
     const handleDrawerClose = () => {
         setIsOpenDrawer(false);
@@ -48,14 +66,14 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
     };
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
-        onChange(value);
+        onChange?.(value);
         if (!value) {
             setIsActive(false);
         }
     };
     const handleSearch = () => {
         setIsActive(true);
-        onSearch();
+        onSearch && onSearch();
     };
     const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && inputValue.length >= 3) {
@@ -66,7 +84,12 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
         dispatch(removeAllergenAction(allergen));
     };
     const handleAllergenItemSet = (allergen: string) => {
+        // dispatch(setAllergenAction(allergen));
         dispatch(setAllergenAction(allergen));
+    };
+    const handleAllAllergenRemove = () => {
+        // dispatch(setAllergenAction(allergen));
+        dispatch(removeAllAllergensAction());
     };
     const inputBorder =
         isActive && !isFound
@@ -131,9 +154,17 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                             <Button
                                 data-test-id='search-button'
                                 variant='clear'
-                                isDisabled={inputValue?.length < 3}
+                                isDisabled={
+                                    (inputValue && inputValue.length > 2) || allergens.length > 0
+                                        ? false
+                                        : true
+                                }
                                 onClick={handleSearch}
-                                pointerEvents={inputValue?.length < 3 ? 'none' : 'auto'}
+                                pointerEvents={
+                                    (inputValue && inputValue.length > 2) || allergens.length > 0
+                                        ? 'auto'
+                                        : 'none'
+                                }
                             >
                                 <SearchIcon color='primaryColor' />
                             </Button>
@@ -150,10 +181,17 @@ export const PageHeader: FC<PageHeaderProps> = (props) => {
                         filteredAllergens={allergens}
                         onSetAllergen={handleAllergenItemSet}
                         onRemoveAllergen={handleAllergenItemRemove}
+                        onTurnOfSwitch={handleAllAllergenRemove}
                     />
                 </Box>
             </VStack>
-            <Drawer isOpen={isOpenDrawer} onClose={handleDrawerClose} />
+            <Drawer
+                isOpen={isOpenDrawer}
+                onFindRecipe={onSearch}
+                onClose={handleDrawerClose}
+                onOpen={onOpenDrawer}
+                onClearFilters={onClearFilters}
+            />
         </VStack>
     );
 };

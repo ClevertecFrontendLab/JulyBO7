@@ -44,6 +44,10 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = (props) => {
     const [enabled, setEnabled] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
 
+    if (filteredAllergens.length > 0 && !enabled) {
+        setEnabled(true);
+    }
+
     const handleInputChange = (value: string) => {
         setInputValue(value);
     };

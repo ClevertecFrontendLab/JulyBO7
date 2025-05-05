@@ -24,3 +24,5 @@ export const CAROUSEL_BACK = 'carousel-back';
 export const CAROUSEL_FORWARD = 'carousel-forward';
 export const JUICIEST_LINK = 'juiciest-link';
 export const JUICIEST_LINK_MOBILE = 'juiciest-link-mobile';
+export const FILTER_TAG = 'filter-tag';
+export const CHECKBOX_POTATO = 'checkbox-картошка';

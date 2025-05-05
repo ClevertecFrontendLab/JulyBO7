@@ -16,7 +16,6 @@ import {
 } from '@chakra-ui/react';
 import React, { ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
@@ -25,11 +24,13 @@ import {
     ALLERGEN,
     ALLERGENS_MENU_BUTTON_FILTER,
     ALLERGENS_SWITCHER_FILTER,
+    CHECKBOX_POTATO,
     CHECKBOX_VEGAN_CUISINE,
     CLEAR_FILTER_BUTTON,
     CLOSE_FILTER_DRAWER,
     FILTER_DRAWER,
     FILTER_MENU_BUTTON_CATEGORY,
+    FILTER_TAG,
     FIND_RECIPE_BUTTON,
 } from '~/shared/constants/tests';
 
@@ -76,24 +77,36 @@ const sides = [
 type DrawerProps = {
     isOpen: boolean;
     onClose: () => void;
+    onOpen?: () => void;
+    onFindRecipe?: () => void;
+    onClearFilters?: () => void;
 };
-export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
+export const Drawer: React.FC<DrawerProps> = ({
+    isOpen,
+    onClose,
+    onFindRecipe,
+    onOpen,
+    onClearFilters,
+}) => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
     const { data: categories } = useGetCategoriesQuery();
+    const filters = useSelector(selectFilters);
+
+    // const [localAllergens, setLocalAllergens] = useState<string[]>(filters.allergen);
+
     const optionsForSelect = categories
         ?.filter((category) => !category.rootCategoryId)
         .map((categ) => categ.title);
-    // getMenuItems().map((item) => item.title)
-    const filters = useSelector(selectFilters);
 
     const filtersTags = [
         ...filters.author,
         ...filters.category,
         ...filters.meetType,
         ...filters.sideType,
+        // ...localAllergens,
         ...filters.allergen,
     ];
+    console.log('Drawer', filters.category);
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {
             dispatch(setMeetTypeAction(meetType));
@@ -110,7 +123,8 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
     };
     const handleAllFiltersRemove = () => {
         dispatch(removeAllFiltersAction());
-        // disableSwitch.current = true;
+        // setLocalAllergens([]);
+        onClearFilters?.();
     };
     const handleCheckedAuthor = (checked: boolean, author: string) => {
         if (checked) {
@@ -166,7 +180,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
 
         return (
             <Checkbox
-                data-test-id={side === 'Картошка' && 'checkbox-картошка'}
+                data-test-id={side === 'Картошка' && CHECKBOX_POTATO}
                 key={side}
                 variant='lime'
                 isChecked={!!checked}
@@ -178,7 +192,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
         );
     });
     const tagsList = filtersTags.map((tag) => (
-        <Badge data-test-id='filter-tag' key={tag} variant='solidWithIcon'>
+        <Badge data-test-id={FILTER_TAG} key={tag} variant='solidWithIcon'>
             <Text as='span'>{tag}</Text>
             <CloseIconChakra
                 onClick={handleFilterRemove(tag)}
@@ -192,31 +206,36 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
     ));
     let disableFindRecipeBtn = true;
 
-    for (const key in filters) {
-        if (filters[key].length !== 0) {
-            disableFindRecipeBtn = false;
-            break;
-        }
+    if (filtersTags.length > 0) {
+        disableFindRecipeBtn = false;
     }
+
+    // for (const key in filters) {
+    //     if (filters[key].length !== 0) {
+    //         disableFindRecipeBtn = false;
+    //         break;
+    //     }
+    // }
     const handleModalClose = () => {
-        handleAllFiltersRemove();
         onClose();
     };
     const handleFindRecipe = () => {
-        navigate('/filtered-recipes');
+        onFindRecipe?.();
         onClose();
     };
     const handleAllergenItemRemove = (allergen: string) => {
         dispatch(removeAllergenAction(allergen));
+        // setLocalAllergens(localAllergens.filter((item) => item !== allergen));
     };
     const handleAllergenItemSet = (allergen: string) => {
         dispatch(setAllergenAction(allergen));
+        // setLocalAllergens([...localAllergens, allergen]);
     };
     useEffect(() => {
         if (isOpen) {
-            dispatch(removeAllFiltersAction());
+            onOpen?.();
         }
-    }, [isOpen, dispatch]);
+    }, [isOpen, onOpen]);
 
     return (
         <>
@@ -241,7 +260,6 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                         top={{ base: '16px', lg: '32px' }}
                         right={{ base: '20px', lg: '32px' }}
                         p={0}
-                        onClick={handleAllFiltersRemove}
                     >
                         <CloseIcon />
                     </ModalCloseButton>
@@ -290,6 +308,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             forTest={ALLERGENS_SWITCHER_FILTER}
                             type='drawer'
                             filteredAllergens={filters.allergen}
+                            // filteredAllergens={localAllergens}
                             onRemoveAllergen={handleAllergenItemRemove}
                             onSetAllergen={handleAllergenItemSet}
                             onTurnOfSwitch={handleAllFiltersRemove}
