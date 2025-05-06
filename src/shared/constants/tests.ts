@@ -31,3 +31,4 @@ export const FILTER_TAG = 'filter-tag';
 export const CHECKBOX_POTATO = 'checkbox-картошка';
 export const SEARCH_INPUT = 'search-input';
 export const SEARCH_BUTTON = 'search-button';
+export const APP_LOADER = 'app-loader';

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useMatch } from 'react-router';
 
 import { setIdsAction, useGetCategoriesQuery } from '~/entities/category';
+import { LoaderOverlay } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { Footer } from '~/widgets/footer';
 import { Menu } from '~/widgets/menu';
@@ -14,7 +15,7 @@ import { AppRouter } from './providers/routes/ui/AppRouter';
 import { useAppDispatch } from './store/hooks';
 
 function App() {
-    const { data } = useGetCategoriesQuery();
+    const { data, isLoading } = useGetCategoriesQuery();
     const dispatch = useAppDispatch();
     const notFoundPath = useMatch(routePaths[AppRoutes.NOT_FOUND]);
 
@@ -27,6 +28,7 @@ function App() {
 
     return (
         <Box bg='bgColor' position='relative' h='100vh'>
+            {isLoading ? <LoaderOverlay /> : null}
             <Navbar />
             {notFoundPath ? (
                 <Box className={cls.wrapper}>
