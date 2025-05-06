@@ -40,7 +40,7 @@ export const Badge: FC<BadgeProps> = (props) => {
                 theme === BadgeTheme.RECOMEND ? { base: 'none', lg: 'inline-flex' } : 'inline-flex'
             }
             alignItems='center'
-            h={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
+            minH={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
             bg={badgeColor}
             p={
                 theme === BadgeTheme.RECOMEND
@@ -49,6 +49,7 @@ export const Badge: FC<BadgeProps> = (props) => {
             }
             borderRadius='4px'
             gap='2px'
+            width='max-content'
             {...style}
         >
             <Image src={theme === BadgeTheme.RECOMEND ? avatar : categoryIcon} h='16px' w='16px' />

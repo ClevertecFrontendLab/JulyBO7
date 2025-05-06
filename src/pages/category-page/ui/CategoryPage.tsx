@@ -8,7 +8,6 @@ import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoryByIdQuery } from '~/entities/category';
 import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
 import { Page } from '~/shared/components/page/ui/Page';
-import { removeAllAllergensAction } from '~/shared/components/page-header';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
@@ -108,7 +107,7 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
                 setCurrentTabIndex(tabIndex);
             }
             return () => {
-                dispatch(removeAllAllergensAction());
+                // dispatch(removeAllAllergensAction());
             };
         }
     }, [pathname, dispatch, category]);

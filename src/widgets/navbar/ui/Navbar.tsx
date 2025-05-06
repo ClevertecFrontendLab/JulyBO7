@@ -1,7 +1,7 @@
 import { Box, HStack, Text, useMediaQuery } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useMatch } from 'react-router';
 
 import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
@@ -18,6 +18,8 @@ import { UserInfoBlock } from './user-info-block/UserInfoBlock';
 export const Navbar: FC = () => {
     const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
     const [isSmallerThan768] = useMediaQuery('(max-width: 770px)');
+
+    const notFoundPath = useMatch(routePaths[AppRoutes.NOT_FOUND]);
 
     const userName = 'Екатерина Константинопольская';
     const userEmail = '@bake_and_pie';
@@ -67,11 +69,14 @@ export const Navbar: FC = () => {
                             <LogoSecond />
                         </Text>
                     </ChakraLink>
-                    {isSmallerThan768 ? null : (
+                    {isSmallerThan768 || notFoundPath ? null : (
                         <BreadCrumb display={{ base: 'none', lg: 'block' }} />
                     )}
                 </Box>
-                <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
+                {!notFoundPath ? (
+                    <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
+                ) : null}
+
                 <UserInfoBlock
                     bookmarkCount={bookmarkCount}
                     emojiCount={emojiCount}

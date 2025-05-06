@@ -47,7 +47,7 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
                 gap={{ lg: '12px' }}
             >
                 <Heading
-                    w={{ lg: '278px', '2xl': 'auto' }}
+                    // w={{ lg: '278px', '2xl': 'auto' }}
                     mb={{ base: '16px', lg: '32px' }}
                     variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}
                     flexShrink={0}

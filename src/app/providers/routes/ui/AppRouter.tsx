@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { useGetCategoriesQuery } from '~/entities/category';
 import { CategoryPage } from '~/pages/category-page';
@@ -59,7 +59,8 @@ export const AppRouter = () => {
             <Route path={routePaths[AppRoutes.THE_JUICIEST]} element={<JuiciestPage />} />
             {categoriesRoutes}
             {recipeRoutes}
-            <Route path={routePaths[AppRoutes.NOT_PAGE]} element={<ErrorPage />} />
+            <Route path={routePaths[AppRoutes.NOT_FOUND]} element={<ErrorPage />} />
+            <Route path='/*' element={<Navigate to={routePaths[AppRoutes.NOT_FOUND]} />} />
         </Routes>
     );
 };

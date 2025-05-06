@@ -1,7 +1,7 @@
 export enum AppRoutes {
     MAIN = 'main',
-    THE_JUICIEST = 'the-juiciest',
-    NOT_PAGE = 'not page',
+    THE_JUICIEST = 'the juiciest',
+    NOT_FOUND = 'not found',
 }
 
 export type RoutePaths = {
@@ -10,5 +10,5 @@ export type RoutePaths = {
 export const routePaths: RoutePaths = {
     [AppRoutes.MAIN]: '/',
     [AppRoutes.THE_JUICIEST]: '/the-juiciest',
-    [AppRoutes.NOT_PAGE]: '/*',
+    [AppRoutes.NOT_FOUND]: '/not-found',
 };

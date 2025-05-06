@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { categoriesSliceReducer } from '~/entities/category';
 import { apiSlice } from '~/shared/api';
-import { pagesSliceReducer } from '~/shared/components/page-header';
 import { filterSliceReducer } from '~/widgets/drawer';
 
 import appReducer, { appSlice } from './app-slice';
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
     [appSlice.name]: appReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     filters: filterSliceReducer,
-    pages: pagesSliceReducer,
     categories: categoriesSliceReducer,
 });
 

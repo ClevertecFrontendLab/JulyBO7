@@ -1,122 +1,93 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
-import { FC, ReactElement, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { FC, useEffect, useRef, useState } from 'react';
 
-import { ApplicationState } from '~/app/store/configure-store';
-import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
-import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
+import { getSubcategoriesIdsFilter, useGetCategoriesQuery } from '~/entities/category';
+import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
 import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
-import { getFilteredRecipesByAllergens } from '~/shared/lib/getFilteredRecipesByAllergens';
-import { getFoundRecipesTitle } from '~/shared/lib/getFoundRecipeTitle';
-import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { removeAllFiltersAction, selectFilters } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
 
-// import { recipes } from '~/shared/recipes';
 import { juiciestPageData } from '../model/mockData';
 
 export const JuiciestPage: FC = () => {
-    const { data: recipes } = useGetRecipesQuery({
-        page: 1,
-        limit: 8,
-        sortBy: 'likes',
-        sortOrder: 'desc',
-    });
+    const { data: categories } = useGetCategoriesQuery();
+    const dispatch = useAppDispatch();
 
-    const [foundRecipes, setFoundRecipes] = useState<Recipe[]>();
-    const [inputValue, setInputValue] = useState<string>('');
-    const isFound = useRef<boolean>(false);
-    const navigate = useNavigate();
+    const {
+        allergen,
+        meetType,
+        sideType,
+        searchString,
+        category: categoryFilter,
+    } = useAppSelector(selectFilters);
 
-    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
-
-    const filteredRecipesByAllergen = getFilteredRecipesByAllergens(recipes, allergens);
-    const isNotFoundWithoutAllergen = filteredRecipesByAllergen.length === 0;
-
-    const handleRecipeSearch = () => {
-        const recipes = filteredRecipesByAllergen.filter((recip) => {
-            const reg = new RegExp(inputValue, 'i');
-            return recip.title.match(reg);
-        });
-        setFoundRecipes(recipes);
-        if (recipes.length === 0) {
-            isFound.current = false;
-        } else {
-            isFound.current = true;
-        }
-    };
-    let cards;
-    if (foundRecipes && foundRecipes.length > 0) {
-        cards = foundRecipes.map((data, idx) => {
-            let index;
-            const reg = new RegExp(inputValue, 'i');
-            const match = data.title.match(reg);
-            if (match) {
-                index = match['index'];
-            }
-            const updatedTitle: ReactElement = getFoundRecipesTitle(
-                data.title,
-                index!,
-                inputValue.length,
-            );
-            const handleCook = getRecipeCardHandler(data, navigate);
-            return (
-                <HorizontalCard
-                    //    recipe={}
-                    key={idx}
-                    title={updatedTitle}
-                    onCook={handleCook}
-                />
-            );
-        });
-    } else {
-        cards = filteredRecipesByAllergen.map((data, idx) => {
-            const handleCook = getRecipeCardHandler(data, navigate);
-            return (
-                <HorizontalCard
-                    //    recipe={}
-                    key={idx}
-                    title={data.title}
-                    onCook={handleCook}
-                />
-            );
-        });
+    let subcategoriesIds: string[] = [];
+    if (categories) {
+        subcategoriesIds = getSubcategoriesIdsFilter(categoryFilter, categories);
     }
-    const handleInputChange = (value: string) => {
-        setInputValue(value);
-        if (!value) {
-            setFoundRecipes([]);
-        }
+    const initialLimit = 8;
+    const [canSearch, setCanSearch] = useState(false);
+    const [page] = useState(1);
+    const [limit, setLimit] = useState(initialLimit);
+
+    const { data: recipes } = useGetRecipesQuery(
+        {
+            page,
+            limit,
+            allergens: allergen.join(',') === '' ? undefined : allergen.join(','),
+            searchString: searchString,
+            meat: meetType.join(',') === '' ? undefined : meetType.join(','),
+            garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
+            subcategoriesIds:
+                subcategoriesIds.join(',') === '' ? undefined : subcategoriesIds.join(','),
+            sortBy: 'likes',
+            sortOrder: 'desc',
+        },
+        { skip: !canSearch },
+    );
+    const totalCount = recipes?.meta.total;
+
+    let buttonRender = true;
+
+    if (recipes && recipes.data.length === totalCount) {
+        buttonRender = false;
+    }
+    const handleRecipeSearch = () => {
+        setCanSearch(true);
     };
 
-    // const cards = filteredRecipes.map((data, idx) => {
-    //     const handleCook = getRecipeCardHandler(data, navigate);
-    //     return (
-    //         <HorizontalCard
-    //             id={data.id}
-    //             category={data.category[0]}
-    //             key={idx}
-    //             title={data.title}
-    //             text={data.description}
-    //             image={data.image}
-    //             bookmarkCount={data.bookmarks}
-    //             likesCount={data.likes}
-    //             onCook={handleCook}
-    //             // recomend={data.recomend}
-    //         />
-    //     );
-    // });
+    const isFound = useRef<boolean>(false);
+    if (recipes && recipes.data.length > 0) {
+        isFound.current = true;
+    }
+
+    const textSearchPanel =
+        recipes?.data.length === 0
+            ? 'По вашему запросу ничего не найдено. Попробуйте другой запрос'
+            : '';
+
+    const handleLoading = () => {
+        setLimit(limit + initialLimit);
+        // setCanSearch(true);
+    };
+
+    useEffect(
+        () => () => {
+            dispatch(removeAllFiltersAction());
+        },
+        [dispatch],
+    );
 
     return (
         <Page>
             <VStack align='center'>
                 <SearchPanel
+                    text={textSearchPanel}
                     title={juiciestPageData.headerPage.title}
                     onSearch={handleRecipeSearch}
-                    onChange={handleInputChange}
                     isFound={isFound.current}
-                    isNotFoundWithoutAllergen={isNotFoundWithoutAllergen}
                 />
             </VStack>
             <Stack
@@ -126,14 +97,23 @@ export const JuiciestPage: FC = () => {
                 rowGap='16px'
                 mt='32px'
             >
-                {cards}
+                {recipes && (
+                    <FoundRecipesCards recipes={recipes.data} searchString={searchString} />
+                )}
             </Stack>
             <VStack mt='16px' align='center'>
-                <Button variant='solid' bg='lime.400' size='l' color='primaryColor'>
-                    Загрузить еще
-                </Button>
+                {buttonRender ? (
+                    <Button
+                        onClick={handleLoading}
+                        variant='solid'
+                        bg='lime.400'
+                        size='l'
+                        color='primaryColor'
+                    >
+                        Загрузить еще
+                    </Button>
+                ) : null}
             </VStack>
-
             <RelevantKitchen />
         </Page>
     );
