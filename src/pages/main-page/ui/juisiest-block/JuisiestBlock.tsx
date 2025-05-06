@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
+import { ErrorAlert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
@@ -15,12 +16,13 @@ type JuisiestBlockProps = {
 };
 export const JuisiestBlock: FC<JuisiestBlockProps> = ({ categories }) => {
     const navigate = useNavigate();
-    const { data: recipes } = useGetRecipesQuery({
+    const { data: recipes, isError } = useGetRecipesQuery({
         page: 1,
         limit: 4,
         sortBy: 'likes',
         sortOrder: 'desc',
     });
+    console.log('isError: ', isError);
     const prefetchPage = usePrefetch('getRecipes');
     // const juisiestRecipes = [...recipes];
     // juisiestRecipes.sort((a, b) => b.likes - a.likes);
@@ -104,6 +106,7 @@ export const JuisiestBlock: FC<JuisiestBlockProps> = ({ categories }) => {
                     Вся подборка
                 </Button>
             </Stack>
+            {isError && <ErrorAlert />}
         </Box>
     );
 };

@@ -7,6 +7,7 @@ import { useLocation } from 'react-router';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoryByIdQuery } from '~/entities/category';
 import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
+import { ErrorAlert } from '~/shared/components/alert';
 import { Page } from '~/shared/components/page/ui/Page';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
@@ -48,7 +49,7 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
     const [sortBy] = useState<'createdAt' | 'likes '>('createdAt');
     const [sortOrder] = useState<'asc' | 'desc'>('asc');
 
-    const { data: recipes } = useGetRecipesQuery(
+    const { data: recipes, isError } = useGetRecipesQuery(
         {
             page,
             limit,
@@ -161,6 +162,7 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
                         <RelevantKitchen category={category.category} />
                     </>
                 )}
+                {isError && <ErrorAlert />}
             </VStack>
         </Page>
     );

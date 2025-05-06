@@ -4,6 +4,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { getSubcategoriesIdsFilter, useGetCategoriesQuery } from '~/entities/category';
 import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
+import { ErrorAlert } from '~/shared/components/alert';
 import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { removeAllFiltersAction, selectFilters } from '~/widgets/drawer';
@@ -32,7 +33,7 @@ export const JuiciestPage: FC = () => {
     const [page] = useState(1);
     const [limit, setLimit] = useState(initialLimit);
 
-    const { data: recipes } = useGetRecipesQuery(
+    const { data: recipes, isError } = useGetRecipesQuery(
         {
             page,
             limit,
@@ -115,6 +116,7 @@ export const JuiciestPage: FC = () => {
                 ) : null}
             </VStack>
             <RelevantKitchen />
+            {isError && <ErrorAlert />}
         </Page>
     );
 };

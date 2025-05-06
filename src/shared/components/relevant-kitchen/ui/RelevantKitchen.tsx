@@ -3,6 +3,7 @@ import { memo, useMemo } from 'react';
 
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetCategoryRecipesQuery } from '~/entities/recipe';
+import { ErrorAlert } from '~/shared/components/alert';
 import { WithoutImageCard } from '~/shared/components/card/ui/without-image-card/WithoutImageCard';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
@@ -19,9 +20,8 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
         () => getRandomId(categories),
         [categories, category],
     );
-    console.log('randomSubcategoryId: ', randomSubcategoryId);
 
-    const { data: randomSubcategoryRecipes } = useGetCategoryRecipesQuery(
+    const { data: randomSubcategoryRecipes, isError } = useGetCategoryRecipesQuery(
         {
             categoryId: randomSubcategoryId,
         },
@@ -82,6 +82,7 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
                             />
                         ))}
                 </VStack>
+                {isError && <ErrorAlert />}
             </Stack>
         </VStack>
     );

@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
+import { ErrorAlert } from '~/shared/components/alert';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
 import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
@@ -23,7 +24,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ categories }) => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
     const navigate = useNavigate();
 
-    const { data: newRecipes } = useGetRecipesQuery({
+    const { data: newRecipes, isError } = useGetRecipesQuery({
         page: 1,
         limit: 10,
         sortBy: 'createdAt',
@@ -106,6 +107,7 @@ export const NewRecipesBlock: FC<NewRecipesBlockProps> = ({ categories }) => {
             >
                 <ArrowRightIcon fill='lime.50' />
             </Button>
+            {isError && <ErrorAlert />}
         </Box>
     );
 };

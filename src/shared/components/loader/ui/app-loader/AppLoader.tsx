@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { Loader } from '../Loader';
 
-export const LoaderOverlay: FC = () => (
+export const AppLoader: FC = () => (
     <HStack
         align='center'
         justify='center'

@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetRecipeByIdQuery } from '~/entities/recipe';
 import avatar1 from '~/shared/assets/images/Avatar.png';
+import { ErrorAlert } from '~/shared/components/alert';
 import { UserCard } from '~/shared/components/card/ui/user-card/UserCard';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { Page } from '~/shared/components/page/ui/Page';
@@ -16,7 +17,7 @@ import { IngredientsBlock } from './ingredients-block/IngredientsBlock';
 
 export const RecipePage: FC = () => {
     const { recipeId } = useParams<{ recipeId: string }>();
-    const { data: recipe, isLoading } = useGetRecipeByIdQuery(recipeId!);
+    const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(recipeId!);
     const { data: categories } = useGetCategoriesQuery();
 
     if (!recipe || !categories) {
@@ -43,6 +44,7 @@ export const RecipePage: FC = () => {
                         <NewRecipesBlock categories={categories} />
                     </>
                 )}
+                {isError && <ErrorAlert />}
             </VStack>
         </Page>
     );

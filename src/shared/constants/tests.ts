@@ -32,3 +32,6 @@ export const CHECKBOX_POTATO = 'checkbox-картошка';
 export const SEARCH_INPUT = 'search-input';
 export const SEARCH_BUTTON = 'search-button';
 export const APP_LOADER = 'app-loader';
+export const ERROR_NOTIFICATION = 'error-notification';
+export const CLOSE_ALERT_BUTTON = 'close-alert-button';
+export const ERROR_PAGE_GO_HOME = 'error-page-go-home';

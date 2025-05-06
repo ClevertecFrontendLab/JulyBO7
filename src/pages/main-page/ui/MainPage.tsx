@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { getSubcategoriesIdsFilter } from '~/entities/category';
 import { FoundRecipesCards, useGetRecipesQuery } from '~/entities/recipe';
+import { ErrorAlert } from '~/shared/components/alert';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
@@ -39,7 +40,7 @@ export const MainPage: FC = () => {
     const [sortBy] = useState<'createdAt' | 'likes '>('createdAt');
     const [sortOrder] = useState<'asc' | 'desc'>('asc');
 
-    const { data: recipes } = useGetRecipesQuery(
+    const { data: recipes, isError } = useGetRecipesQuery(
         {
             page,
             limit,
@@ -142,6 +143,7 @@ export const MainPage: FC = () => {
                         </>
                     )}
                 </VStack>
+                {isError && <ErrorAlert />}
             </VStack>
         </Page>
     );

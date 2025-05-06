@@ -23,7 +23,7 @@ export const recipeApiSlice = apiSlice
             }),
             getRecipeById: builder.query<Recipe, string>({
                 query: (id: string) => ({
-                    url: `${ApiEndpoints.RECIPE}/${id}`,
+                    url: `${ApiEndpoints.RECIPE}/${id}dffdsfdfsd`,
                     method: 'GET',
                     // apiGroupName: ApiGroupNames.POSTS,
                     // name: EndpointNames.GET_POSTS,

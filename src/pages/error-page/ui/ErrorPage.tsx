@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import not_found from '~/shared/assets/images/not-found.png';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import { ERROR_PAGE_GO_HOME } from '~/shared/constants/tests';
 
 export const ErrorPage: FC = () => (
     <VStack alignItems='center' justify='center' h='100%' gap='32px'>
@@ -15,9 +16,9 @@ export const ErrorPage: FC = () => (
             <Text fontSize='16px' fontWeight='400' color='gray.150' textAlign='center'>
                 Можете поискать другой рецепт
                 <ChakraLink
+                    data-test-id={ERROR_PAGE_GO_HOME}
                     as={Link}
                     textDecoration='underline'
-                    data-test-id='error-page-go-home'
                     to={routePaths[AppRoutes.MAIN]}
                 >
                     {' здесь.'}
