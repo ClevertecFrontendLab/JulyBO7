@@ -1,7 +1,5 @@
 import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
-// import { ApiGroupNames } from '~/shared/api/constants/api-group-names';
-// import { EndpointNames } from '~/shared/api/constants/endpoint-names';
 import { Tags } from '~/shared/api/constants/tags';
 import { Category } from '~/shared/types/categories';
 
@@ -17,19 +15,15 @@ export const categoryApiSlice = apiSlice
                 query: () => ({
                     url: ApiEndpoints.CATEGORY,
                     method: 'GET',
-                    // apiGroupName: ApiGroupNames.POSTS,
-                    // name: EndpointNames.GET_POSTS,
                 }),
-                // providesTags: [Tags.CATEGORY],
+                providesTags: [Tags.CATEGORY],
             }),
             getCategoryById: builder.query<Category, string>({
                 query: (id: string) => ({
                     url: `${ApiEndpoints.CATEGORY}/${id}`,
                     method: 'GET',
-                    // apiGroupName: ApiGroupNames.POSTS,
-                    // name: EndpointNames.GET_POSTS,
                 }),
-                // providesTags: [Tags.CATEGORY],
+                providesTags: [Tags.CATEGORY],
             }),
         }),
     });

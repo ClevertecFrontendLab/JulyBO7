@@ -6,8 +6,12 @@ export { selectSideTypeFilter } from './model/selectors/selectSideTypeFilter';
 export {
     filterSliceReducer,
     removeAllAllergensAction,
+    removeAllAuthorAction,
+    removeAllCategoryAction,
     removeAllergenAction,
     removeAllFiltersAction,
+    removeAllMeetTypeAction,
+    removeAllSideTypeAction,
     setAllergenAction,
     setCategoryAction,
     setMeetTypeAction,
@@ -16,3 +20,4 @@ export {
 } from './model/slice/filtersSlice';
 export { AllergensExclusion } from './ui/allergens-exclusion/AllergensExclusion';
 export { Drawer } from './ui/Drawer';
+export { FiltersTags } from './ui/filters-tags/FiltersTags';

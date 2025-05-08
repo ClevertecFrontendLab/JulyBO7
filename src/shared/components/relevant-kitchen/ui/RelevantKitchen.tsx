@@ -17,6 +17,7 @@ type RelevantKitchenProps = {
 export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
     const { data: categories } = useGetCategoriesQuery();
     const dispatch = useAppDispatch();
+    const limit = 5;
 
     const { randomSubcategoryId, randomCategoryId } = useMemo(
         () => getRandomId(categories),
@@ -26,6 +27,7 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
     const { data: randomSubcategoryRecipes, isError } = useGetCategoryRecipesQuery(
         {
             categoryId: randomSubcategoryId,
+            limit,
         },
         { skip: !randomSubcategoryId && !categories },
     );

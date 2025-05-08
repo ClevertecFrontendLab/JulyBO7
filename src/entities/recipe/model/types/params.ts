@@ -22,8 +22,10 @@ export type GetRecipesResponse = {
     data: Recipe[];
     meta: Meta;
 };
-export type GetRecipesRequest = {
+export type GetCategoryRecipesRequest = {
     categoryId: string;
-    allergens?: string[];
+    allergens?: string;
     searchString?: string;
+    page?: number;
+    limit?: number;
 };

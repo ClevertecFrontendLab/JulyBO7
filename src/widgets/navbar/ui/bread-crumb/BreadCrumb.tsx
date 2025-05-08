@@ -20,7 +20,6 @@ export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
     const { pathname } = useLocation();
 
     const { state, crumbHandler, navigate } = useBreadcrumbs();
-    console.log('BreadCrumb- state: ', state);
 
     return (
         <Breadcrumb

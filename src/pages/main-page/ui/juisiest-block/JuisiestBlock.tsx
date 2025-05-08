@@ -1,5 +1,5 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Stack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
 import { FC, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -16,6 +16,8 @@ import { SubCategory } from '~/shared/types/categories';
 
 export const JuisiestBlock: FC = () => {
     const { data: categories } = useGetCategoriesQuery();
+    const [isMoreThan760] = useMediaQuery('(min-width: 760px)');
+    const [isSmallerThan1400] = useMediaQuery('(max-width: 1400px)');
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -85,7 +87,7 @@ export const JuisiestBlock: FC = () => {
             <HStack justify='space-between'>
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
                 <Button
-                    data-test-id={JUICIEST_LINK}
+                    data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
                     onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
@@ -109,7 +111,9 @@ export const JuisiestBlock: FC = () => {
             >
                 {juiciestCards}
                 <Button
-                    data-test-id={JUICIEST_LINK_MOBILE}
+                    data-test-id={
+                        isMoreThan760 && isSmallerThan1400 ? JUICIEST_LINK : JUICIEST_LINK_MOBILE
+                    }
                     onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'

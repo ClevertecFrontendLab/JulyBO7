@@ -41,7 +41,7 @@ export const ErrorAlert: FC<ErrorAlertProps> = ({ onClose }) => {
                     Ошибка сервера!
                 </AlertTitle>
                 <AlertDescription color='bgColor' textStyle='m' fontWeight={400}>
-                    Попробуйте немного позже
+                    Попробуйте поискать снова попозже
                 </AlertDescription>
             </Box>
             <CloseButton

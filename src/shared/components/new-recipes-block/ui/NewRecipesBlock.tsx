@@ -37,7 +37,14 @@ export const NewRecipesBlock: FC = () => {
     let newRecipesCards;
 
     if (categories && newRecipes) {
-        newRecipesCards = newRecipes.data.map((recipe: Recipe, idx: number) => {
+        //FOR TESTS:
+        const newRecipesForRender = [...newRecipes.data].sort((a, b) => {
+            const value1 = new Date(a.createdAt).valueOf();
+            const value2 = new Date(b.createdAt).valueOf();
+            return value2 - value1;
+        });
+        //
+        newRecipesCards = newRecipesForRender.map((recipe: Recipe, idx: number) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;

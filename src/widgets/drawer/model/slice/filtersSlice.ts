@@ -11,7 +11,7 @@ type InitialState = {
     searchString: string;
 };
 const initialState: InitialState = {
-    ['allergen']: [],
+    allergen: [],
     meetType: [],
     sideType: [],
     category: [],
@@ -46,6 +46,9 @@ export const filtersSlice = createSlice({
                 state.meetType.splice(index, 1);
             }
         },
+        removeAllMeetType(state) {
+            state.meetType = [];
+        },
         setSideType(state, action: PayloadAction<string>) {
             state.sideType.push(action.payload);
         },
@@ -54,6 +57,9 @@ export const filtersSlice = createSlice({
             if (index !== -1) {
                 state.sideType.splice(index, 1);
             }
+        },
+        removeAllSideType(state) {
+            state.sideType = [];
         },
         setCategory(state, action: PayloadAction<string>) {
             state.category.push(action.payload);
@@ -64,6 +70,9 @@ export const filtersSlice = createSlice({
                 state.category.splice(index, 1);
             }
         },
+        removeAllCategory(state) {
+            state.category = [];
+        },
         setAuthor(state, action: PayloadAction<string>) {
             state.author.push(action.payload);
         },
@@ -72,6 +81,9 @@ export const filtersSlice = createSlice({
             if (index !== -1) {
                 state.author.splice(index, 1);
             }
+        },
+        removeAllAuthor(state) {
+            state.author = [];
         },
         removeAllFilters(state) {
             state.allergen = [];
@@ -98,6 +110,10 @@ export const {
     removeAllergen: removeAllergenAction,
     removeAllFilters: removeAllFiltersAction,
     removeAuthor: removeAuthorAction,
+    removeAllMeetType: removeAllMeetTypeAction,
+    removeAllSideType: removeAllSideTypeAction,
+    removeAllCategory: removeAllCategoryAction,
+    removeAllAuthor: removeAllAuthorAction,
 } = filtersSlice.actions;
 
 export const filterSliceReducer = filtersSlice.reducer;

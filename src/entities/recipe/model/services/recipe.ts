@@ -2,7 +2,7 @@ import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { Tags } from '~/shared/api/constants/tags';
 
-import { GetRecipesRequest, GetRecipesResponse, RequestParams } from '../types/params';
+import { GetCategoryRecipesRequest, GetRecipesResponse, RequestParams } from '../types/params';
 import { Recipe } from '../types/recipe';
 
 export const recipeApiSlice = apiSlice
@@ -16,8 +16,6 @@ export const recipeApiSlice = apiSlice
                     url: ApiEndpoints.RECIPE,
                     method: 'GET',
                     params,
-                    // apiGroupName: ApiGroupNames.POSTS,
-                    // name: EndpointNames.GET_POSTS,
                 }),
 
                 providesTags: [Tags.RECIPE],
@@ -30,11 +28,13 @@ export const recipeApiSlice = apiSlice
                 providesTags: [Tags.RECIPE],
             }),
 
-            getCategoryRecipes: builder.query<GetRecipesResponse, GetRecipesRequest>({
-                query: ({ categoryId }) => ({
+            getCategoryRecipes: builder.query<GetRecipesResponse, GetCategoryRecipesRequest>({
+                query: ({ categoryId, ...rest }) => ({
                     url: `${ApiEndpoints.CATEGORY_RECIPES}/${categoryId}`,
                     method: 'GET',
+                    params: rest,
                 }),
+
                 providesTags: [Tags.RECIPE],
             }),
         }),

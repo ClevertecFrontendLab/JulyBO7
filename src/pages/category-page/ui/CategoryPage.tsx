@@ -10,7 +10,6 @@ import { Page } from '~/shared/components/page/ui/Page';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
-import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
 
 type CategoryPageProps = {
@@ -34,12 +33,10 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
         setCurrentTabIndex(ind);
     };
 
-    useEffect(
-        () => () => {
-            dispatch(removeAllFiltersAction());
-        },
-        [dispatch],
-    );
+    useEffect(() => {
+        setFilteredRecipes([]);
+    }, [dispatch, categoryId]);
+
     useEffect(() => {
         if (category) {
             const tabIndex = getCurrentCategoryByPath(pathname, category);
@@ -51,60 +48,13 @@ export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
 
     if (!category) return null;
 
-    // let subcategoriesIds: string[] = [];
-    // if (category) {
-    //     subcategoriesIds = category.subCategories.map((subcat) => subcat._id);
-    // }
-
-    // const [view, setView] = useState<'default' | 'search'>('default');
-    // const [canSearch, setCanSearch] = useState(false);
-
-    // const [page] = useState(1);
-    // const [limit] = useState(8);
-    // const [sortBy] = useState<'createdAt' | 'likes '>('createdAt');
-    // const [sortOrder] = useState<'asc' | 'desc'>('asc');
-
-    // const { data: recipes, isError } = useGetRecipesQuery(
-    //     {
-    //         page,
-    //         limit,
-    //         allergens: allergen.join(',') === '' ? undefined : allergen.join(','),
-    //         searchString: searchString,
-    //         meat: meatType.join(',') === '' ? undefined : meatType.join(','),
-    //         garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
-    //         subcategoriesIds:
-    //             subcategoriesIds.join(',') === '' ? undefined : subcategoriesIds.join(','),
-    //         sortBy,
-    //         sortOrder,
-    //     },
-    //     { skip: !canSearch },
-    // );
-
-    // const handleRecipeSearch = () => {
-    //     setCanSearch(true);
-    // };
-
-    // if (
-    //     recipes &&
-    //     recipes.data.length > 0 &&
-    //     view === 'default' &&
-    //     (allergen.length !== 0 ||
-    //         meatType.length !== 0 ||
-    //         sideType.length !== 0 ||
-    //         searchString.length !== 0)
-    // ) {
-    //     setView('search');
-    // } else if (recipes && recipes.data.length === 0 && view === 'search') {
-    //     setView('default');
-    // }
-
     return (
         <Page>
             <VStack align='center'>
                 <SearchPanel
                     title={category.title}
                     getFoundRecipes={getFoundRecipes}
-                    withinCategory={category}
+                    searchWithinCategory={category}
                 />
 
                 {filteredRecipes && filteredRecipes.length > 0 ? (

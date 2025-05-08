@@ -1,5 +1,6 @@
-import { Box, Button, Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { Box, Button, Heading, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react';
+import { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { setAppError } from '~/app/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
@@ -18,12 +19,15 @@ import { Category } from '~/shared/types/categories';
 import {
     AllergensExclusion,
     Drawer,
-    removeAllAllergensAction,
-    removeAllergenAction,
     removeAllFiltersAction,
     selectFilters,
-    setAllergenAction,
 } from '~/widgets/drawer';
+import {
+    removeAllAuthorAction,
+    removeAllCategoryAction,
+    removeAllMeetTypeAction,
+    removeAllSideTypeAction,
+} from '~/widgets/drawer/model/slice/filtersSlice';
 
 import { SearchInput } from './search-input/SearchInput';
 
@@ -31,16 +35,21 @@ type SearchPanelProps = {
     getFoundRecipes: (items: Recipe[]) => void;
     title?: ReactElement | string;
     text?: string;
-    withinCategory?: Category;
+    searchWithinCategory?: Category;
 };
 
 export const SearchPanel: FC<SearchPanelProps> = (props) => {
-    const { title, text, getFoundRecipes, withinCategory } = props;
+    const { title, text, getFoundRecipes, searchWithinCategory } = props;
+
     const dispatch = useAppDispatch();
+    const [isSmallerThan1400] = useMediaQuery('(max-width: 1400px)');
+    const { pathname } = useLocation();
+
+    const [canSearch, setCanSearch] = useState(false);
+    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+    const [isActive, setIsActive] = useState(false);
 
     const { data: categories } = useGetCategoriesQuery();
-    const [canSearch, setCanSearch] = useState(false);
-
     const {
         allergen,
         meetType,
@@ -51,11 +60,11 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
 
     let subcategoriesIds: string[] = [];
 
-    if (withinCategory) {
-        subcategoriesIds = withinCategory.subCategories.map((subcat) => subcat._id);
+    if (searchWithinCategory) {
+        subcategoriesIds = searchWithinCategory.subCategories.map((subcat) => subcat._id);
     }
 
-    if (!withinCategory && categories) {
+    if (!searchWithinCategory && categories) {
         subcategoriesIds = getSubcategoriesIdsFilter(categoryFilter, categories);
     }
 
@@ -71,17 +80,12 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
             garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
             subcategoriesIds:
                 subcategoriesIds.join(',') === '' ? undefined : subcategoriesIds.join(','),
-            sortBy: undefined,
-            sortOrder: undefined,
         },
         { skip: !canSearch },
     );
-    const handleRecipesSearch = () => {
-        setCanSearch(true);
-    };
-
-    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-    const [isActive, setIsActive] = useState<boolean>(false);
+    if (isError) {
+        dispatch(setAppError('ошибка'));
+    }
 
     const handleDrawerClose = () => {
         setIsOpenDrawer(false);
@@ -89,31 +93,21 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
     const handleDrawerOpen = () => {
         setIsOpenDrawer(true);
         setCanSearch(false);
+        dispatch(removeAllMeetTypeAction());
+        dispatch(removeAllSideTypeAction());
+        dispatch(removeAllCategoryAction());
+        dispatch(removeAllAuthorAction());
     };
 
-    const handleSearch = () => {
+    const handleSearchInit = () => {
         setCanSearch(true);
-    };
-    // const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.code === 'Enter' && inputValue.length >= 3) {
-    //         handleSearch();
-    //     }
-    // };
-    const handleAllergenItemRemove = (allergen: string) => {
-        dispatch(removeAllergenAction(allergen));
-    };
-    const handleAllergenItemSet = (allergen: string) => {
-        dispatch(setAllergenAction(allergen));
-    };
-    const handleAllAllergenRemove = () => {
-        dispatch(removeAllAllergensAction());
     };
 
     const handleInputFocus = () => {
         setIsActive(true);
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (recipes?.data) {
             getFoundRecipes(recipes.data);
         }
@@ -126,11 +120,13 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         }
     }, [getFoundRecipes, dispatch, recipes?.data, recipes]);
 
-    useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
-        }
-    }, [isError, dispatch]);
+    useEffect(
+        () => () => {
+            setCanSearch(false);
+            dispatch(removeAllFiltersAction());
+        },
+        [pathname],
+    );
 
     return (
         <VStack
@@ -200,32 +196,30 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
                                 <FilterMenu />
                             </Button>
                             <SearchInput
-                                onSearch={handleSearch}
+                                onSearch={handleSearchInit}
                                 onFocus={handleInputFocus}
                                 clearInput={recipes?.data.length === 0}
                                 borderColor={recipes && recipes.data.length > 0 ? 'lime.600' : ''}
                             />
                         </HStack>
-                        <Box display={{ base: 'none', lg: 'block' }} w='100%'>
-                            <AllergensExclusion
-                                forTest={ALLERGENS_SWITCHER}
-                                forTestSelect={ALLERGENS_MENU_BUTTON}
-                                forTestCheckbox={ALLERGEN}
-                                direction='row'
-                                type='header'
-                                filteredAllergens={allergen}
-                                onSetAllergen={handleAllergenItemSet}
-                                onRemoveAllergen={handleAllergenItemRemove}
-                                onTurnOfSwitch={handleAllAllergenRemove}
-                                disableSwitch={recipes?.data.length === 0}
-                            />
-                        </Box>
+                        {isSmallerThan1400 ? null : (
+                            <Box display={{ base: 'none', lg: 'block' }} w='100%'>
+                                <AllergensExclusion
+                                    forTest={ALLERGENS_SWITCHER}
+                                    forTestSelect={ALLERGENS_MENU_BUTTON}
+                                    forTestCheckbox={ALLERGEN}
+                                    direction='row'
+                                    type='header'
+                                    disableSwitch={recipes?.data.length === 0}
+                                />
+                            </Box>
+                        )}
                     </>
                 )}
             </VStack>
             <Drawer
                 isOpen={isOpenDrawer}
-                onFindRecipe={handleRecipesSearch}
+                onFindRecipe={handleSearchInit}
                 onClose={handleDrawerClose}
             />
         </VStack>

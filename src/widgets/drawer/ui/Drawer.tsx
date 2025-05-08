@@ -1,6 +1,4 @@
-import { CloseIcon as CloseIconChakra } from '@chakra-ui/icons';
 import {
-    Badge,
     Button,
     Checkbox,
     HStack,
@@ -14,7 +12,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { ChangeEvent, memo, useEffect } from 'react';
+import { ChangeEvent, memo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '~/app/store/hooks';
@@ -30,19 +28,16 @@ import {
     CLOSE_FILTER_DRAWER,
     FILTER_DRAWER,
     FILTER_MENU_BUTTON_CATEGORY,
-    FILTER_TAG,
     FIND_RECIPE_BUTTON,
 } from '~/shared/constants/tests';
 
 import { selectFilters } from '../model/selectors/selectFilters';
 import {
-    removeAllergenAction,
     removeAllFiltersAction,
     removeAuthorAction,
     removeCategoryAction,
     removeMeetTypeAction,
     removeSideTypeAction,
-    setAllergenAction,
     setAuthorAction,
     setCategoryAction,
     setMeetTypeAction,
@@ -50,6 +45,7 @@ import {
 } from '../model/slice/filtersSlice';
 import { AllergensExclusion } from './allergens-exclusion/AllergensExclusion';
 import { FiltersSelect } from './filters-select/FiltersSelect';
+import { FiltersTags } from './filters-tags/FiltersTags';
 
 const authors = [
     'Елена Мин',
@@ -77,12 +73,10 @@ const sides = [
 type DrawerProps = {
     isOpen: boolean;
     onClose: () => void;
-    onOpen?: () => void;
     onFindRecipe?: () => void;
-    onClearFilters?: () => void;
 };
 export const Drawer = memo<DrawerProps>((props) => {
-    const { isOpen, onClose, onFindRecipe, onOpen, onClearFilters } = props;
+    const { isOpen, onClose, onFindRecipe } = props;
 
     const dispatch = useAppDispatch();
     const { data: categories } = useGetCategoriesQuery();
@@ -92,13 +86,6 @@ export const Drawer = memo<DrawerProps>((props) => {
         ?.filter((category) => !category.rootCategoryId)
         .map((categ) => categ.title);
 
-    const filtersTags = [
-        ...filters.author,
-        ...filters.category,
-        ...filters.meetType,
-        ...filters.sideType,
-        ...filters.allergen,
-    ];
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {
             dispatch(setMeetTypeAction(meetType));
@@ -115,7 +102,6 @@ export const Drawer = memo<DrawerProps>((props) => {
     };
     const handleAllFiltersRemove = () => {
         dispatch(removeAllFiltersAction());
-        onClearFilters?.();
     };
     const handleCheckedAuthor = (checked: boolean, author: string) => {
         if (checked) {
@@ -129,26 +115,6 @@ export const Drawer = memo<DrawerProps>((props) => {
             dispatch(setCategoryAction(category));
         } else {
             dispatch(removeCategoryAction(category));
-        }
-    };
-    const handleFilterRemove = (filterValue: string) => () => {
-        // для удаления по бейджу
-        const meet = filters.meetType.find((type) => type === filterValue);
-        const side = filters.sideType.find((type) => type === filterValue);
-        const author = filters.author.find((type) => type === filterValue);
-        const category = filters.category.find((type) => type === filterValue);
-
-        if (meet) {
-            dispatch(removeMeetTypeAction(filterValue));
-        }
-        if (side) {
-            dispatch(removeSideTypeAction(filterValue));
-        }
-        if (author) {
-            dispatch(removeAuthorAction(filterValue));
-        }
-        if (category) {
-            dispatch(removeCategoryAction(filterValue));
         }
     };
 
@@ -182,23 +148,14 @@ export const Drawer = memo<DrawerProps>((props) => {
             </Checkbox>
         );
     });
-    const tagsList = filtersTags.map((tag) => (
-        <Badge data-test-id={FILTER_TAG} key={tag} variant='solidWithIcon'>
-            <Text as='span'>{tag}</Text>
-            <CloseIconChakra
-                onClick={handleFilterRemove(tag)}
-                as='button'
-                fill='lime.700'
-                w='10px'
-                h='10px'
-                opacity='50%'
-            />
-        </Badge>
-    ));
+
     let disableFindRecipeBtn = true;
 
-    if (filtersTags.length > 0) {
-        disableFindRecipeBtn = false;
+    for (const key in filters) {
+        if (filters[key].length !== 0) {
+            disableFindRecipeBtn = false;
+            break;
+        }
     }
 
     const handleModalClose = () => {
@@ -208,17 +165,6 @@ export const Drawer = memo<DrawerProps>((props) => {
         onFindRecipe?.();
         onClose();
     };
-    const handleAllergenItemRemove = (allergen: string) => {
-        dispatch(removeAllergenAction(allergen));
-    };
-    const handleAllergenItemSet = (allergen: string) => {
-        dispatch(setAllergenAction(allergen));
-    };
-    useEffect(() => {
-        if (isOpen) {
-            onOpen?.();
-        }
-    }, [isOpen, onOpen]);
 
     return (
         <>
@@ -289,17 +235,12 @@ export const Drawer = memo<DrawerProps>((props) => {
 
                         <AllergensExclusion
                             forTest={ALLERGENS_SWITCHER_FILTER}
-                            type='drawer'
-                            filteredAllergens={filters.allergen}
-                            // filteredAllergens={localAllergens}
-                            onRemoveAllergen={handleAllergenItemRemove}
-                            onSetAllergen={handleAllergenItemSet}
-                            onTurnOfSwitch={handleAllFiltersRemove}
                             forTestSelect={ALLERGENS_MENU_BUTTON_FILTER}
                             forTestCheckbox={ALLERGEN}
+                            type='drawer'
                         />
                         <HStack wrap='wrap' gap='16px'>
-                            {tagsList}
+                            <FiltersTags />
                         </HStack>
                     </ModalBody>
 

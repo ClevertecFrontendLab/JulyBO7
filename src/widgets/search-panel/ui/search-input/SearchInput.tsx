@@ -28,9 +28,6 @@ export const SearchInput: FC<SearchInputProps> = (props) => {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
         setInputValue(value);
-        // if (!value) {
-        //     dispatch(setSearchStringAction(value));
-        // }
     };
     const handleSearch = () => {
         dispatch(setSearchStringAction(inputValue));
@@ -64,9 +61,7 @@ export const SearchInput: FC<SearchInputProps> = (props) => {
                 borderRadius='6px'
                 placeholder='Название или ингредиент...'
                 onChange={handleInputChange}
-                // onKeyDown={handleEnterClick}
                 value={inputValue}
-                // border={isNotFoundWithoutAllergen ? ' 2px solid #e53e3e' : inputBorder}
             />
             <InputRightElement h='100%'>
                 <Button

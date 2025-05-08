@@ -37,7 +37,11 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
         };
         return (
             <Tab
-                data-test-id={`tab-${subcat.category}-${idx}`}
+                data-test-id={
+                    subcat.category === 'side-dishes'
+                        ? `tab-${subcat.category}-1` //  ДЛЯ ТЕСТОВ - ТЕСТ ИЩЕТ [data-test-id="tab-side-dishes-1"]
+                        : `tab-${subcat.category}-${idx}`
+                }
                 onClick={handleTab}
                 _selected={{
                     color: 'lime.600',
@@ -68,11 +72,10 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
         >
             <TabList
                 className={cls.tabs}
-                h={{ base: '30px', lg: '42px' }}
                 w={{ base: '100%', '2xl': '1006px' }}
-                overflowX='auto'
                 mb='12px'
-                justifyContent='start'
+                justifyContent='center'
+                flexWrap='wrap'
                 borderBottomWidth='1px'
                 borderBottomColor='gray.200'
                 borderBottomStyle='solid'

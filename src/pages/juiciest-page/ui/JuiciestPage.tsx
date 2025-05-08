@@ -18,10 +18,10 @@ import { SearchPanel } from '~/widgets/search-panel';
 
 export const JuiciestPage: FC = () => {
     const { data: categories } = useGetCategoriesQuery();
-    const initialLimit = 8;
 
-    const [page] = useState(1);
-    const [limit, setLimit] = useState(initialLimit);
+    const [page, setPage] = useState(1);
+    const [limit] = useState(8);
+    const [loadedRecipes, setLoadedRecipes] = useState<Recipe[]>([]);
 
     const {
         data: recipes,
@@ -38,61 +38,57 @@ export const JuiciestPage: FC = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const totalCount = recipes?.meta.total;
+    const totalCountPages = recipes && Math.ceil(recipes.meta.total / limit);
 
-    let isButtonRender = true;
-
-    if (recipes && recipes.data.length === totalCount) {
-        isButtonRender = false;
-    }
     const handleLoading = () => {
-        setLimit(limit + initialLimit);
+        setPage(page + 1);
     };
 
-    let juiciestRecipes;
+    if (isError) {
+        dispatch(setAppError('ошибка'));
+    }
 
-    if (categories && recipes) {
-        juiciestRecipes = recipes.data.map((recipe, idx) => {
+    const juiciestRecipes = loadedRecipes.map((recipe, idx) => {
+        let handleCook;
+        if (categories) {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;
             const category = categories.find(
                 (category) => category._id === subcategory.rootCategoryId,
             )!;
-            const handleCook = getRecipeCardHandler(
+            handleCook = getRecipeCardHandler(
                 recipe,
                 navigate,
                 category,
                 subcategory as SubCategory,
                 pathname,
             );
+        }
+        return (
+            <HorizontalCard
+                data-test-id={`food-card-${idx}`}
+                categories={categories}
+                indexForTest={idx}
+                key={idx}
+                recipe={recipe}
+                title={recipe.title}
+                onCook={handleCook}
+            />
+        );
+    });
 
-            return (
-                <HorizontalCard
-                    categories={categories}
-                    indexForTest={idx}
-                    key={idx}
-                    recipe={recipe}
-                    title={recipe.title}
-                    onCook={handleCook}
-                />
-            );
-        });
-    }
-    //ПОЛУЧЕНИЕ ОТФИЛЬТРОВАННЫХ РЕЦЕПТОВ:
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
 
     const getFoundRecipes = useCallback((recipes: Recipe[]) => {
         setFilteredRecipes(recipes);
     }, []);
 
-    //--------------------------------------------------------------------------------------------------------------
-
     useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+        if (recipes) {
+            setLoadedRecipes([...loadedRecipes, ...recipes.data]);
         }
-    }, [isError, dispatch]);
+    }, [recipes]);
 
     useEffect(
         () => () => {
@@ -121,7 +117,7 @@ export const JuiciestPage: FC = () => {
                 )}
             </Stack>
             <VStack mt='16px' align='center'>
-                {isButtonRender ? (
+                {totalCountPages === page ? null : (
                     <Button
                         data-test-id={LOAD_MORE_BUTTON}
                         onClick={handleLoading}
@@ -130,9 +126,9 @@ export const JuiciestPage: FC = () => {
                         size='l'
                         color='primaryColor'
                     >
-                        Загрузить еще
+                        Загрузка
                     </Button>
-                ) : null}
+                )}
             </VStack>
             {filteredRecipes && filteredRecipes.length > 0 ? null : <RelevantKitchen />}
         </Page>

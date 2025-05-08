@@ -37,17 +37,19 @@ export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes })
         if (categories) {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
-            )!;
-            const category = categories.find(
-                (category) => category._id === subcategory.rootCategoryId,
-            )!;
-            handleCook = getRecipeCardHandler(
-                recipe,
-                navigate,
-                category,
-                subcategory as SubCategory,
-                pathname,
             );
+            const category = categories.find(
+                (category) => category._id === subcategory?.rootCategoryId,
+            );
+            if (category) {
+                handleCook = getRecipeCardHandler(
+                    recipe,
+                    navigate,
+                    category,
+                    subcategory as SubCategory,
+                    pathname,
+                );
+            }
         }
         return (
             <HorizontalCard
