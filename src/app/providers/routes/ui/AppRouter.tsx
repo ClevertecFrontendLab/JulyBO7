@@ -60,7 +60,7 @@ export const AppRouter = () => {
             {categoriesRoutes}
             {recipeRoutes}
             <Route path={routePaths[AppRoutes.NOT_FOUND]} element={<ErrorPage />} />
-            <Route path='/*' element={<Navigate to={routePaths[AppRoutes.NOT_FOUND]} />} />
+            <Route path='*' element={<Navigate to={routePaths[AppRoutes.NOT_FOUND]} />} />
         </Routes>
     );
 };

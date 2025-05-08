@@ -1,9 +1,10 @@
 import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 
+import { setAppError } from '~/app/store/app-slice';
+import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetCategoryRecipesQuery } from '~/entities/recipe';
-import { ErrorAlert } from '~/shared/components/alert';
 import { WithoutImageCard } from '~/shared/components/card/ui/without-image-card/WithoutImageCard';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
@@ -15,6 +16,7 @@ type RelevantKitchenProps = {
 };
 export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
     const { data: categories } = useGetCategoriesQuery();
+    const dispatch = useAppDispatch();
 
     const { randomSubcategoryId, randomCategoryId } = useMemo(
         () => getRandomId(categories),
@@ -29,6 +31,12 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
     );
 
     const randomCategory = categories?.find((category) => category._id === randomCategoryId);
+
+    useEffect(() => {
+        if (isError) {
+            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+        }
+    }, [isError, dispatch]);
 
     return (
         <VStack
@@ -70,7 +78,11 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
             >
                 {randomSubcategoryRecipes?.data
                     .slice(0, 2)
-                    .map((recipe, idx) => <WithoutImageCard key={idx} recipe={recipe} />)}
+                    .map((recipe, idx) =>
+                        categories ? (
+                            <WithoutImageCard categories={categories} key={idx} recipe={recipe} />
+                        ) : null,
+                    )}
                 <VStack spacing={{ base: '12px', md: '6px', lg: '12px' }}>
                     {randomSubcategoryRecipes?.data
                         .slice(2, 5)
@@ -82,7 +94,6 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
                             />
                         ))}
                 </VStack>
-                {isError && <ErrorAlert />}
             </Stack>
         </VStack>
     );

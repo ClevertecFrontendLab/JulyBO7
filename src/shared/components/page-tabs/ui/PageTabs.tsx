@@ -3,38 +3,34 @@ import { FC } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 
 import { Category } from '~/shared/types/categories';
+import { UrlState } from '~/shared/types/url';
 
-// import { SubMenuItem } from '../../../lib/getMenuItems';
 import cls from './PageTabs.module.scss';
 
 type PageTabsProps = {
     onChangeTab?: (index: number) => void;
     categoryData?: Category;
-    // items: SubCategory[];
-    // titleCategory?: string;
-    // pathCategory?: string;
-    // category?: Category;
     tabIndex?: number;
     style?: TabsProps;
 };
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
     const { onChangeTab, tabIndex, style, categoryData } = props;
-    // console.log('TAB');
-    // const { data: category } = useGetCategoryByIdQuery(categoryId);
     const navigate = useNavigate();
 
     const tabList = categoryData?.subCategories.map((subcat, idx) => {
         const categoryPath = `/${categoryData.category}/${categoryData.subCategories[0].category}`;
         const subcatPath = `/${categoryData.category}/${subcat.category}`;
-        const state = [
-            {
-                title: categoryData.title,
-                path: categoryPath,
-                category: categoryData.category,
-            },
-            { title: subcat.title, path: subcatPath },
-        ];
+        const state: UrlState = {
+            breadcrumb: [
+                {
+                    title: categoryData.title,
+                    path: categoryPath,
+                    category: categoryData.category,
+                },
+                { title: subcat.title, path: subcatPath },
+            ],
+        };
 
         const handleTab = () => {
             navigate(subcatPath, { state });

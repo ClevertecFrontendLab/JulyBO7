@@ -14,10 +14,3 @@ export type Category = {
     subCategories: SubCategory[];
     rootCategoryId?: string;
 };
-
-// type SubcategoryData = SubCategory & { path: string };
-
-// export type CategoryData = Omit<Category, 'subCategories'> & {
-//     subCategories: SubcategoryData[];
-//     path: string;
-// };

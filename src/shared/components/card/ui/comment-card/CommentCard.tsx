@@ -45,13 +45,9 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
             </Flex>
 
             <Text
-                // h={{ base: '88px', '2xl': '96px' }}
-
-                // p={{ base: '8px 16px 16px 16px', '2xl': '12px 24px 20px 24px' }}
                 p={{ base: '8px 16px 0 16px', '2xl': '12px 24px 20px 24px' }}
                 textStyle='s'
                 noOfLines={3}
-                // className={cls.text}
             >
                 {text}
             </Text>

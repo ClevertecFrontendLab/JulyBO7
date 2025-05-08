@@ -79,6 +79,7 @@ export const filtersSlice = createSlice({
             state.category = [];
             state.meetType = [];
             state.sideType = [];
+            state.searchString = '';
         },
     },
 });

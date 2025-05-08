@@ -11,8 +11,16 @@ import { FC } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/shared/constants/tests';
 
-export const ErrorAlert: FC = () => {
-    const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: true });
+type ErrorAlertProps = {
+    onClose?: () => void;
+};
+export const ErrorAlert: FC<ErrorAlertProps> = ({ onClose }) => {
+    const { isOpen: isVisible, onClose: onCloseAlert } = useDisclosure({ defaultIsOpen: true });
+
+    const handleClose = () => {
+        onClose?.();
+        onCloseAlert();
+    };
 
     return isVisible ? (
         <Alert
@@ -43,7 +51,7 @@ export const ErrorAlert: FC = () => {
                 position='relative'
                 right={-1}
                 top={-1}
-                onClick={onClose}
+                onClick={handleClose}
                 color='bgColor'
             />
         </Alert>

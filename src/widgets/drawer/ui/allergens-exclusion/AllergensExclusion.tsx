@@ -120,6 +120,7 @@ export const AllergensExclusion: FC<AllergensExclusionProps> = (props) => {
                 />
             </FormControl>
             <FiltersSelect
+                isClose={!enabled}
                 disabled={!enabled}
                 options={allergens}
                 placeholder={placeholder}

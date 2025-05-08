@@ -83,11 +83,10 @@ type DrawerProps = {
 };
 export const Drawer = memo<DrawerProps>((props) => {
     const { isOpen, onClose, onFindRecipe, onOpen, onClearFilters } = props;
+
     const dispatch = useAppDispatch();
     const { data: categories } = useGetCategoriesQuery();
     const filters = useSelector(selectFilters);
-
-    // const [localAllergens, setLocalAllergens] = useState<string[]>(filters.allergen);
 
     const optionsForSelect = categories
         ?.filter((category) => !category.rootCategoryId)
@@ -98,10 +97,8 @@ export const Drawer = memo<DrawerProps>((props) => {
         ...filters.category,
         ...filters.meetType,
         ...filters.sideType,
-        // ...localAllergens,
         ...filters.allergen,
     ];
-    // console.log('Drawer', filters.category);
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {
             dispatch(setMeetTypeAction(meetType));
@@ -118,7 +115,6 @@ export const Drawer = memo<DrawerProps>((props) => {
     };
     const handleAllFiltersRemove = () => {
         dispatch(removeAllFiltersAction());
-        // setLocalAllergens([]);
         onClearFilters?.();
     };
     const handleCheckedAuthor = (checked: boolean, author: string) => {
@@ -205,12 +201,6 @@ export const Drawer = memo<DrawerProps>((props) => {
         disableFindRecipeBtn = false;
     }
 
-    // for (const key in filters) {
-    //     if (filters[key].length !== 0) {
-    //         disableFindRecipeBtn = false;
-    //         break;
-    //     }
-    // }
     const handleModalClose = () => {
         onClose();
     };
@@ -220,11 +210,9 @@ export const Drawer = memo<DrawerProps>((props) => {
     };
     const handleAllergenItemRemove = (allergen: string) => {
         dispatch(removeAllergenAction(allergen));
-        // setLocalAllergens(localAllergens.filter((item) => item !== allergen));
     };
     const handleAllergenItemSet = (allergen: string) => {
         dispatch(setAllergenAction(allergen));
-        // setLocalAllergens([...localAllergens, allergen]);
     };
     useEffect(() => {
         if (isOpen) {

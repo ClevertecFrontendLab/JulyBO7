@@ -12,7 +12,6 @@ import { AppRoutes, routePaths } from '~/shared/config/router';
 import { BREADCRUMBS } from '~/shared/constants/tests';
 
 import { useBreadcrumbs } from '../../model/hooks/useBreadcrumbs';
-import { CrumbState } from '../../model/types/breadcrumb';
 import cls from './BreadCrumb.module.scss';
 
 type BreadcrumbProps = ChakraBreadcrumbProps & { className?: string };
@@ -21,6 +20,7 @@ export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
     const { pathname } = useLocation();
 
     const { state, crumbHandler, navigate } = useBreadcrumbs();
+    console.log('BreadCrumb- state: ', state);
 
     return (
         <Breadcrumb
@@ -49,8 +49,9 @@ export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
                 </BreadcrumbItem>
             )}
             {state &&
-                state.map((item: CrumbState, idx: number) => {
-                    const currentPage = idx === state.length - 1;
+                state.breadcrumb.map((item, idx: number) => {
+                    const currentPage = idx === state.breadcrumb.length - 1;
+
                     return (
                         <BreadcrumbItem key={idx}>
                             <BreadcrumbLink

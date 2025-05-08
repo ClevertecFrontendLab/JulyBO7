@@ -24,6 +24,7 @@ type FiltersSelectProps = {
     type: 'drawer' | 'header';
     placeholder: ReactNode;
     options: string[];
+    isClose?: boolean;
     selectedOptions?: string[];
     onChecked?: (cheked: boolean, filterValue: string) => void;
     disabled?: boolean;
@@ -37,6 +38,7 @@ type FiltersSelectProps = {
 
 export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
     const {
+        isClose,
         placeholder,
         options,
         disabled,
@@ -51,6 +53,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
         forTestCheckbox,
     } = props;
     const inputRef = useRef<HTMLInputElement>(null);
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         onInputChange?.(e.currentTarget.value);
     };
@@ -123,7 +126,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                     >
                         {placeholder}
                     </MenuButton>
-                    {!isOpen ? null : (
+                    {!isOpen || isClose ? null : (
                         <MenuList
                             data-test-id={ALLERGENS_MENU}
                             w={type === 'drawer' ? { base: '308px', lg: '400px' } : '234px'}

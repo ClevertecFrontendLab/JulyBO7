@@ -18,6 +18,7 @@ import ArrowNavbarDown from '~/shared/assets/icons/components/ArrowNavbarDown';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 import { NAV } from '~/shared/constants/tests';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
+import { UrlState } from '~/shared/types/url';
 
 import { useGetCategoriesQuery } from '../../../../entities/category/model/services/categories';
 import cls from './MenuArea.module.scss';
@@ -35,8 +36,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
     const menuCategories = useMemo(() => data?.filter((item) => !item.rootCategoryId), [data]);
 
     const onClickMenuItem =
-        (path: string, state: { title: string; path: string }[]) =>
-        (e: MouseEvent<HTMLButtonElement>) => {
+        (path: string, state: UrlState) => (e: MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             navigate(path, { state });
         };
@@ -63,17 +63,19 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
 
     const accordeonItems = menuCategories?.map((menuItem, idx) => {
         const categoryPath = `/${menuItem.category}/${menuItem.subCategories[0].category}`;
-        const state = [
-            {
-                title: menuItem.title,
-                path: categoryPath,
-                category: menuItem.category,
-            },
-            {
-                title: menuItem.subCategories[0].title,
-                path: categoryPath,
-            },
-        ];
+        const state: UrlState = {
+            breadcrumb: [
+                {
+                    title: menuItem.title,
+                    path: categoryPath,
+                    category: menuItem.category,
+                },
+                {
+                    title: menuItem.subCategories[0].title,
+                    path: categoryPath,
+                },
+            ],
+        };
         const id = menuItem.category === 'vegan' ? 'vegan-cuisine' : menuItem.category;
         return (
             <AccordionItem border='none' key={idx}>
@@ -107,17 +109,19 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
                             >
                                 {menuItem.subCategories.map((item, idx) => {
                                     const subcatPath = `/${menuItem.category}/${item.category}`;
-                                    const state = [
-                                        {
-                                            title: menuItem.title,
-                                            path: categoryPath,
-                                            category: menuItem.category,
-                                        },
-                                        {
-                                            title: item.title,
-                                            path: subcatPath,
-                                        },
-                                    ];
+                                    const state: UrlState = {
+                                        breadcrumb: [
+                                            {
+                                                title: menuItem.title,
+                                                path: categoryPath,
+                                                category: menuItem.category,
+                                            },
+                                            {
+                                                title: item.title,
+                                                path: subcatPath,
+                                            },
+                                        ],
+                                    };
 
                                     return (
                                         <Tab

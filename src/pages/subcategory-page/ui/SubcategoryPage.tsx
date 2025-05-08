@@ -1,10 +1,8 @@
 import { Button, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
-import { ApplicationState } from '~/app/store/configure-store';
-import { useGetCategoryByIdQuery } from '~/entities/category';
+import { useGetCategoriesQuery, useGetCategoryByIdQuery } from '~/entities/category';
 import { useGetCategoryRecipesQuery } from '~/entities/recipe';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { FOOD_CARD } from '~/shared/constants/tests';
@@ -17,30 +15,39 @@ type SubcategoryPageProps = {
 
 export const SubcategoryPage: FC<SubcategoryPageProps> = ({ categoryId, subcatId }) => {
     const { data: categoryData } = useGetCategoryByIdQuery(categoryId);
+    const { data: categories } = useGetCategoriesQuery();
     const { data: subcategoryData } = useGetCategoryByIdQuery(subcatId);
-
-    const allergens = useSelector((state: ApplicationState) => state.pages.allergens);
-
     const { data: subcategoryRecipes } = useGetCategoryRecipesQuery({
         categoryId: subcatId,
-        allergens,
     });
 
+    const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const cards = subcategoryRecipes?.data.map((recipe, idx) => {
-        const handleCook = getRecipeCardHandler(recipe, navigate, categoryData, subcategoryData);
-        return (
-            <HorizontalCard
-                data-test-id={`${FOOD_CARD}-${idx}`}
-                key={recipe._id}
-                title={recipe.title}
-                onCook={handleCook}
-                indexForTest={idx}
-                recipe={recipe}
-            />
-        );
-    });
+    let cards;
+    if (subcategoryRecipes && categoryData && subcategoryData) {
+        cards = subcategoryRecipes?.data.map((recipe, idx) => {
+            const handleCook = getRecipeCardHandler(
+                recipe,
+                navigate,
+                categoryData,
+                subcategoryData,
+                pathname,
+            );
+            return (
+                <HorizontalCard
+                    data-test-id={`${FOOD_CARD}-${idx}`}
+                    categories={categories}
+                    key={recipe._id}
+                    title={recipe.title}
+                    onCook={handleCook}
+                    indexForTest={idx}
+                    recipe={recipe}
+                />
+            );
+        });
+    }
+
     return (
         <>
             <Stack

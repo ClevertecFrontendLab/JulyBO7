@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { categoriesSliceReducer } from '~/entities/category';
 import { apiSlice } from '~/shared/api';
 import { filterSliceReducer } from '~/widgets/drawer';
 
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
     [appSlice.name]: appReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     filters: filterSliceReducer,
-    categories: categoriesSliceReducer,
 });
 
 export type ApplicationState = ReturnType<typeof rootReducer>;

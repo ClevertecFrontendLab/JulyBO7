@@ -16,20 +16,22 @@ import { Recipe } from '~/entities/recipe';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import { Category } from '~/shared/types/categories';
 
 import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
 type HorizontalCardProps = {
     title: ReactNode;
-    onSave?: () => void;
+    recipe: Recipe;
+    categories?: Category[];
     onCook?: () => void;
     recomend?: { user: string; avatar: string };
     indexForTest?: number;
-    recipe?: Recipe;
+    onSave?: () => void;
 } & CardProps;
 
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
-    const { title, onSave, onCook, recomend, indexForTest, recipe, ...rest } = props;
+    const { title, onSave, onCook, recomend, indexForTest, recipe, categories, ...rest } = props;
 
     return (
         <Card
@@ -72,20 +74,18 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 border='1px solid gray.200'
             >
                 <Box display='flex' justifyContent='space-between'>
-                    {/* <Badge
-                        category={category}
-                        style={{
-                            position: { base: 'absolute', lg: 'static' },
-                            top: { base: '8px' },
-                            left: { base: '8px' },
-                        }}
-                    /> */}
                     <Box
                         position={{ base: 'absolute', lg: 'static' }}
                         top={{ base: '8px' }}
                         left={{ base: '8px' }}
                     >
-                        <RecipeBages recipe={recipe} onlyFirstCategory />
+                        {categories && (
+                            <RecipeBages
+                                recipe={recipe}
+                                categories={categories}
+                                onlyFirstCategory
+                            />
+                        )}
                     </Box>
 
                     <Box display='flex' gap='8px'>

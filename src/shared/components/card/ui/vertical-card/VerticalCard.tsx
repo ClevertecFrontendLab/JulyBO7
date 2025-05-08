@@ -7,15 +7,17 @@ import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 import { BadgeColor } from '~/shared/components/badge/ui/Badge';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import { Category } from '~/shared/types/categories';
 
 type VerticalCardProps = {
     recipe: Recipe;
+    categories: Category[];
     onClick?: () => void;
     style?: CardProps;
 };
 
 export const VerticalCard: FC<VerticalCardProps> = (props) => {
-    const { recipe, style, onClick } = props;
+    const { recipe, style, onClick, categories } = props;
 
     const handleClickCard = () => {
         onClick?.();
@@ -72,13 +74,14 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                 <Box display='flex' alignItems='flex-start' justifyContent='space-between' w='100%'>
                     <RecipeBages
                         onlyFirstCategory
+                        categories={categories}
+                        recipe={recipe}
                         badgeColor={BadgeColor.SECONDARY}
                         badgeStyle={{
                             position: { base: 'absolute', lg: 'static' },
                             top: '8px',
                             left: '8px',
                         }}
-                        recipe={recipe}
                     />
                     <Box display='flex' gap='8px'>
                         <Button variant='withIcon' color='lime.600' h='24px'>

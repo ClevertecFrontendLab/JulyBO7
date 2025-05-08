@@ -1,33 +1,37 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Button, Heading, HStack, Stack } from '@chakra-ui/react';
-import { FC } from 'react';
-import { useNavigate } from 'react-router';
+import { FC, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
+import { setAppError } from '~/app/store/app-slice';
+import { useAppDispatch } from '~/app/store/hooks';
+import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
-import { ErrorAlert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { Category, SubCategory } from '~/shared/types/categories';
+import { SubCategory } from '~/shared/types/categories';
 
-type JuisiestBlockProps = {
-    categories: Category[];
-};
-export const JuisiestBlock: FC<JuisiestBlockProps> = ({ categories }) => {
+export const JuisiestBlock: FC = () => {
+    const { data: categories } = useGetCategoriesQuery();
+
     const navigate = useNavigate();
-    const { data: recipes, isError } = useGetRecipesQuery({
+    const { pathname } = useLocation();
+    const dispatch = useAppDispatch();
+
+    const {
+        data: recipes,
+        isError,
+        isLoading,
+    } = useGetRecipesQuery({
         page: 1,
         limit: 4,
         sortBy: 'likes',
         sortOrder: 'desc',
     });
-    console.log('isError: ', isError);
     const prefetchPage = usePrefetch('getRecipes');
-    // const juisiestRecipes = [...recipes];
-    // juisiestRecipes.sort((a, b) => b.likes - a.likes);
-
-    // const recipeItems = juisiestRecipes.slice(0, 4);
 
     const handleSelection = () => {
         prefetchPage({
@@ -36,36 +40,48 @@ export const JuisiestBlock: FC<JuisiestBlockProps> = ({ categories }) => {
             sortBy: 'likes',
             sortOrder: 'desc',
         });
-        // const state = [{ title: 'Самое сочное', path: routePaths.juiciest }]; // будет выполняться проверка из url
 
         navigate(routePaths[AppRoutes.THE_JUICIEST]);
     };
-    const juiciestCards = recipes?.data.map((recipe, idx) => {
-        const subcategory = categories.find(
-            (category) => category._id === recipe.categoriesIds[0],
-        )!;
-        const category = categories.find(
-            (category) => category._id === subcategory.rootCategoryId,
-        )!;
-        const handleCook = getRecipeCardHandler(
-            recipe,
-            navigate,
-            category,
-            subcategory as SubCategory,
-        );
 
-        return (
-            <HorizontalCard
-                indexForTest={idx}
-                key={idx}
-                recipe={recipe}
-                title={recipe.title}
-                onCook={handleCook}
-            />
-        );
-    });
+    let juiciestCards;
+    if (categories && recipes) {
+        juiciestCards = recipes?.data.map((recipe, idx) => {
+            const subcategory = categories.find(
+                (category) => category._id === recipe.categoriesIds[0],
+            )!;
+            const category = categories.find(
+                (category) => category._id === subcategory.rootCategoryId,
+            )!;
+            const handleCook = getRecipeCardHandler(
+                recipe,
+                navigate,
+                category,
+                subcategory as SubCategory,
+                pathname,
+            );
+
+            return (
+                <HorizontalCard
+                    categories={categories}
+                    indexForTest={idx}
+                    key={idx}
+                    recipe={recipe}
+                    title={recipe.title}
+                    onCook={handleCook}
+                />
+            );
+        });
+    }
+
+    useEffect(() => {
+        if (isError) {
+            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+        }
+    }, [isError, dispatch]);
     return (
         <Box>
+            {isLoading ? <AppLoader /> : null}
             <HStack justify='space-between'>
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
                 <Button
@@ -106,7 +122,6 @@ export const JuisiestBlock: FC<JuisiestBlockProps> = ({ categories }) => {
                     Вся подборка
                 </Button>
             </Stack>
-            {isError && <ErrorAlert />}
         </Box>
     );
 };

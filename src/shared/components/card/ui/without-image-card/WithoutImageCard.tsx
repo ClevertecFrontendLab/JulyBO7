@@ -5,15 +5,17 @@ import { RecipeBages } from '~/entities/category';
 import { Recipe } from '~/entities/recipe';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import { Category } from '~/shared/types/categories';
 
 import cls from './WithoutImageCard.module.scss';
 
 export type WithoutImageCardProps = {
     recipe: Recipe;
+    categories: Category[];
 };
 
 export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
-    const { recipe } = props;
+    const { recipe, categories } = props;
 
     return (
         <VStack
@@ -56,6 +58,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
 
             <Box display='flex' justifyContent='space-between' w='100%'>
                 <RecipeBages
+                    categories={categories}
                     recipe={recipe}
                     onlyFirstCategory
                     badgeStyle={{ w: { md: '' }, bg: 'lime.50' }}

@@ -19,26 +19,23 @@ export const recipeApiSlice = apiSlice
                     // apiGroupName: ApiGroupNames.POSTS,
                     // name: EndpointNames.GET_POSTS,
                 }),
-                // providesTags: [Tags.CATEGORY],
+
+                providesTags: [Tags.RECIPE],
             }),
             getRecipeById: builder.query<Recipe, string>({
                 query: (id: string) => ({
-                    url: `${ApiEndpoints.RECIPE}/${id}dffdsfdfsd`,
+                    url: `${ApiEndpoints.RECIPE}/${id}`,
                     method: 'GET',
-                    // apiGroupName: ApiGroupNames.POSTS,
-                    // name: EndpointNames.GET_POSTS,
                 }),
-                // providesTags: [Tags.CATEGORY],
+                providesTags: [Tags.RECIPE],
             }),
+
             getCategoryRecipes: builder.query<GetRecipesResponse, GetRecipesRequest>({
                 query: ({ categoryId }) => ({
                     url: `${ApiEndpoints.CATEGORY_RECIPES}/${categoryId}`,
                     method: 'GET',
-
-                    // apiGroupName: ApiGroupNames.POSTS,
-                    // name: EndpointNames.GET_POSTS,
                 }),
-                // providesTags: [Tags.CATEGORY],
+                providesTags: [Tags.RECIPE],
             }),
         }),
     });

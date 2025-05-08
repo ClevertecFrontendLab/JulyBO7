@@ -4,8 +4,6 @@ export {
     useGetCategoriesQuery,
     useGetCategoryByIdQuery,
 } from '../../entities/category/model/services/categories';
-export { setIdsAction } from '../../entities/category/model/slices/categoriesSlice';
-export { categoriesSliceReducer } from '../../entities/category/model/slices/categoriesSlice';
 export { getSubcategoriesIdsFilter } from './model/lib/getSubcategoriesIdsFilter';
 export { getRootCategory } from './model/selectors/getRootCategory';
 export { getSubcategoryIds } from './model/selectors/getSubcategoryIds';

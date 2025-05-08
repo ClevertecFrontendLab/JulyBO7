@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
+import { useAppSelector } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { FOOD_CARD } from '~/shared/constants/tests';
@@ -12,12 +13,13 @@ import { Recipe } from '../../model/types/recipe';
 
 type FoundRecipesCardsProps = {
     recipes: Recipe[];
-    searchString: string;
 };
 
-export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes, searchString }) => {
+export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes }) => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const { data: categories } = useGetCategoriesQuery();
+    const searchString = useAppSelector((state) => state.filters.searchString);
 
     const cards = recipes.map((recipe, idx) => {
         let index;
@@ -44,6 +46,7 @@ export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes, s
                 navigate,
                 category,
                 subcategory as SubCategory,
+                pathname,
             );
         }
         return (
@@ -53,6 +56,7 @@ export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes, s
                 title={updatedTitle}
                 onCook={handleCook}
                 recipe={recipe}
+                categories={categories}
             />
         );
     });
