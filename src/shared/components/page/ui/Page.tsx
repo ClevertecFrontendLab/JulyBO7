@@ -9,8 +9,6 @@ export const Page: FC<PageProps> = ({ children }) => (
     <Box
         as='main'
         height='100%'
-        // pl={{ base: '16px', md: '20px', lg: '24px' }}
-        // pr={{ base: '16px', md: '20px', lg: '72px' }}
         mt={{ base: '64px', lg: '80px' }}
         mb={{ base: '84px', lg: 0 }}
         pl={{ base: '16px', md: '20px', lg: '280px' }}

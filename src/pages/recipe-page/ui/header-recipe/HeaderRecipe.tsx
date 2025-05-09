@@ -71,7 +71,6 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = ({ recipe }) => {
                     </Box>
                 </Box>
                 <HStack flexWrap='wrap' justify='space-between' w='100%'>
-                    {/* <Badge category={} /> */}// СДЕЛАТЬ С БУДИЛЬНИКОМ!!!!
                     <HStack>
                         <Button
                             variant='outline'

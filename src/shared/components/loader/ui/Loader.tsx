@@ -3,10 +3,12 @@ import { FC } from 'react';
 
 import { APP_LOADER } from '~/shared/constants/tests';
 
-type LoaderProps = {
-    width?: string;
-    height?: string;
-} & SpinnerProps;
+type LoaderProps = Partial<
+    {
+        width: string;
+        height: string;
+    } & SpinnerProps
+>;
 
 export const Loader: FC<LoaderProps> = ({ width, height, ...rest }) => (
     <HStack

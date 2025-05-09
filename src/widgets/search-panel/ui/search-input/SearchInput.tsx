@@ -8,8 +8,8 @@ import { SEARCH_BUTTON, SEARCH_INPUT } from '~/shared/constants/tests';
 import { selectAllergenFilter, selectSearchString, setSearchStringAction } from '~/widgets/drawer';
 
 type SearchInputProps = {
-    onSearch?: () => void;
     onFocus: () => void;
+    onSearch?: () => void;
     clearInput?: boolean;
     borderColor?: string;
 };

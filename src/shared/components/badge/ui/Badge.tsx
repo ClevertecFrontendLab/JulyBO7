@@ -10,16 +10,16 @@ export enum BadgeColor {
     SECONDARY = 'lime.150',
 }
 
-type BadgeProps = {
-    categoryTitle?: string;
-    categoryIcon?: string;
+type BadgeProps = Partial<{
+    categoryTitle: string;
+    categoryIcon: string;
 
-    userName?: string;
-    avatar?: string;
-    style?: BoxProps;
-    theme?: BadgeTheme;
-    badgeColor?: BadgeColor;
-};
+    userName: string;
+    avatar: string;
+    style: BoxProps;
+    theme: BadgeTheme;
+    badgeColor: BadgeColor;
+}>;
 
 export const Badge: FC<BadgeProps> = (props) => {
     const {

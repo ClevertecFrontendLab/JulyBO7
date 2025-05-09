@@ -1,16 +1,17 @@
 import { Recipe } from './recipe';
 
-export type RequestParams = {
-    page?: number;
-    limit?: number;
-    allergens?: string;
-    searchString?: string;
-    meat?: string;
-    garnish?: string;
-    subcategoriesIds?: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-};
+export type RequestParams = Partial<{
+    page: number;
+    limit: number;
+    allergens: string;
+    searchString: string;
+    meat: string;
+    garnish: string;
+    subcategoriesIds: string;
+    sortBy: string;
+    sortOrder: 'asc' | 'desc';
+}>;
+
 type Meta = {
     total: number;
     page: number;

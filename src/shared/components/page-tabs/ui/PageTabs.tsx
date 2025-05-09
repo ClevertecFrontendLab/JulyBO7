@@ -84,7 +84,6 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             </TabList>
             <TabPanels>
                 {categoryData?.subCategories.map((_, idx) => (
-                    // const tab = idx === tabIndex ? <Outlet /> : '';
                     <TabPanel key={idx} padding='12px 0 0 0'>
                         <Outlet />
                     </TabPanel>
