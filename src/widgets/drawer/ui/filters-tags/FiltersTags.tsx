@@ -15,11 +15,7 @@ import {
     removeSideTypeAction,
 } from '../../model/slice/filtersSlice';
 
-type FiltersTagsProps = {
-    withAllergens?: boolean;
-};
-
-export const FiltersTags: React.FC<FiltersTagsProps> = ({ withAllergens = true }) => {
+export const FiltersTags: React.FC<{ withAllergens?: boolean }> = ({ withAllergens = true }) => {
     const filters = useSelector(selectFilters);
     const dispatch = useAppDispatch();
 

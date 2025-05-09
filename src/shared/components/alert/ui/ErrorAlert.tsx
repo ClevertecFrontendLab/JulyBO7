@@ -11,10 +11,9 @@ import { FC } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/shared/constants/tests';
 
-type ErrorAlertProps = {
-    onClose?: () => void;
-};
-export const ErrorAlert: FC<ErrorAlertProps> = ({ onClose }) => {
+import { ERROR_TEXT, ERROR_TITLE } from '../model/constants/alertText';
+
+export const ErrorAlert: FC<{ onClose?: () => void }> = ({ onClose }) => {
     const { isOpen: isVisible, onClose: onCloseAlert } = useDisclosure({ defaultIsOpen: true });
 
     const handleClose = () => {
@@ -38,10 +37,10 @@ export const ErrorAlert: FC<ErrorAlertProps> = ({ onClose }) => {
             <AlertIcon color='bgColor' />
             <Box>
                 <AlertTitle color='bgColor' textStyle='m' fontWeight={700}>
-                    Ошибка сервера!
+                    {ERROR_TITLE}
                 </AlertTitle>
                 <AlertDescription color='bgColor' textStyle='m' fontWeight={400}>
-                    Попробуйте поискать снова попозже
+                    {ERROR_TEXT}
                 </AlertDescription>
             </Box>
             <CloseButton

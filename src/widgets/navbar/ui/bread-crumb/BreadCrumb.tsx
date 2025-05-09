@@ -14,7 +14,7 @@ import { BREADCRUMBS } from '~/shared/constants/tests';
 import { useBreadcrumbs } from '../../model/hooks/useBreadcrumbs';
 import cls from './BreadCrumb.module.scss';
 
-type BreadcrumbProps = ChakraBreadcrumbProps & { className?: string };
+type BreadcrumbProps = Partial<ChakraBreadcrumbProps & { className: string }>;
 
 export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
     const { pathname } = useLocation();

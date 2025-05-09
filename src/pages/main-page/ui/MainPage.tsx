@@ -9,6 +9,7 @@ import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
 
+import { TITLE } from '../model/constants/mainpage';
 import { CulinaryBlogs } from './culinary-blogs/CulinaryBlogs';
 import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 
@@ -21,17 +22,14 @@ export const MainPage: FC = () => {
         setFilteredRecipes(recipes);
     }, []);
 
-    useEffect(
-        () => () => {
-            dispatch(removeAllFiltersAction());
-        },
-        [dispatch],
-    );
+    useEffect(() => {
+        dispatch(removeAllFiltersAction());
+    }, [dispatch]);
 
     return (
         <Page>
             <VStack align='center'>
-                <SearchPanel title='Приятного аппетита!' getFoundRecipes={getFoundRecipes} />
+                <SearchPanel title={TITLE} getFoundRecipes={getFoundRecipes} />
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
                     {filteredRecipes && filteredRecipes.length > 0 ? (
                         <>

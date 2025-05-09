@@ -7,9 +7,7 @@ import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Reaction from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
-type HeaderRecipeProps = { recipe: Recipe };
-
-export const HeaderRecipe: FC<HeaderRecipeProps> = ({ recipe }) => {
+export const HeaderRecipe: FC<{ recipe: Recipe }> = ({ recipe }) => {
     const { data: categories } = useGetCategoriesQuery();
 
     return (

@@ -11,10 +11,7 @@ import { IMAGE_API } from '~/shared/constants/imageApi';
 import { WithoutTextCard } from '../../card/ui/without-text-card/WithoutTextCard';
 import { getRandomId } from '../model/lib/getRandomId';
 
-type RelevantKitchenProps = {
-    category?: string;
-};
-export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
+export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
     const { data: categories } = useGetCategoriesQuery();
     const dispatch = useAppDispatch();
     const limit = 5;
@@ -57,7 +54,6 @@ export const RelevantKitchen = memo<RelevantKitchenProps>(({ category }) => {
                 gap={{ lg: '12px' }}
             >
                 <Heading
-                    // w={{ lg: '278px', '2xl': 'auto' }}
                     mb={{ base: '16px', lg: '32px' }}
                     variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}
                     flexShrink={0}

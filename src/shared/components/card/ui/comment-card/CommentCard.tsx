@@ -31,7 +31,6 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
                     <Heading
                         fontSize={{ base: 'm', lg: 'l' }}
                         fontWeight={500}
-                        // noOfLines={1}
                         lineHeight='156%'
                         isTruncated
                         maxWidth={{ base: '223px', md: '150px', lg: '170px', '2xl': '318px' }}

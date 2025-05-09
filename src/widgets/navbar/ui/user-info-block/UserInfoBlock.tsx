@@ -9,11 +9,11 @@ import People from '~/shared/assets/icons/components/BsPeopleFill';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 
 type UserInfoBlockProps = {
+    isOpenMobileMenu: boolean;
+    onClick: () => void;
     bookmarkCount?: number;
     emojiCount?: number;
     peopleCount?: number;
-    isOpenMobileMenu: boolean;
-    onClick: () => void;
 };
 
 export const UserInfoBlock: FC<UserInfoBlockProps> = (props) => {

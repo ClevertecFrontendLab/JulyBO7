@@ -75,17 +75,18 @@ export const JuisiestBlock: FC = () => {
             );
         });
     }
+    const title = 'Самое сочное ';
 
     useEffect(() => {
         if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+            dispatch(setAppError('ошибка'));
         }
     }, [isError, dispatch]);
     return (
         <Box>
             {isLoading ? <AppLoader /> : null}
             <HStack justify='space-between'>
-                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
+                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{title}</Heading>
                 <Button
                     data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
                     onClick={handleSelection}

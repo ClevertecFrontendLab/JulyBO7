@@ -9,7 +9,6 @@ export const useBreadcrumbs = () => {
     const { data: categories } = useGetCategoriesQuery();
 
     const crumbHandler = (path: string, title: string, category?: string) => {
-        //category argument for category state
         let newState: UrlState;
         if (category && categories) {
             const categoryData = categories

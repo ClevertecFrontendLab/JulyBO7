@@ -12,11 +12,7 @@ import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/Relevan
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
 import { SearchPanel } from '~/widgets/search-panel';
 
-type CategoryPageProps = {
-    categoryId: string;
-};
-
-export const CategoryPage: FC<CategoryPageProps> = ({ categoryId }) => {
+export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
     const { pathname } = useLocation();
     const dispatch = useAppDispatch();
 

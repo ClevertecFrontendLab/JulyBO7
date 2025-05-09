@@ -24,8 +24,6 @@ function App() {
     const matchMainPage = useMatch(routePaths[AppRoutes.MAIN]);
     const error = useAppSelector((state) => state.app.error);
 
-    console.log('isLoading: ', isLoading, 'notFoundPath: ', notFoundPath);
-
     const handleClose = () => {
         dispatch(removeAppError());
     };

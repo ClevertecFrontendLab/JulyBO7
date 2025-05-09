@@ -3,8 +3,8 @@ import React from 'react';
 
 type NutritionValueItemProps = {
     name: string;
-    value?: number;
     unit: string;
+    value?: number;
 };
 
 export const NutritionValueItem: React.FC<NutritionValueItemProps> = (props) => {

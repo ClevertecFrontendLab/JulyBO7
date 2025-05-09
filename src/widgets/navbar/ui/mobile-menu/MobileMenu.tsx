@@ -7,11 +7,7 @@ import { MenuFooter } from '~/widgets/menu';
 
 import { BreadCrumb } from '../bread-crumb/BreadCrumb';
 
-type MobileMenuProps = {
-    onClose: () => void;
-};
-
-export const MobileMenu: FC<MobileMenuProps> = ({ onClose }) => (
+export const MobileMenu: FC<{ onClose: () => void }> = ({ onClose }) => (
     <Box
         data-test-id={NAV}
         position='fixed'

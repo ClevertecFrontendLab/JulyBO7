@@ -4,11 +4,7 @@ import React from 'react';
 import { Step } from '~/entities/recipe';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
-type CookingStepsProps = {
-    steps: Step[];
-};
-
-export const CookingSteps: React.FC<CookingStepsProps> = ({ steps }) => (
+export const CookingSteps: React.FC<{ steps: Step[] }> = ({ steps }) => (
     <Box w={{ base: '100%', md: '604px', lg: '578px', '2xl': '668px' }}>
         {steps.map((step, idx) => (
             <Box

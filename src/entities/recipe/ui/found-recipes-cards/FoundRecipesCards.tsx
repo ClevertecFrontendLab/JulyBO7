@@ -11,11 +11,7 @@ import { SubCategory } from '~/shared/types/categories';
 
 import { Recipe } from '../../model/types/recipe';
 
-type FoundRecipesCardsProps = {
-    recipes: Recipe[];
-};
-
-export const FoundRecipesCards: React.FC<FoundRecipesCardsProps> = ({ recipes }) => {
+export const FoundRecipesCards: React.FC<{ recipes: Recipe[] }> = ({ recipes }) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { data: categories } = useGetCategoriesQuery();

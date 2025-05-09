@@ -29,6 +29,7 @@ import {
     removeAllSideTypeAction,
 } from '~/widgets/drawer/model/slice/filtersSlice';
 
+import { getParam } from '../model/lib/getParam';
 import { SearchInput } from './search-input/SearchInput';
 
 type SearchPanelProps = {
@@ -74,15 +75,15 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         isError,
     } = useGetRecipesQuery(
         {
-            allergens: allergen.join(',') === '' ? undefined : allergen.join(','),
-            searchString: searchString,
-            meat: meetType.join(',') === '' ? undefined : meetType.join(','),
-            garnish: sideType.join(',') === '' ? undefined : sideType.join(','),
-            subcategoriesIds:
-                subcategoriesIds.join(',') === '' ? undefined : subcategoriesIds.join(','),
+            allergens: getParam(allergen),
+            searchString: getParam(searchString),
+            meat: getParam(meetType),
+            garnish: getParam(sideType),
+            subcategoriesIds: getParam(subcategoriesIds),
         },
         { skip: !canSearch },
     );
+
     if (isError) {
         dispatch(setAppError('ошибка'));
     }

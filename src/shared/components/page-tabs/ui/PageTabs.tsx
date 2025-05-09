@@ -7,12 +7,12 @@ import { UrlState } from '~/shared/types/url';
 
 import cls from './PageTabs.module.scss';
 
-type PageTabsProps = {
-    onChangeTab?: (index: number) => void;
-    categoryData?: Category;
-    tabIndex?: number;
-    style?: TabsProps;
-};
+type PageTabsProps = Partial<{
+    onChangeTab: (index: number) => void;
+    categoryData: Category;
+    tabIndex: number;
+    style: TabsProps;
+}>;
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
     const { onChangeTab, tabIndex, style, categoryData } = props;

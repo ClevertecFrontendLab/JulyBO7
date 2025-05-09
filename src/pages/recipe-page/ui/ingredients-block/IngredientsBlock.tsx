@@ -17,6 +17,8 @@ import {
     INGREDIENT_QUANTITY,
 } from '~/shared/constants/tests';
 
+import { INGREDIENTS, PORTIONS } from '../../main/recipePage';
+
 type IngredientsBlockProps = {
     items: Ingredient[];
     portions: number;
@@ -65,10 +67,10 @@ export const IngredientsBlock: React.FC<IngredientsBlockProps> = ({ items, porti
                 fontWeight={700}
                 pl={{ base: '8px', md: '24px' }}
             >
-                <Text textTransform='uppercase'>Ингредиенты</Text>
+                <Text textTransform='uppercase'>{INGREDIENTS}</Text>
 
                 <HStack>
-                    <Text textTransform='uppercase'>порций </Text>
+                    <Text textTransform='uppercase'>{PORTIONS} </Text>
                     <NumberInput
                         w={{ base: '73px', md: '90px' }}
                         h='40px'

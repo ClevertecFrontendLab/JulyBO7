@@ -23,7 +23,7 @@ import { UrlState } from '~/shared/types/url';
 import { useGetCategoriesQuery } from '../../../../entities/category/model/services/categories';
 import cls from './MenuArea.module.scss';
 
-type MenuAreaProps = AccordionProps & { isMobile?: boolean; forTest?: boolean };
+type MenuAreaProps = Partial<AccordionProps & { isMobile?: boolean; forTest?: boolean }>;
 
 export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest }) => {
     const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>();
