@@ -1,10 +1,6 @@
 import { Box, BoxProps, Image, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { Category } from '~/shared/types/categories';
-
-import { mappedCategoryData } from '../../../mappedCategoriesData';
-
 export enum BadgeTheme {
     CATEGORY = 'category',
     RECOMEND = 'recomend',
@@ -14,14 +10,16 @@ export enum BadgeColor {
     SECONDARY = 'lime.150',
 }
 
-type BadgeProps = {
-    category?: Category;
-    userName?: string;
-    avatar?: string;
-    style?: BoxProps;
-    theme?: BadgeTheme;
-    badgeColor?: BadgeColor;
-};
+type BadgeProps = Partial<{
+    categoryTitle: string;
+    categoryIcon: string;
+
+    userName: string;
+    avatar: string;
+    style: BoxProps;
+    theme: BadgeTheme;
+    badgeColor: BadgeColor;
+}>;
 
 export const Badge: FC<BadgeProps> = (props) => {
     const {
@@ -30,12 +28,11 @@ export const Badge: FC<BadgeProps> = (props) => {
         badgeColor = BadgeColor.PRIMARY,
         userName,
         avatar,
-        category,
+        categoryTitle,
+        categoryIcon,
     } = props;
 
-    const categoryData = category && mappedCategoryData[category];
-    const badgeText =
-        theme === BadgeTheme.RECOMEND ? `${userName} рекомендует` : categoryData?.title;
+    const badgeText = theme === BadgeTheme.RECOMEND ? `${userName} рекомендует` : categoryTitle;
 
     return (
         <Box
@@ -43,7 +40,7 @@ export const Badge: FC<BadgeProps> = (props) => {
                 theme === BadgeTheme.RECOMEND ? { base: 'none', lg: 'inline-flex' } : 'inline-flex'
             }
             alignItems='center'
-            h={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
+            minH={theme === BadgeTheme.RECOMEND ? '28px' : '24px'}
             bg={badgeColor}
             p={
                 theme === BadgeTheme.RECOMEND
@@ -52,13 +49,10 @@ export const Badge: FC<BadgeProps> = (props) => {
             }
             borderRadius='4px'
             gap='2px'
+            width='max-content'
             {...style}
         >
-            <Image
-                src={theme === BadgeTheme.RECOMEND ? avatar : categoryData?.image}
-                h='16px'
-                w='16px'
-            />
+            <Image src={theme === BadgeTheme.RECOMEND ? avatar : categoryIcon} h='16px' w='16px' />
             <Text textStyle='s'>{badgeText}</Text>
         </Box>
     );

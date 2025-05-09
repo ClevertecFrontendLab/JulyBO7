@@ -1,12 +1,13 @@
 import { Box, HStack, Text, useMediaQuery } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useMatch } from 'react-router';
 
 import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
 import avatar from '~/shared/assets/images/Avatar.png';
-import { routePaths } from '~/shared/config/route-config/router';
+import { AppRoutes, routePaths } from '~/shared/config/router';
+import { HEADER } from '~/shared/constants/tests';
 
 import { AvatarBlock } from './avatar-block/AvatarBlock';
 import { BreadCrumb } from './bread-crumb/BreadCrumb';
@@ -17,6 +18,8 @@ import { UserInfoBlock } from './user-info-block/UserInfoBlock';
 export const Navbar: FC = () => {
     const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
     const [isSmallerThan768] = useMediaQuery('(max-width: 770px)');
+
+    const notFoundPath = useMatch(routePaths[AppRoutes.NOT_FOUND]);
 
     const userName = 'Екатерина Константинопольская';
     const userEmail = '@bake_and_pie';
@@ -38,7 +41,7 @@ export const Navbar: FC = () => {
     return (
         <>
             <HStack
-                data-test-id='header'
+                data-test-id={HEADER}
                 as='header'
                 w='100%'
                 h={{ base: '64px', lg: '80px' }}
@@ -53,7 +56,7 @@ export const Navbar: FC = () => {
                 <Box as='nav' display='flex' alignItems='center' h='100%'>
                     <ChakraLink
                         as={Link}
-                        to={routePaths.main}
+                        to={routePaths[AppRoutes.MAIN]}
                         display='flex'
                         alignItems='center'
                         gap='7px'
@@ -66,11 +69,14 @@ export const Navbar: FC = () => {
                             <LogoSecond />
                         </Text>
                     </ChakraLink>
-                    {isSmallerThan768 ? null : (
+                    {isSmallerThan768 || notFoundPath ? null : (
                         <BreadCrumb display={{ base: 'none', lg: 'block' }} />
                     )}
                 </Box>
-                <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
+                {!notFoundPath ? (
+                    <AvatarBlock userName={userName} image={avatar} userEmail={userEmail} />
+                ) : null}
+
                 <UserInfoBlock
                     bookmarkCount={bookmarkCount}
                     emojiCount={emojiCount}
@@ -93,7 +99,6 @@ export const Navbar: FC = () => {
                 />
             )}
             {isOpenMobileMenu && <MobileMenu onClose={handleCloseMobileMenu} />}
-            {/* <MobileMenu onClose={handleCloseMobileMenu} isOpen={isOpenMobileMenu} /> */}
         </>
     );
 };

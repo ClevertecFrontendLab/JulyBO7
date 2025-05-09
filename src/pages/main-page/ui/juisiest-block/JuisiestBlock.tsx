@@ -1,52 +1,94 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Stack } from '@chakra-ui/react';
-import { FC } from 'react';
-import { useNavigate } from 'react-router';
+import { Box, Button, Heading, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
+import { FC, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
+import { setAppError } from '~/app/store/app-slice';
+import { useAppDispatch } from '~/app/store/hooks';
+import { useGetCategoriesQuery } from '~/entities/category';
+import { useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
-import { routePaths } from '~/shared/config/route-config/router';
+import { AppLoader } from '~/shared/components/loader';
+import { AppRoutes, routePaths } from '~/shared/config/router';
+import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { recipes } from '~/shared/recipes';
+import { SubCategory } from '~/shared/types/categories';
 
 export const JuisiestBlock: FC = () => {
+    const { data: categories } = useGetCategoriesQuery();
+    const [isMoreThan760] = useMediaQuery('(min-width: 760px)');
+    const [isSmallerThan1400] = useMediaQuery('(max-width: 1400px)');
+
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const dispatch = useAppDispatch();
 
-    const juisiestRecipes = [...recipes];
-    juisiestRecipes.sort((a, b) => b.likes - a.likes);
-
-    console.log('JuisiestBlock', juisiestRecipes);
-
-    const recipeItems = juisiestRecipes.slice(0, 4);
-    console.log('recipeItems', recipeItems);
+    const {
+        data: recipes,
+        isError,
+        isLoading,
+    } = useGetRecipesQuery({
+        page: 1,
+        limit: 4,
+        sortBy: 'likes',
+        sortOrder: 'desc',
+    });
+    const prefetchPage = usePrefetch('getRecipes');
 
     const handleSelection = () => {
-        // const state = [{ title: 'Самое сочное', path: routePaths.juiciest }]; // будет выполняться проверка из url
-        navigate(routePaths.juiciest);
-    };
-    const juiciestCards = recipeItems.map((data, idx) => {
-        const handleCook = getRecipeCardHandler(data, navigate);
+        prefetchPage({
+            page: 1,
+            limit: 8,
+            sortBy: 'likes',
+            sortOrder: 'desc',
+        });
 
-        return (
-            <HorizontalCard
-                indexForTest={idx}
-                key={idx}
-                id={data.id}
-                category={data.category[0]}
-                title={data.title}
-                text={data.description}
-                image={data.image}
-                bookmarkCount={data.bookmarks}
-                likesCount={data.likes}
-                onCook={handleCook}
-            />
-        );
-    });
+        navigate(routePaths[AppRoutes.THE_JUICIEST]);
+    };
+
+    let juiciestCards;
+    if (categories && recipes) {
+        juiciestCards = recipes?.data.map((recipe, idx) => {
+            const subcategory = categories.find(
+                (category) => category._id === recipe.categoriesIds[0],
+            )!;
+            const category = categories.find(
+                (category) => category._id === subcategory.rootCategoryId,
+            )!;
+            const handleCook = getRecipeCardHandler(
+                recipe,
+                navigate,
+                category,
+                subcategory as SubCategory,
+                pathname,
+            );
+
+            return (
+                <HorizontalCard
+                    categories={categories}
+                    indexForTest={idx}
+                    key={idx}
+                    recipe={recipe}
+                    title={recipe.title}
+                    onCook={handleCook}
+                />
+            );
+        });
+    }
+    const title = 'Самое сочное ';
+
+    useEffect(() => {
+        if (isError) {
+            dispatch(setAppError('ошибка'));
+        }
+    }, [isError, dispatch]);
     return (
         <Box>
+            {isLoading ? <AppLoader /> : null}
             <HStack justify='space-between'>
-                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>Самое сочное </Heading>
+                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{title}</Heading>
                 <Button
-                    data-test-id='juiciest-link'
+                    data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
                     onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
@@ -70,7 +112,9 @@ export const JuisiestBlock: FC = () => {
             >
                 {juiciestCards}
                 <Button
-                    data-test-id='juiciest-link-mobile'
+                    data-test-id={
+                        isMoreThan760 && isSmallerThan1400 ? JUICIEST_LINK : JUICIEST_LINK_MOBILE
+                    }
                     onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'

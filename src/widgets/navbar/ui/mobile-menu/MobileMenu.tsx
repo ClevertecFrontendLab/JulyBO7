@@ -1,18 +1,15 @@
 import { Box } from '@chakra-ui/react';
 import { FC } from 'react';
 
+import { NAV } from '~/shared/constants/tests';
 import { MenuArea } from '~/widgets/menu';
 import { MenuFooter } from '~/widgets/menu';
 
 import { BreadCrumb } from '../bread-crumb/BreadCrumb';
 
-type MobileMenuProps = {
-    onClose: () => void;
-};
-
-export const MobileMenu: FC<MobileMenuProps> = ({ onClose }) => (
+export const MobileMenu: FC<{ onClose: () => void }> = ({ onClose }) => (
     <Box
-        data-test-id='nav'
+        data-test-id={NAV}
         position='fixed'
         zIndex='1000'
         right='8px'

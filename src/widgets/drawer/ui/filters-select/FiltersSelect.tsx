@@ -12,10 +12,19 @@ import {
 } from '@chakra-ui/react';
 import { ChangeEvent, FC, KeyboardEvent, ReactNode, useRef } from 'react';
 
+import {
+    ADD_ALLERGEN_BUTTON,
+    ADD_OTHER_ALLERGENS,
+    ALLERGEN,
+    ALLERGENS_MENU,
+    CHECKBOX_VEGAN_CUISINE,
+} from '~/shared/constants/tests';
+
 type FiltersSelectProps = {
     type: 'drawer' | 'header';
     placeholder: ReactNode;
     options: string[];
+    isClose?: boolean;
     selectedOptions?: string[];
     onChecked?: (cheked: boolean, filterValue: string) => void;
     disabled?: boolean;
@@ -29,6 +38,7 @@ type FiltersSelectProps = {
 
 export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
     const {
+        isClose,
         placeholder,
         options,
         disabled,
@@ -43,6 +53,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
         forTestCheckbox,
     } = props;
     const inputRef = useRef<HTMLInputElement>(null);
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         onInputChange?.(e.currentTarget.value);
     };
@@ -62,10 +73,10 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
     const optionsList = options.map((option, idx) => {
         const isChecked = selectedOptions?.find((selectedOption) => option === selectedOption);
         let testId;
-        if (forTestCheckbox === 'checkbox-веганская кухня' && option === 'Веганская кухня') {
-            testId = 'checkbox-веганская кухня';
-        } else if (forTestCheckbox === 'allergen') {
-            testId = `allergen-${idx}`;
+        if (forTestCheckbox === CHECKBOX_VEGAN_CUISINE && option === 'Веганская кухня') {
+            testId = CHECKBOX_VEGAN_CUISINE;
+        } else if (forTestCheckbox === ALLERGEN) {
+            testId = `${ALLERGEN}-${idx}`;
         }
 
         return (
@@ -115,9 +126,9 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                     >
                         {placeholder}
                     </MenuButton>
-                    {!isOpen ? null : (
+                    {!isOpen || isClose ? null : (
                         <MenuList
-                            data-test-id='allergens-menu'
+                            data-test-id={ALLERGENS_MENU}
                             w={type === 'drawer' ? { base: '308px', lg: '400px' } : '234px'}
                             zIndex='1000'
                         >
@@ -127,7 +138,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                                     <Input
                                         ref={inputRef}
                                         autoFocus={true}
-                                        data-test-id='add-other-allergen'
+                                        data-test-id={ADD_OTHER_ALLERGENS}
                                         value={inputValue}
                                         onChange={handleInputChange}
                                         onKeyDown={handleEnterClick}
@@ -136,7 +147,7 @@ export const FiltersSelect: FC<FiltersSelectProps> = (props) => {
                                         size='s'
                                     />
                                     <SmallAddIcon
-                                        data-test-id='add-allergen-button'
+                                        data-test-id={ADD_ALLERGEN_BUTTON}
                                         as='button'
                                         rounded='50%'
                                         color='bgColor'

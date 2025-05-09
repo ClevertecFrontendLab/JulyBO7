@@ -8,20 +8,24 @@ type InitialState = {
     sideType: string[];
     category: string[];
     author: string[];
+    searchString: string;
 };
 const initialState: InitialState = {
-    ['allergen']: [],
+    allergen: [],
     meetType: [],
     sideType: [],
     category: [],
     author: [],
+    searchString: '',
 };
 export const filtersSlice = createSlice({
     name: 'filters',
     initialState,
     reducers: {
+        setSearchString(state, action: PayloadAction<string>) {
+            state.searchString = action.payload;
+        },
         setAllergen(state, action: PayloadAction<string>) {
-            // state.allergen = [...state.allergen, action.payload];
             state.allergen.push(action.payload);
         },
         removeAllergen(state, action: PayloadAction<string>) {
@@ -31,11 +35,9 @@ export const filtersSlice = createSlice({
             }
         },
         removeAllAllergens(state) {
-            // state.allergen.splice(0, state.allergen.length);
             state.allergen = [];
         },
         setMeetType(state, action: PayloadAction<string>) {
-            // state.meetType = [...state.meetType, action.payload];
             state.meetType.push(action.payload);
         },
         removeMeetType(state, action: PayloadAction<string>) {
@@ -44,8 +46,10 @@ export const filtersSlice = createSlice({
                 state.meetType.splice(index, 1);
             }
         },
+        removeAllMeetType(state) {
+            state.meetType = [];
+        },
         setSideType(state, action: PayloadAction<string>) {
-            // state.sideType = [...state.sideType, action.payload];
             state.sideType.push(action.payload);
         },
         removeSideType(state, action: PayloadAction<string>) {
@@ -54,8 +58,10 @@ export const filtersSlice = createSlice({
                 state.sideType.splice(index, 1);
             }
         },
+        removeAllSideType(state) {
+            state.sideType = [];
+        },
         setCategory(state, action: PayloadAction<string>) {
-            // state.category = [...state.category, action.payload];
             state.category.push(action.payload);
         },
         removeCategory(state, action: PayloadAction<string>) {
@@ -64,8 +70,10 @@ export const filtersSlice = createSlice({
                 state.category.splice(index, 1);
             }
         },
+        removeAllCategory(state) {
+            state.category = [];
+        },
         setAuthor(state, action: PayloadAction<string>) {
-            // state.author = [...state.author, action.payload];
             state.author.push(action.payload);
         },
         removeAuthor(state, action: PayloadAction<string>) {
@@ -74,17 +82,22 @@ export const filtersSlice = createSlice({
                 state.author.splice(index, 1);
             }
         },
+        removeAllAuthor(state) {
+            state.author = [];
+        },
         removeAllFilters(state) {
             state.allergen = [];
             state.author = [];
             state.category = [];
             state.meetType = [];
             state.sideType = [];
+            state.searchString = '';
         },
     },
 });
 
 export const {
+    setSearchString: setSearchStringAction,
     setAllergen: setAllergenAction,
     setCategory: setCategoryAction,
     setMeetType: setMeetTypeAction,
@@ -97,6 +110,10 @@ export const {
     removeAllergen: removeAllergenAction,
     removeAllFilters: removeAllFiltersAction,
     removeAuthor: removeAuthorAction,
+    removeAllMeetType: removeAllMeetTypeAction,
+    removeAllSideType: removeAllSideTypeAction,
+    removeAllCategory: removeAllCategoryAction,
+    removeAllAuthor: removeAllAuthorAction,
 } = filtersSlice.actions;
 
 export const filterSliceReducer = filtersSlice.reducer;

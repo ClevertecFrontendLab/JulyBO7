@@ -1,57 +1,16 @@
-export type Category =
-    | 'vegan'
-    | 'second-dish'
-    | 'snacks'
-    | 'national'
-    | 'salads'
-    | 'first-dish'
-    | 'desert-bakery'
-    | 'grill'
-    | 'children-dish'
-    | 'medical-nutrition'
-    | 'sauces'
-    | 'provisions'
-    | 'drinks';
-//TODO: дополнить всеми категориями
+export type SubCategory = {
+    _id: string;
+    title: string;
+    category: string;
+    rootCategoryId: string;
+};
 
-export type SubCategory =
-    | 'snacks'
-    | 'vegetables'
-    | 'warm-snacks'
-    | 'second-dish'
-    | 'first-dish'
-    | 'italian'
-    | 'poultry-dish'
-    | 'side-dishes'
-    | 'warm-salads'
-    | 'fish-salads'
-    | 'vegetable-salads'
-    | 'meet-salads'
-    | 'meet-snacks'
-    | 'fish-snacks'
-    | 'vegetable-snacks'
-    | 'warm-snacks'
-    | 'sandwiches'
-    | 'fast-food'
-    | 'drinks'
-    | 'deserts'
-    | 'bakery'
-    | 'raw-food-dishes'
-    | 'meet-soups'
-    | 'vegetable-soups'
-    | 'broths'
-    | 'cold-soups'
-    | 'diet-soups'
-    //second-dishes:
-    | 'meet'
-    | 'fish'
-    | 'vegetables'
-    | 'poultry-dish'
-    | 'mashroom'
-    | 'offal'
-    | 'steamed-dishes'
-    | 'dumplings'
-    | 'flour-side-dishes'
-    | 'vegetable-garnish'
-    | 'pizza'
-    | 'sushi';
+export type Category = {
+    _id: string;
+    title: string;
+    category: string;
+    icon: string;
+    description: string;
+    subCategories: SubCategory[];
+    rootCategoryId?: string;
+};

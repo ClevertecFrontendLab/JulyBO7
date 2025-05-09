@@ -5,15 +5,12 @@ import HomeIcon from '~/shared/assets/icons/components/HomeSolid';
 import Search from '~/shared/assets/icons/components/Search';
 import Write from '~/shared/assets/icons/components/Write';
 import avatar from '~/shared/assets/images/Avatar.png';
+import { FOOTER } from '~/shared/constants/tests';
 
 export const Footer: FC = () => (
     <footer
-        data-test-id='footer'
+        data-test-id={FOOTER}
         style={{
-            // position: 'absolute', //for tests
-            // bottom: 0,
-            // left: 0,
-            // right: 0,
             position: 'fixed',
             bottom: 0,
             left: 0,

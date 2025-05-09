@@ -3,37 +3,45 @@ import { FC } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 
 import { Category } from '~/shared/types/categories';
+import { UrlState } from '~/shared/types/url';
 
-import { SubMenuItem } from '../../../lib/getMenuItems';
 import cls from './PageTabs.module.scss';
 
-type PageTabsProps = {
+type PageTabsProps = Partial<{
     onChangeTab: (index: number) => void;
-    items: SubMenuItem[];
-    titleCategory: string;
-    pathCategory: string;
-    category: Category;
-    tabIndex?: number;
-    style?: TabsProps;
-};
+    categoryData: Category;
+    tabIndex: number;
+    style: TabsProps;
+}>;
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
-    console.log('TAB');
+    const { onChangeTab, tabIndex, style, categoryData } = props;
     const navigate = useNavigate();
-    const { onChangeTab, items, tabIndex, style, titleCategory, pathCategory, category } = props;
 
-    const tabList = items.map((item, idx) => {
-        const state = [
-            { title: titleCategory, path: pathCategory, category },
-            { title: item.title, path: item.routePath },
-        ];
+    const tabList = categoryData?.subCategories.map((subcat, idx) => {
+        const categoryPath = `/${categoryData.category}/${categoryData.subCategories[0].category}`;
+        const subcatPath = `/${categoryData.category}/${subcat.category}`;
+        const state: UrlState = {
+            breadcrumb: [
+                {
+                    title: categoryData.title,
+                    path: categoryPath,
+                    category: categoryData.category,
+                },
+                { title: subcat.title, path: subcatPath },
+            ],
+        };
 
         const handleTab = () => {
-            navigate(item.routePath, { state });
+            navigate(subcatPath, { state });
         };
         return (
             <Tab
-                data-test-id={`tab-${item.subCategory}-${idx}`}
+                data-test-id={
+                    subcat.category === 'side-dishes'
+                        ? `tab-${subcat.category}-1` //  ДЛЯ ТЕСТОВ - ТЕСТ ИЩЕТ [data-test-id="tab-side-dishes-1"]
+                        : `tab-${subcat.category}-${idx}`
+                }
                 onClick={handleTab}
                 _selected={{
                     color: 'lime.600',
@@ -45,7 +53,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
                 padding={{ base: '4px 16px', lg: '8px 16px' }}
                 key={idx}
             >
-                <Text textStyle={{ base: 'md', lg: 'm' }}>{item.title}</Text>
+                <Text textStyle={{ base: 'md', lg: 'm' }}>{subcat.title}</Text>
             </Tab>
         );
     });
@@ -64,11 +72,10 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
         >
             <TabList
                 className={cls.tabs}
-                h={{ base: '30px', lg: '42px' }}
                 w={{ base: '100%', '2xl': '1006px' }}
-                overflowX='auto'
                 mb='12px'
-                justifyContent='start'
+                justifyContent='center'
+                flexWrap='wrap'
                 borderBottomWidth='1px'
                 borderBottomColor='gray.200'
                 borderBottomStyle='solid'
@@ -76,14 +83,11 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
                 {tabList}
             </TabList>
             <TabPanels>
-                {items.map((_, idx) => {
-                    const tab = idx === tabIndex ? <Outlet /> : '';
-                    return (
-                        <TabPanel key={idx} padding='12px 0 0 0'>
-                            {tab}
-                        </TabPanel>
-                    );
-                })}
+                {categoryData?.subCategories.map((_, idx) => (
+                    <TabPanel key={idx} padding='12px 0 0 0'>
+                        <Outlet />
+                    </TabPanel>
+                ))}
             </TabPanels>
         </Tabs>
     );

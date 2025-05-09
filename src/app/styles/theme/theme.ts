@@ -44,6 +44,9 @@ export const theme = extendTheme({
             300: 'rgba(0, 0, 0, 0.06)',
             350: 'rgba(0, 0, 0, 0.16)',
         },
+        error: {
+            100: '#e53e3e',
+        },
     },
     fontSizes: {
         xs: '12px',

@@ -6,62 +6,57 @@ import {
     BreadcrumbProps as ChakraBreadcrumbProps,
 } from '@chakra-ui/react';
 import { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
-import { routePaths } from '~/shared/config/route-config/router';
-import { Category } from '~/shared/types/categories';
+import { AppRoutes, routePaths } from '~/shared/config/router';
+import { BREADCRUMBS } from '~/shared/constants/tests';
 
-import { getCrumbHandler } from '../../model/getCrumbHandler';
+import { useBreadcrumbs } from '../../model/hooks/useBreadcrumbs';
 import cls from './BreadCrumb.module.scss';
 
-export type CrumbState = { title: string; path: string; category?: Category };
-
-type BreadcrumbProps = ChakraBreadcrumbProps & { className?: string };
+type BreadcrumbProps = Partial<ChakraBreadcrumbProps & { className: string }>;
 
 export const BreadCrumb: FC<BreadcrumbProps> = ({ className, ...props }) => {
-    const { state } = useLocation();
-    const navigate = useNavigate();
     const { pathname } = useLocation();
-    console.log('BreadCrumb: ', pathname);
 
-    const handleCrumb = getCrumbHandler(navigate, state);
+    const { state, crumbHandler, navigate } = useBreadcrumbs();
 
     return (
         <Breadcrumb
-            data-test-id='breadcrumbs'
+            data-test-id={BREADCRUMBS}
             spacing='8px'
             separator={<ChevronRightIcon color='gray.500' />}
-            // className={className}
             className={cls.breadCrimb}
             {...props}
         >
             <BreadcrumbItem>
                 <BreadcrumbLink
                     color={state ? 'gray.150' : 'primaryColor'}
-                    onClick={() => navigate(routePaths.main)}
+                    onClick={() => navigate(routePaths[AppRoutes.MAIN])}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
-            {pathname === routePaths.juiciest && (
+            {pathname === routePaths[AppRoutes.THE_JUICIEST] && (
                 <BreadcrumbItem>
                     <BreadcrumbLink
                         color={state ? 'gray.150' : 'primaryColor'}
-                        onClick={() => navigate(routePaths.juiciest)}
+                        onClick={() => navigate(routePaths[AppRoutes.THE_JUICIEST])}
                     >
                         Самое сочное
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
             {state &&
-                state.map((item: CrumbState, idx: number) => {
-                    const currentPage = idx === state.length - 1;
+                state.breadcrumb.map((item, idx: number) => {
+                    const currentPage = idx === state.breadcrumb.length - 1;
+
                     return (
                         <BreadcrumbItem key={idx}>
                             <BreadcrumbLink
                                 color={currentPage ? 'primaryColor' : 'gray.150'}
                                 isCurrentPage={currentPage}
-                                onClick={() => handleCrumb(item.path, item.title, item.category)}
+                                onClick={() => crumbHandler(item.path, item.title, item.category)}
                             >
                                 {item.title}
                             </BreadcrumbLink>

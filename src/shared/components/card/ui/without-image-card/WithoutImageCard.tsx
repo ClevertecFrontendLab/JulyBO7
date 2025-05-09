@@ -1,24 +1,21 @@
 import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 
+import { RecipeBages } from '~/entities/category';
+import { Recipe } from '~/entities/recipe';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
-import { Badge } from '~/shared/components/badge/ui/Badge';
+import { Category } from '~/shared/types/categories';
 
 import cls from './WithoutImageCard.module.scss';
 
 export type WithoutImageCardProps = {
-    title: string;
-    text: string;
-    badgeImage: string;
-    badgeText: string;
-
-    bookmarkCount?: number;
-    emojiCount?: number;
+    recipe: Recipe;
+    categories: Category[];
 };
 
 export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
-    const { title, text, bookmarkCount, emojiCount } = props;
+    const { recipe, categories } = props;
 
     return (
         <VStack
@@ -43,7 +40,7 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                     textOverflow='ellipsis'
                     className={cls.title}
                 >
-                    {title}
+                    {recipe.title}
                 </Heading>
                 <Text
                     lineHeight='143%'
@@ -55,29 +52,32 @@ export const WithoutImageCard: FC<WithoutImageCardProps> = (props) => {
                     height='4.5em'
                     className={cls.text}
                 >
-                    {text}
+                    {recipe.description}
                 </Text>
             </Box>
+
             <Box display='flex' justifyContent='space-between' w='100%'>
-                <Badge category='vegan' style={{ bg: 'lime.50' }} w={{ md: '' }} />
+                <RecipeBages
+                    categories={categories}
+                    recipe={recipe}
+                    onlyFirstCategory
+                    badgeStyle={{ w: { md: '' }, bg: 'lime.50' }}
+                />
                 <Box display='flex' gap={{ base: '12px', md: '0', lg: '8px' }}>
-                    {bookmarkCount && (
-                        <Button variant='withIcon' color='lime.600'>
-                            <Bookmark />
-                            <Text fontSize='12px'>{bookmarkCount}</Text>
-                        </Button>
-                    )}
-                    {emojiCount && (
-                        <Button
-                            variant='withIcon'
-                            color='lime.600'
-                            padding={{ base: '0 4px', md: '0 2px', lg: '0 4px' }}
-                            w={{ base: '34px', md: '32px', lg: '34px' }}
-                        >
-                            <Emoji />
-                            <Text fontSize='12px'>{emojiCount}</Text>
-                        </Button>
-                    )}
+                    <Button variant='withIcon' color='lime.600'>
+                        <Bookmark />
+                        <Text fontSize='12px'>{recipe.bookmarks}</Text>
+                    </Button>
+
+                    <Button
+                        variant='withIcon'
+                        color='lime.600'
+                        padding={{ base: '0 4px', md: '0 2px', lg: '0 4px' }}
+                        w={{ base: '34px', md: '32px', lg: '34px' }}
+                    >
+                        <Emoji />
+                        <Text fontSize='12px'>{recipe.likes}</Text>
+                    </Button>
                 </Box>
             </Box>
         </VStack>

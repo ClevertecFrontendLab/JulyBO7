@@ -4,6 +4,7 @@ import { FC } from 'react';
 
 import { CommentCard } from '~/shared/components/card/ui/comment-card/CommentCard';
 
+import { ALL_AUTHORS } from '../../model/constants/mainpage';
 import { mainPageData } from '../../model/mockData';
 
 export const CulinaryBlogs: FC = () => {
@@ -29,7 +30,7 @@ export const CulinaryBlogs: FC = () => {
                     color='primaryColor'
                     rightIcon={<ArrowForwardIcon />}
                 >
-                    Все авторы
+                    {ALL_AUTHORS}
                 </Button>
             </HStack>
 
@@ -52,7 +53,7 @@ export const CulinaryBlogs: FC = () => {
                 color='primaryColor'
                 rightIcon={<ArrowForwardIcon />}
             >
-                Все авторы
+                {ALL_AUTHORS}
             </Button>
         </Box>
     );

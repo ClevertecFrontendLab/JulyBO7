@@ -1,28 +1,24 @@
 import { Box, Button, Card, CardProps, Heading, Image, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 
+import { RecipeBages } from '~/entities/category';
+import { Recipe } from '~/entities/recipe';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import { BadgeColor } from '~/shared/components/badge/ui/Badge';
+import { IMAGE_API } from '~/shared/constants/imageApi';
 import { Category } from '~/shared/types/categories';
 
-import { Badge, BadgeColor } from '../../../badge/ui/Badge';
-
 type VerticalCardProps = {
-    id: string;
-    title: string;
-    text: string;
-    category: Category;
+    recipe: Recipe;
+    categories: Category[];
     onClick?: () => void;
-    image?: string;
-    bookmarkCount?: number;
-    likesCount?: number;
-    badgeColor?: BadgeColor;
     style?: CardProps;
 };
 
 export const VerticalCard: FC<VerticalCardProps> = (props) => {
-    const { title, text, category, bookmarkCount, likesCount, image, badgeColor, style, onClick } =
-        props;
+    const { recipe, style, onClick, categories } = props;
+
     const handleClickCard = () => {
         onClick?.();
     };
@@ -44,8 +40,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                 objectFit='cover'
                 borderTopLeftRadius='8px'
                 borderTopRightRadius='8px'
-                src={image}
-                alt={title}
+                src={`${IMAGE_API}${recipe.image}`}
             />
 
             <VStack
@@ -60,7 +55,7 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                         noOfLines={{ base: 2, lg: 1 }}
                         lineHeight={{ base: '150%', lg: '156%', '2xl': '140%' }}
                     >
-                        {title}
+                        {recipe.title}
                     </Heading>
                     <Text
                         lineHeight='143%'
@@ -73,32 +68,31 @@ export const VerticalCard: FC<VerticalCardProps> = (props) => {
                         color={{ base: 'transparent', lg: 'primaryColor' }}
                         top='-1000%'
                     >
-                        {text}
+                        {recipe.description}
                     </Text>
                 </Box>
                 <Box display='flex' alignItems='flex-start' justifyContent='space-between' w='100%'>
-                    <Badge
-                        category={category}
-                        badgeColor={badgeColor}
-                        style={{
+                    <RecipeBages
+                        onlyFirstCategory
+                        categories={categories}
+                        recipe={recipe}
+                        badgeColor={BadgeColor.SECONDARY}
+                        badgeStyle={{
                             position: { base: 'absolute', lg: 'static' },
                             top: '8px',
                             left: '8px',
                         }}
                     />
                     <Box display='flex' gap='8px'>
-                        {bookmarkCount && (
-                            <Button variant='withIcon' color='lime.600' h='24px'>
-                                <Bookmark />
-                                <Text fontSize='12px'>123</Text>
-                            </Button>
-                        )}
-                        {likesCount && (
-                            <Button variant='withIcon' color='lime.600' h='24px'>
-                                <Emoji />
-                                <Text fontSize='12px'>12</Text>
-                            </Button>
-                        )}
+                        <Button variant='withIcon' color='lime.600' h='24px'>
+                            <Bookmark />
+                            <Text fontSize='12px'>{recipe.bookmarks}</Text>
+                        </Button>
+
+                        <Button variant='withIcon' color='lime.600' h='24px'>
+                            <Emoji />
+                            <Text fontSize='12px'>{recipe.likes}</Text>
+                        </Button>
                     </Box>
                 </Box>
             </VStack>

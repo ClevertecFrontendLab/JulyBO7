@@ -10,17 +10,20 @@ import {
     Tabs,
     Text,
 } from '@chakra-ui/react';
-import { FC, MouseEvent, useEffect, useState } from 'react';
+import { FC, MouseEvent, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import ArrowNavbar from '~/shared/assets/icons/components/ArrowNavbar';
 import ArrowNavbarDown from '~/shared/assets/icons/components/ArrowNavbarDown';
+import { IMAGE_API } from '~/shared/constants/imageApi';
+import { NAV } from '~/shared/constants/tests';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
-import { getMenuItems } from '~/shared/lib/getMenuItems';
+import { UrlState } from '~/shared/types/url';
 
+import { useGetCategoriesQuery } from '../../../../entities/category/model/services/categories';
 import cls from './MenuArea.module.scss';
 
-type MenuAreaProps = AccordionProps & { isMobile?: boolean; forTest?: boolean };
+type MenuAreaProps = Partial<AccordionProps & { isMobile?: boolean; forTest?: boolean }>;
 
 export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest }) => {
     const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>();
@@ -28,11 +31,12 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const menuCategories = getMenuItems();
+    const { data } = useGetCategoriesQuery();
+
+    const menuCategories = useMemo(() => data?.filter((item) => !item.rootCategoryId), [data]);
 
     const onClickMenuItem =
-        (path: string, state: { title: string; path: string }[]) =>
-        (e: MouseEvent<HTMLButtonElement>) => {
+        (path: string, state: UrlState) => (e: MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
             navigate(path, { state });
         };
@@ -46,20 +50,32 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
     };
 
     useEffect(() => {
-        const tabIndex = getCurrentCategoryByPath(pathname);
-        if (tabIndex !== undefined) {
-            setActiveSubCategoryIndex(tabIndex);
-        } else {
-            setActiveCategoryIndex(-1);
-            setActiveSubCategoryIndex(0);
+        if (menuCategories) {
+            const tabIndex = getCurrentCategoryByPath(pathname, menuCategories);
+            if (tabIndex !== undefined) {
+                setActiveSubCategoryIndex(tabIndex);
+            } else {
+                setActiveCategoryIndex(-1);
+                setActiveSubCategoryIndex(0);
+            }
         }
-    }, [pathname]);
+    }, [pathname, menuCategories]);
 
-    const accordeonItems = menuCategories.map((menuItem, idx) => {
-        const state = [
-            { title: menuItem.title, path: menuItem.routePath, category: menuItem.category },
-            { title: menuItem.items[0].title, path: menuItem.items[0].routePath },
-        ];
+    const accordeonItems = menuCategories?.map((menuItem, idx) => {
+        const categoryPath = `/${menuItem.category}/${menuItem.subCategories[0].category}`;
+        const state: UrlState = {
+            breadcrumb: [
+                {
+                    title: menuItem.title,
+                    path: categoryPath,
+                    category: menuItem.category,
+                },
+                {
+                    title: menuItem.subCategories[0].title,
+                    path: categoryPath,
+                },
+            ],
+        };
         const id = menuItem.category === 'vegan' ? 'vegan-cuisine' : menuItem.category;
         return (
             <AccordionItem border='none' key={idx}>
@@ -67,7 +83,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
                     <>
                         <AccordionButton
                             data-test-id={id}
-                            onClick={onClickMenuItem(menuItem.routePath, state)}
+                            onClick={onClickMenuItem(categoryPath, state)}
                             padding='12px 8px'
                             display='flex'
                             alignItems='center'
@@ -76,7 +92,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
                             _expanded={{ bg: 'lime.100', fontWeight: '700' }}
                         >
                             <Box display='flex' gap='12px'>
-                                <Image src={menuItem.icon} />
+                                <Image src={`${IMAGE_API}${menuItem.icon}`} />
                                 <Text textStyle='m' fontWeight={isExpanded ? '700' : '500'}>
                                     {menuItem.title}
                                 </Text>
@@ -91,25 +107,31 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
                                 index={activeSubCategoryIndex}
                                 onChange={onChangeSubCategory}
                             >
-                                {menuItem.items.map((item, idx) => {
-                                    const state = [
-                                        {
-                                            title: menuItem.title,
-                                            path: menuItem.routePath,
-                                            category: menuItem.category,
-                                        },
-                                        { title: item.title, path: item.routePath },
-                                    ];
+                                {menuItem.subCategories.map((item, idx) => {
+                                    const subcatPath = `/${menuItem.category}/${item.category}`;
+                                    const state: UrlState = {
+                                        breadcrumb: [
+                                            {
+                                                title: menuItem.title,
+                                                path: categoryPath,
+                                                category: menuItem.category,
+                                            },
+                                            {
+                                                title: item.title,
+                                                path: subcatPath,
+                                            },
+                                        ],
+                                    };
 
                                     return (
                                         <Tab
                                             data-test-id={
                                                 activeSubCategoryIndex === idx
-                                                    ? `${item.subCategory}-active`
+                                                    ? `${item.category}-active`
                                                     : ''
                                             }
                                             key={idx}
-                                            onClick={onClickMenuItem(item.routePath, state)}
+                                            onClick={onClickMenuItem(subcatPath, state)}
                                             w='100%'
                                             display='flex'
                                             justifyContent='start'
@@ -151,7 +173,7 @@ export const MenuArea: FC<MenuAreaProps> = ({ isMobile = false, forTest, ...rest
 
     return (
         <Accordion
-            data-test-id='nav'
+            data-test-id={NAV}
             onChange={onChangeCategory}
             index={activeCategoryIndex}
             allowToggle
