@@ -1,1 +1,1 @@
-export { ErrorAlert } from './ui/ErrorAlert';
+export { Alert } from './ui/Alert';

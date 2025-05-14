@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useMatch } from 'react-router';
 
 import { useGetCategoriesQuery } from '~/entities/category';
-import { ErrorAlert } from '~/shared/components/alert/ui/ErrorAlert';
+import { Alert } from '~/shared/components/alert/ui/Alert';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { LOCAL_STORAGE_CATEGORIES_KEY } from '~/shared/constants/localStorage';
@@ -23,6 +23,9 @@ function App() {
     const notFoundPath = useMatch(routePaths[AppRoutes.NOT_FOUND]);
     const matchMainPage = useMatch(routePaths[AppRoutes.MAIN]);
     const error = useAppSelector((state) => state.app.error);
+    const successMessage = useAppSelector((state) => state.app.succesMessage);
+
+    const inited = false; // для авторизации - сделать нормальный layout
 
     const handleClose = () => {
         dispatch(removeAppError());
@@ -37,25 +40,35 @@ function App() {
     return (
         <Box bg='bgColor' position='relative' h='100vh'>
             {isLoading && matchMainPage ? <AppLoader /> : null}
-            <Navbar />
-            {notFoundPath ? (
-                <>
-                    <Box className={cls.wrapper}>
-                        <AppRouter />
-                    </Box>
-                    <Footer />
-                </>
+            {!inited ? (
+                <AppRouter />
             ) : (
                 <>
-                    <Box display='flex' className={cls.wrapper}>
-                        <Menu />
-                        <AppRouter />
-                        <Sidebar />
-                    </Box>
-                    <Footer />
+                    <Navbar />
+                    {notFoundPath ? (
+                        <>
+                            <Box className={cls.wrapper}>
+                                <AppRouter />
+                            </Box>
+                            <Footer />
+                        </>
+                    ) : (
+                        <>
+                            <Box display='flex' className={cls.wrapper}>
+                                <Menu />
+                                <AppRouter />
+                                <Sidebar />
+                            </Box>
+                            <Footer />
+                        </>
+                    )}
                 </>
             )}
-            {error && <ErrorAlert onClose={handleClose} />}
+
+            {error && <Alert onClose={handleClose} title={error} type='error' />}
+            {successMessage && (
+                <Alert onClose={handleClose} title={successMessage} type='success' />
+            )}
         </Box>
     );
 }

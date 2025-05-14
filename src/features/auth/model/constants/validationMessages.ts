@@ -1,0 +1,23 @@
+export enum ValidationMessages {
+    ENTER_NAME = 'Введите имя',
+    MAX_LENGTH = 'Максимальная длина 50 символов',
+    MUST_START_WITH_CYRILLIC = 'Должно начинаться с кириллицы А-Я',
+    ONLY_CYRILLIC_AND_HYPHEN = 'Только кириллица А-Я, и "-"',
+    ENTER_SIRNAME = 'Введите фамилию',
+    ENTER_EMAIL = 'Введите e-mail',
+    ENTER_CORRECT_EMAIL = 'Введите корректный e-mail',
+    ENTER_LOGIN = 'Введите логин',
+    NOT_MATCH_FORMAT = 'Не соответствует формату',
+    LOGIN_MIN_LENGTH_ONLY_LATIN = 'Логин не менее 5 символов, только латиница',
+    ENTER_PASSWORD = 'Введите пароль',
+    PASSWORD_MIN_LENGTH_NUMBER_CAPITAL_LETTER = 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
+    REPLICATE_PASSWORD = 'Повторите пароль',
+    PASSWORDS_MUST_MATCH = 'Пароли должны совпадать',
+}
+
+// enum ValidationMessages {
+//     REQUIRED = "Это поле обязательно для заполнения.",
+//     EMAIL_INVALID = "Введите корректный адрес электронной почты.",
+//     PASSWORD_TOO_SHORT = "Пароль должен содержать минимум 6 символов.",
+//     PASSWORD_MISMATCH = "Пароли не совпадают."
+// }

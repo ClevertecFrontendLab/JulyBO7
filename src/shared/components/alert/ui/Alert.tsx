@@ -1,7 +1,8 @@
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import {
-    Alert,
+    Alert as ChakraAlert,
     AlertDescription,
-    AlertIcon,
+    AlertIcon as AlertErrorIcon,
     AlertTitle,
     Box,
     CloseButton,
@@ -11,9 +12,13 @@ import { FC } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/shared/constants/tests';
 
-import { ERROR_TEXT, ERROR_TITLE } from '../model/constants/alertText';
-
-export const ErrorAlert: FC<{ onClose?: () => void }> = ({ onClose }) => {
+type AlertProps = {
+    type: 'error' | 'success';
+    title: string;
+    text?: string;
+    onClose?: () => void;
+};
+export const Alert: FC<AlertProps> = ({ onClose, text, type, title }) => {
     const { isOpen: isVisible, onClose: onCloseAlert } = useDisclosure({ defaultIsOpen: true });
 
     const handleClose = () => {
@@ -22,26 +27,28 @@ export const ErrorAlert: FC<{ onClose?: () => void }> = ({ onClose }) => {
     };
 
     return isVisible ? (
-        <Alert
+        <ChakraAlert
             data-test-id={ERROR_NOTIFICATION}
-            status='error'
+            status={type}
             position='fixed'
             zIndex={10000}
             bottom='100px'
             left='50%'
             transform='translateX(-50%)'
-            bg='error.100'
+            bg={type === 'error' ? 'error.100' : 'green.500'}
             p='12px 16px'
             w={{ base: '328px', lg: '400px' }}
         >
-            <AlertIcon color='bgColor' />
+            {type === 'error' ? <AlertErrorIcon color='bgColor' /> : <CheckCircleIcon />}
             <Box>
                 <AlertTitle color='bgColor' textStyle='m' fontWeight={700}>
-                    {ERROR_TITLE}
+                    {title}
                 </AlertTitle>
-                <AlertDescription color='bgColor' textStyle='m' fontWeight={400}>
-                    {ERROR_TEXT}
-                </AlertDescription>
+                {type === 'error' && (
+                    <AlertDescription color='bgColor' textStyle='m' fontWeight={400}>
+                        {text}
+                    </AlertDescription>
+                )}
             </Box>
             <CloseButton
                 data-test-id={CLOSE_ALERT_BUTTON}
@@ -53,6 +60,6 @@ export const ErrorAlert: FC<{ onClose?: () => void }> = ({ onClose }) => {
                 onClick={handleClose}
                 color='bgColor'
             />
-        </Alert>
+        </ChakraAlert>
     ) : null;
 };
