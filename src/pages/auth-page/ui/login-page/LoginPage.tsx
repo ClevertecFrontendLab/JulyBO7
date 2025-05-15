@@ -1,3 +1,9 @@
 import React from 'react';
 
-export const LoginPage: React.FC = () => <div>Login Page </div>;
+import { LoginForm } from '~/features/auth';
+
+export const LoginPage: React.FC = () => (
+    <>
+        <LoginForm />
+    </>
+);

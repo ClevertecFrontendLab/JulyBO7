@@ -1,25 +1,23 @@
 import { Button, Progress, Text, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, useEffect, useState } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router';
 
-import { useAppDispatch } from '~/app/store/hooks';
+import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { STEP_1, STEP_2 } from '../../model/constants/signUpFormText';
 import { ValidationMessages } from '../../model/constants/validationMessages';
-import { SignUpFormData, signUpSchema } from '../../model/schemas/signUpSchema';
+import { SignUpFormData, signUpFormSchema } from '../../model/schemas/signUpFormSchema';
 import { useRegistrationMutation } from '../../model/services/authApi';
-import { FormFields } from '../../model/types/signUp';
 import { FormInput } from '../form-input/FormInput';
 import { FormModal } from '../form-modal/FormModal';
 import cls from './SignUpForm.module.scss';
 
-// export type Inputs = FormFields & { confirmPassword: string };
-
 export const SignUpForm: FC = () => {
-    const dispatch = useAppDispatch();
     const location = useLocation();
 
     const defaultValues: SignUpFormData = {
@@ -40,20 +38,16 @@ export const SignUpForm: FC = () => {
     } = useForm<SignUpFormData>({
         defaultValues,
         mode: 'all',
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(signUpFormSchema),
     });
     const [trigger, { isLoading }] = useRegistrationMutation();
     const [progressValue, setProgressValue] = useState<string[]>([]);
     const [step, setStep] = useState(1);
     const [isOpenModal, setIsOpenModal] = useState(false);
-
-    // if (!location.state.isVerified && !isOpenModal) {
-    //     setIsOpenModal(true);
-    // }
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = async (formData: SignUpFormData) => {
-        console.log('FORM DATA: ', formData);
-        const body: FormFields = {
+        const body = {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
@@ -61,14 +55,10 @@ export const SignUpForm: FC = () => {
             password: formData.password,
         };
         try {
-            const res = await trigger(body).unwrap();
+            await trigger(body).unwrap();
             setIsOpenModal(true);
-
-            console.log('УСПЕШНЫЙ ОТВЕТ ОТ СЕРВЕРА: ', res);
         } catch (error) {
-            dispatch(error.message);
-
-            console.log('ОШИБКА ПРИ ЗАПРОСЕ НА СЕРВЕР: ', error);
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
     };
 
@@ -76,7 +66,6 @@ export const SignUpForm: FC = () => {
         const fieldState = getFieldState(fieldName as keyof SignUpFormData);
         if (
             !fieldState.invalid &&
-            // fieldState.isTouched &&
             !fieldState.isValidating &&
             fieldState.isDirty &&
             !progressValue.find((value) => value === fieldName)
@@ -90,9 +79,9 @@ export const SignUpForm: FC = () => {
     const handleNextStep = () => {
         setStep((prev) => prev + 1);
     };
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setIsOpenModal(false);
-    };
+    }, []);
 
     useEffect(() => {
         if (location.state && location.state.isVerified === false) {
@@ -103,6 +92,10 @@ export const SignUpForm: FC = () => {
     return (
         <>
             {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
+
             <FormModal
                 isOpen={isOpenModal}
                 onClose={handleCloseModal}
@@ -110,7 +103,7 @@ export const SignUpForm: FC = () => {
                 type={
                     location.state && location.state.isVerified === false
                         ? 'verificationError'
-                        : 'beforeVerification'
+                        : 'verification'
                 }
             />
             <Text as='label' fontSize='16px' fontWeight='400'>
@@ -193,118 +186,3 @@ export const SignUpForm: FC = () => {
         </>
     );
 };
-
-// {
-//     /* <Text as='label' fontSize='16px' fontWeight='400'>
-//                     Ваш e-mail
-//                 </Text>
-//                 <Input
-//                     placeholder='e-mail'
-//                     variant='outlineLime'
-//                     size='m'
-//                     {...register('email')}
-//                     borderColor={errors.email ? 'error.100' : 'lime.150'}
-//                 />
-//                 {errors.email && (
-//                     <Text textStyle='xs' color='red'>
-//                         {errors.email.message}
-//                     </Text>
-//                 )} */
-// }
-// {
-//     /* <Text as='label' fontSize='16px' fontWeight='400'>
-//                     Ваше имя
-//                 </Text>
-//                 <Input
-//                     placeholder='Имя'
-//                     variant='outlineLime'
-//                     size='m'
-//                     {...register('firstName')}
-//                     borderColor={errors.firstName ? 'error.100' : 'lime.150'}
-//                 />
-//                 {errors.firstName && (
-//                     <Text textStyle='xs' color='red'>
-//                         {errors.firstName.message}
-//                     </Text>
-//                 )} */
-// }
-// {
-//     /*
-//                 <Text as='label' fontSize='16px' fontWeight='400'>
-//                     Ваша фамилия
-//                 </Text>
-//                 <Input
-//                     placeholder='Фамилия'
-//                     variant='outlineLime'
-//                     size='m'
-//                     {...register('surname')}
-//                     borderColor={errors.surname ? 'error.100' : 'lime.150'}
-//                 />
-//                 {errors.surname && (
-//                     <Text textStyle='xs' color='red'>
-//                         {errors.surname.message}
-//                     </Text>
-//                 )} */
-// }
-
-// {
-//     /* <Text as='label' fontSize='16px' fontWeight='400'>
-//                         Логин для входа на сайт
-//                     </Text>
-//                     <Input
-//                         placeholder='Логин'
-//                         variant='outlineLime'
-//                         size='m'
-//                         {...register('login')}
-//                         borderColor={errors.login ? 'error.100' : 'lime.150'}
-//                     />
-//                     <Text textStyle='xs' color='gray.150'>
-//                         {ValidationMessages.LOGIN_MIN_LENGTH_ONLY_LATIN}
-//                     </Text>
-//                     {errors.login && (
-//                         <Text textStyle='xs' color='red'>
-//                             {errors.login.message}
-//                         </Text>
-//                     )} */
-// }
-// {
-//     /* <Text as='label'>Пароль</Text>
-//                     <InputGroup size='md'>
-//                         <Input
-//                             {...register('password')}
-//                             variant='outlineLime'
-//                             size='m'
-//                             type={showPassword ? 'text' : 'password'}
-//                             borderColor={errors.password ? 'error.100' : 'lime.150'}
-//                             placeholder='Пароль'
-//                         />
-//                         <InputRightElement w='48px' h='48px'>
-//                             <Button variant='clear' onClick={handleClick}>
-//                                 {showPassword ? <EyeIcon /> : <CrossOutEyeIcon />}
-//                             </Button>
-//                         </InputRightElement>
-//                     </InputGroup>
-//                     <Text textStyle='xs' color='gray.150'>
-//                         {ValidationMessages.PASSWORD_MIN_LENGTH_NUMBER_CAPITAL_LETTER}
-//                     </Text>
-//                     {errors.password && (
-//                         <Text textStyle='xs' color='red'>
-//                             {errors.password.message}
-//                         </Text>
-//                     )} */
-
-//                              /* <Text as='label' fontSize='16px' fontWeight='400'>
-//                         Повторите пароль
-//                     </Text>
-//                     <Input
-//                         placeholder='Пароль'
-//                         variant='outlineLime'
-//                         size='m'
-//                         {...register('confirmPassword')}
-//                         borderColor={errors.confirmPassword ? 'error.100' : 'lime.150'}
-//                     />
-//                     {errors.confirmPassword && (
-//                         <Text textStyle='xs' color='red'>
-//                             {errors.confirmPassword.message}
-//                         </Text>
-//                     )}

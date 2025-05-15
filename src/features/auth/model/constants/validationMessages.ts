@@ -14,10 +14,3 @@ export enum ValidationMessages {
     REPLICATE_PASSWORD = 'Повторите пароль',
     PASSWORDS_MUST_MATCH = 'Пароли должны совпадать',
 }
-
-// enum ValidationMessages {
-//     REQUIRED = "Это поле обязательно для заполнения.",
-//     EMAIL_INVALID = "Введите корректный адрес электронной почты.",
-//     PASSWORD_TOO_SHORT = "Пароль должен содержать минимум 6 символов.",
-//     PASSWORD_MISMATCH = "Пароли не совпадают."
-// }

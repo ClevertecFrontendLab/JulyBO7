@@ -8,7 +8,7 @@ import {
     CloseButton,
     useDisclosure,
 } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/shared/constants/tests';
 
@@ -25,6 +25,16 @@ export const Alert: FC<AlertProps> = ({ onClose, text, type, title }) => {
         onClose?.();
         onCloseAlert();
     };
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            handleClose();
+        }, 16000);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, []);
 
     return isVisible ? (
         <ChakraAlert

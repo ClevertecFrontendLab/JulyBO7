@@ -1,24 +1,25 @@
 import { Box, Button, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { memo, useState } from 'react';
 import { FieldError, UseFormRegister } from 'react-hook-form';
 
 import CrossOutEyeIcon from '~/shared/assets/icons/components/CrossOutEye';
 import EyeIcon from '~/shared/assets/icons/components/Eye';
 
 import { ValidationMessages } from '../../model/constants/validationMessages';
-import { SignUpFormData } from '../../model/schemas/signUpSchema';
+import { LoginFormData } from '../../model/schemas/loginFormSchema';
+import { SignUpFormData } from '../../model/schemas/signUpFormSchema';
 
 type FormInputProps = {
     label: string;
     fieldName: keyof SignUpFormData;
-    register: UseFormRegister<SignUpFormData>;
+    register: UseFormRegister<SignUpFormData | LoginFormData>;
     placeholder: string;
     error?: FieldError;
     type?: 'password' | 'default';
     note?: ValidationMessages;
 };
 
-export const FormInput: FC<FormInputProps> = (props) => {
+export const FormInput = memo<FormInputProps>((props) => {
     const { label, fieldName, register, placeholder, error, type = 'default', note } = props;
 
     const [showPassword, setShowPassword] = useState(false);
@@ -84,4 +85,4 @@ export const FormInput: FC<FormInputProps> = (props) => {
             )}
         </>
     );
-};
+});

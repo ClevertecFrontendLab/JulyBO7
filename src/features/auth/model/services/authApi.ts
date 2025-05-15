@@ -2,10 +2,10 @@ import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '~/shared/constants/localStorage';
 
-// import { Tags } from '~/shared/api/constants/tags';
-import { FormFields } from '../types/signUp';
+import { LoginFormData } from '../schemas/loginFormSchema';
+import { SignUpFormData } from '../schemas/signUpFormSchema';
 
-type RegistrationResponse = {
+type AuthResponse = {
     statusText: string;
     message: string;
     error?: string;
@@ -13,11 +13,18 @@ type RegistrationResponse = {
 };
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        registration: builder.mutation<RegistrationResponse, FormFields>({
+        registration: builder.mutation<AuthResponse, Omit<SignUpFormData, 'confirmPassword'>>({
             query: (body) => ({
                 body,
                 method: 'POST',
                 url: ApiEndpoints.SIGN_UP,
+            }),
+        }),
+        login: builder.mutation<AuthResponse, LoginFormData>({
+            query: (body) => ({
+                body,
+                method: 'POST',
+                url: ApiEndpoints.LOGIN,
             }),
             transformResponse: (response, meta) => {
                 const headers = meta?.response?.headers;
@@ -32,4 +39,4 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useRegistrationMutation } = authApi;
+export const { useRegistrationMutation, useLoginMutation } = authApi;
