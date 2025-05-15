@@ -5,14 +5,20 @@ import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '~/shared/constants/localStorage'
 import { LoginFormData } from '../schemas/loginFormSchema';
 import { SignUpFormData } from '../schemas/signUpFormSchema';
 
-type AuthResponse = {
+type AuthResponse = Partial<{
     statusText: string;
     message: string;
-    error?: string;
-    statusCode?: number;
-};
+    error: string;
+    statusCode: number;
+}>;
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
+        checkAuth: builder.query<AuthResponse, void>({
+            query: () => ({
+                method: 'GET',
+                url: ApiEndpoints.CHECK_AUTH,
+            }),
+        }),
         registration: builder.mutation<AuthResponse, Omit<SignUpFormData, 'confirmPassword'>>({
             query: (body) => ({
                 body,
@@ -39,4 +45,4 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useRegistrationMutation, useLoginMutation } = authApi;
+export const { useRegistrationMutation, useLoginMutation, useCheckAuthQuery } = authApi;
