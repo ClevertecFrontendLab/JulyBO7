@@ -1,13 +1,12 @@
 import 'swiper/scss';
 
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { Recipe, useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
@@ -15,8 +14,11 @@ import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
 import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
 
+import { Alert } from '../../alert';
+import { AppLoader } from '../../loader';
 import { useSlider } from '../model/useSlider';
 
 export const NewRecipesBlock: FC = () => {
@@ -25,9 +27,13 @@ export const NewRecipesBlock: FC = () => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const { data: newRecipes, isError } = useGetRecipesQuery({
+    const {
+        data: newRecipes,
+        error,
+        isLoading,
+    } = useGetRecipesQuery({
         page: 1,
         limit: 10,
         sortBy: 'createdAt',
@@ -75,10 +81,10 @@ export const NewRecipesBlock: FC = () => {
     }
 
     useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+        if (error) {
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
-    }, [isError, dispatch]);
+    }, [error]);
 
     return (
         <Box w='100%' position={{ base: 'static', lg: 'relative' }}>
@@ -131,6 +137,11 @@ export const NewRecipesBlock: FC = () => {
             >
                 <ArrowRightIcon fill='lime.50' />
             </Button>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </Box>
     );
 };

@@ -1,74 +1,45 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useMatch } from 'react-router';
+import { useMatch, useNavigate } from 'react-router';
 
 import { useGetCategoriesQuery } from '~/entities/category';
-import { Alert } from '~/shared/components/alert/ui/Alert';
+import { useCheckAuthQuery } from '~/features/auth';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { LOCAL_STORAGE_CATEGORIES_KEY } from '~/shared/constants/localStorage';
-import { Footer } from '~/widgets/footer';
-import { Menu } from '~/widgets/menu';
-import { Navbar } from '~/widgets/navbar';
-import { Sidebar } from '~/widgets/sidebar/ui/Sidebar';
 
-import cls from './App.module.scss';
 import { AppRouter } from './providers/routes/ui/AppRouter';
-import { removeAppError } from './store/app-slice';
-import { useAppDispatch, useAppSelector } from './store/hooks';
+import { setIsAuthAction } from './store/app-slice';
+import { useAppDispatch } from './store/hooks';
 
 function App() {
-    const { data, isLoading } = useGetCategoriesQuery();
-    const dispatch = useAppDispatch();
-    const notFoundPath = useMatch(routePaths[AppRoutes.NOT_FOUND]);
+    const navigate = useNavigate();
     const matchMainPage = useMatch(routePaths[AppRoutes.MAIN]);
-    const error = useAppSelector((state) => state.app.error);
-    const successMessage = useAppSelector((state) => state.app.succesMessage);
+    const dispatch = useAppDispatch();
 
-    const inited = false; // для авторизации - сделать нормальный layout
-
-    const handleClose = () => {
-        dispatch(removeAppError());
-    };
+    const { data, error, isLoading: isLoadingAuth } = useCheckAuthQuery();
+    const { data: categories, isLoading: isLoadingCategories } = useGetCategoriesQuery();
 
     useEffect(() => {
-        if (data) {
-            localStorage.setItem(LOCAL_STORAGE_CATEGORIES_KEY, JSON.stringify(data));
+        if (categories) {
+            localStorage.setItem(LOCAL_STORAGE_CATEGORIES_KEY, JSON.stringify(categories));
         }
-    }, [data]);
+    }, [categories]);
+
+    useEffect(() => {
+        if (error && 'status' in error && error.status === 403) {
+            navigate(routePaths[AppRoutes.LOGIN]);
+            return;
+        }
+        if (data) {
+            dispatch(setIsAuthAction(true));
+        }
+    }, [error, navigate, dispatch, data]);
 
     return (
         <Box bg='bgColor' position='relative' h='100vh'>
-            {isLoading && matchMainPage ? <AppLoader /> : null}
-            {!inited ? (
-                <AppRouter />
-            ) : (
-                <>
-                    <Navbar />
-                    {notFoundPath ? (
-                        <>
-                            <Box className={cls.wrapper}>
-                                <AppRouter />
-                            </Box>
-                            <Footer />
-                        </>
-                    ) : (
-                        <>
-                            <Box display='flex' className={cls.wrapper}>
-                                <Menu />
-                                <AppRouter />
-                                <Sidebar />
-                            </Box>
-                            <Footer />
-                        </>
-                    )}
-                </>
-            )}
-
-            {error && <Alert onClose={handleClose} title={error} type='error' />}
-            {successMessage && (
-                <Alert onClose={handleClose} title={successMessage} type='success' />
-            )}
+            <AppRouter />
+            {(isLoadingCategories || isLoadingAuth) && matchMainPage ? <AppLoader /> : null}
         </Box>
     );
 }

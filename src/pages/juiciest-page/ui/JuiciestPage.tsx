@@ -1,17 +1,19 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { setAppError } from '~/app/store/app-slice';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { FoundRecipesCards, Recipe, useGetRecipesQuery } from '~/entities/recipe';
+import { Alert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
+import { PageLayout } from '~/shared/components/layouts';
 import { AppLoader } from '~/shared/components/loader';
-import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { LOAD_MORE_BUTTON } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
@@ -22,10 +24,11 @@ export const JuiciestPage: FC = () => {
     const [page, setPage] = useState(1);
     const [limit] = useState(8);
     const [loadedRecipes, setLoadedRecipes] = useState<Recipe[]>([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const {
         data: recipes,
-        isError,
+        error,
         isFetching,
     } = useGetRecipesQuery({
         page,
@@ -43,10 +46,6 @@ export const JuiciestPage: FC = () => {
     const handleLoading = () => {
         setPage(page + 1);
     };
-
-    if (isError) {
-        dispatch(setAppError('ошибка'));
-    }
 
     const juiciestRecipes = loadedRecipes.map((recipe, idx) => {
         let handleCook;
@@ -87,8 +86,12 @@ export const JuiciestPage: FC = () => {
     useEffect(() => {
         if (recipes) {
             setLoadedRecipes([...loadedRecipes, ...recipes.data]);
+            return;
         }
-    }, [recipes]);
+        if (error) {
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
+        }
+    }, [recipes, error]);
 
     useEffect(
         () => () => {
@@ -98,8 +101,7 @@ export const JuiciestPage: FC = () => {
     );
 
     return (
-        <Page>
-            {isFetching ? <AppLoader /> : null}
+        <PageLayout>
             <VStack align='center'>
                 <SearchPanel getFoundRecipes={getFoundRecipes} title='Самое сочное' />
             </VStack>
@@ -131,6 +133,11 @@ export const JuiciestPage: FC = () => {
                 )}
             </VStack>
             {filteredRecipes && filteredRecipes.length > 0 ? null : <RelevantKitchen />}
-        </Page>
+
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
+            {isFetching && <AppLoader />}
+        </PageLayout>
     );
 };

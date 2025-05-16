@@ -1,4 +1,4 @@
-import { apiSlice } from '~/shared/api';
+import { apiSlice, Tags } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '~/shared/constants/localStorage';
 
@@ -18,7 +18,9 @@ export const authApi = apiSlice.injectEndpoints({
                 method: 'GET',
                 url: ApiEndpoints.CHECK_AUTH,
             }),
+            providesTags: [Tags.API],
         }),
+
         registration: builder.mutation<AuthResponse, Omit<SignUpFormData, 'confirmPassword'>>({
             query: (body) => ({
                 body,
@@ -32,6 +34,7 @@ export const authApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 url: ApiEndpoints.LOGIN,
             }),
+            invalidatesTags: [Tags.API],
             transformResponse: (response, meta) => {
                 const headers = meta?.response?.headers;
                 const customHeader = headers?.get('Authentication-Access');

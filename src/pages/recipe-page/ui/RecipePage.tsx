@@ -1,15 +1,18 @@
 import { VStack } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
-import { setAppError } from '~/app/store/app-slice';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetRecipeByIdQuery } from '~/entities/recipe';
 import avatar1 from '~/shared/assets/images/Avatar.png';
+import { Alert } from '~/shared/components/alert';
 import { UserCard } from '~/shared/components/card/ui/user-card/UserCard';
+import { PageLayout } from '~/shared/components/layouts/ui/page-layout/PageLayout';
+import { AppLoader } from '~/shared/components/loader';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
-import { Page } from '~/shared/components/page/ui/Page';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { UrlState } from '~/shared/types/url';
 
 import { NutritionValueBlock } from './calorie-content/NutritionValueBlock';
@@ -22,8 +25,14 @@ export const RecipePage: FC = () => {
     const navigate = useNavigate();
     const location: { state: UrlState } = useLocation();
     const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const { data: recipe, isLoading, isError: isErrorRecipe } = useGetRecipeByIdQuery(recipeId!);
+    const {
+        data: recipe,
+        isLoading,
+        isError: isErrorRecipe,
+        error,
+    } = useGetRecipeByIdQuery(recipeId!);
 
     useEffect(() => {
         if (isErrorRecipe && location.state.fromPath) {
@@ -45,34 +54,33 @@ export const RecipePage: FC = () => {
             navigate(location.state.fromPath, {
                 state,
             });
-            dispatch(setAppError('На сервере произошла ошибка'));
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
-    }, [dispatch, isErrorRecipe, location.state, navigate]);
+    }, [dispatch, isErrorRecipe, location.state, navigate, error]);
 
     if (!recipe) {
         return null;
     }
     return (
-        <Page>
+        <PageLayout>
             <VStack align='center' spacing={{ base: '24px', lg: '40px' }}>
-                {isLoading ? (
-                    'LOADING'
-                ) : (
-                    <>
-                        <HeaderRecipe recipe={recipe} />
-                        <NutritionValueBlock nutritionValue={recipe.nutritionValue} />
-                        <IngredientsBlock items={recipe.ingredients} portions={recipe.portions} />
-                        <CookingSteps steps={recipe.steps} />
-                        <UserCard
-                            avatar={avatar1}
-                            userName='Сергей Разумов'
-                            email='@serge25'
-                            subscribersCount={125}
-                        />
-                        <NewRecipesBlock />
-                    </>
-                )}
+                <HeaderRecipe recipe={recipe} />
+                <NutritionValueBlock nutritionValue={recipe.nutritionValue} />
+                <IngredientsBlock items={recipe.ingredients} portions={recipe.portions} />
+                <CookingSteps steps={recipe.steps} />
+                <UserCard
+                    avatar={avatar1}
+                    userName='Сергей Разумов'
+                    email='@serge25'
+                    subscribersCount={125}
+                />
+                <NewRecipesBlock />
             </VStack>
-        </Page>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
+        </PageLayout>
     );
 };

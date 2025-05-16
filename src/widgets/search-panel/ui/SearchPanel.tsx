@@ -1,12 +1,13 @@
 import { Box, Button, Heading, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
-import { setAppError } from '~/app/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { getSubcategoriesIdsFilter, useGetCategoriesQuery } from '~/entities/category';
 import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import FilterMenu from '~/shared/assets/icons/components/Filter';
+import { Alert } from '~/shared/components/alert';
 import { Loader } from '~/shared/components/loader';
 import {
     ALLERGEN,
@@ -15,6 +16,7 @@ import {
     FILTER_BUTTON,
     LOADER_SEARCH_BLOCK,
 } from '~/shared/constants/tests';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { Category } from '~/shared/types/categories';
 import {
     AllergensExclusion,
@@ -49,6 +51,7 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
     const [canSearch, setCanSearch] = useState(false);
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const { data: categories } = useGetCategoriesQuery();
     const {
@@ -72,7 +75,7 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
     const {
         data: recipes,
         isLoading,
-        isError,
+        error,
     } = useGetRecipesQuery(
         {
             allergens: getParam(allergen),
@@ -83,10 +86,6 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         },
         { skip: !canSearch },
     );
-
-    if (isError) {
-        dispatch(setAppError('ошибка'));
-    }
 
     const handleDrawerClose = () => {
         setIsOpenDrawer(false);
@@ -128,6 +127,12 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         },
         [pathname],
     );
+
+    useEffect(() => {
+        if (error) {
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
+        }
+    }, [error]);
 
     return (
         <VStack
@@ -223,6 +228,9 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
                 onFindRecipe={handleSearchInit}
                 onClose={handleDrawerClose}
             />
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </VStack>
     );
 };

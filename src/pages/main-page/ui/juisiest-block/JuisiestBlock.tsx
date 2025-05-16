@@ -1,18 +1,21 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Button, Heading, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
+import { Alert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
+
+import { THE_JUICIEST_ } from '../../model/constants/mainpage';
 
 export const JuisiestBlock: FC = () => {
     const { data: categories } = useGetCategoriesQuery();
@@ -21,11 +24,11 @@ export const JuisiestBlock: FC = () => {
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const {
         data: recipes,
-        isError,
+        error,
         isLoading,
     } = useGetRecipesQuery({
         page: 1,
@@ -75,18 +78,16 @@ export const JuisiestBlock: FC = () => {
             );
         });
     }
-    const title = 'Самое сочное ';
-
     useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('ошибка'));
+        if (error) {
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
-    }, [isError, dispatch]);
+    }, [error]);
+
     return (
         <Box>
-            {isLoading ? <AppLoader /> : null}
             <HStack justify='space-between'>
-                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{title}</Heading>
+                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{THE_JUICIEST_}</Heading>
                 <Button
                     data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
                     onClick={handleSelection}
@@ -101,7 +102,6 @@ export const JuisiestBlock: FC = () => {
                     Вся подборка
                 </Button>
             </HStack>
-
             <Stack
                 direction={{ base: 'column', md: 'row', lg: 'column', '2xl': 'row' }}
                 wrap='wrap'
@@ -127,6 +127,11 @@ export const JuisiestBlock: FC = () => {
                     Вся подборка
                 </Button>
             </Stack>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </Box>
     );
 };

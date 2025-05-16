@@ -1,19 +1,21 @@
 import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
-import { memo, useEffect, useMemo } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetCategoryRecipesQuery } from '~/entities/recipe';
 import { WithoutImageCard } from '~/shared/components/card/ui/without-image-card/WithoutImageCard';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
+import { Alert } from '../../alert';
 import { WithoutTextCard } from '../../card/ui/without-text-card/WithoutTextCard';
 import { getRandomId } from '../model/lib/getRandomId';
 
 export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
     const { data: categories } = useGetCategoriesQuery();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
+
     const limit = 5;
 
     const { randomSubcategoryId, randomCategoryId } = useMemo(
@@ -21,7 +23,7 @@ export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
         [categories, category],
     );
 
-    const { data: randomSubcategoryRecipes, isError } = useGetCategoryRecipesQuery(
+    const { data: randomSubcategoryRecipes, error } = useGetCategoryRecipesQuery(
         {
             categoryId: randomSubcategoryId,
             limit,
@@ -32,10 +34,10 @@ export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
     const randomCategory = categories?.find((category) => category._id === randomCategoryId);
 
     useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
+        if (error) {
+            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
-    }, [isError, dispatch]);
+    }, [error]);
 
     return (
         <VStack
@@ -47,6 +49,9 @@ export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
             mb={{ base: '16px', lg: '0' }}
             mt={{ base: '32px', lg: '40px' }}
         >
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
             <Stack
                 w='100%'
                 direction={{ base: 'column', lg: 'row' }}

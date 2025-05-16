@@ -6,7 +6,7 @@ import { useLocation } from 'react-router';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoryByIdQuery } from '~/entities/category';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
-import { Page } from '~/shared/components/page/ui/Page';
+import { PageLayout } from '~/shared/components/layouts';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
@@ -45,7 +45,7 @@ export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
     if (!category) return null;
 
     return (
-        <Page>
+        <PageLayout>
             <VStack align='center'>
                 <SearchPanel
                     title={category.title}
@@ -85,6 +85,6 @@ export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
                     </>
                 )}
             </VStack>
-        </Page>
+        </PageLayout>
     );
 };

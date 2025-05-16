@@ -3,8 +3,8 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch } from '~/app/store/hooks';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
+import { PageLayout } from '~/shared/components/layouts';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
-import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
@@ -27,7 +27,7 @@ export const MainPage: FC = () => {
     }, [dispatch]);
 
     return (
-        <Page>
+        <PageLayout>
             <VStack align='center'>
                 <SearchPanel title={TITLE} getFoundRecipes={getFoundRecipes} />
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
@@ -62,6 +62,6 @@ export const MainPage: FC = () => {
                     )}
                 </VStack>
             </VStack>
-        </Page>
+        </PageLayout>
     );
 };

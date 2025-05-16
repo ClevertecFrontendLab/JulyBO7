@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
-export const Page: FC<{ children: ReactNode }> = ({ children }) => (
+export const PageLayout: FC<{ children: ReactNode }> = ({ children }) => (
     <Box
         as='main'
         height='100%'
