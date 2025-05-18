@@ -6,21 +6,35 @@ import CrossOutEyeIcon from '~/shared/assets/icons/components/CrossOutEye';
 import EyeIcon from '~/shared/assets/icons/components/Eye';
 
 import { ValidationMessages } from '../../model/constants/validationMessages';
+import { AccountRecoveryFormData } from '../../model/schemas/accountRecoveryFormSchema';
+import { ForgotPasswordFormData } from '../../model/schemas/forgotPasswordFormSchema';
 import { LoginFormData } from '../../model/schemas/loginFormSchema';
 import { SignUpFormData } from '../../model/schemas/signUpFormSchema';
 
 type FormInputProps = {
     label: string;
-    fieldName: keyof SignUpFormData;
-    register: UseFormRegister<SignUpFormData | LoginFormData>;
+    fieldName: keyof SignUpFormData | keyof AccountRecoveryFormData;
+    register: UseFormRegister<
+        SignUpFormData | LoginFormData | AccountRecoveryFormData | ForgotPasswordFormData
+    >;
     placeholder: string;
     error?: FieldError;
     type?: 'password' | 'default';
     note?: ValidationMessages;
+    isErrorBorderColor?: boolean;
 };
 
 export const FormInput = memo<FormInputProps>((props) => {
-    const { label, fieldName, register, placeholder, error, type = 'default', note } = props;
+    const {
+        label,
+        fieldName,
+        register,
+        placeholder,
+        error,
+        type = 'default',
+        note,
+        isErrorBorderColor,
+    } = props;
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -38,7 +52,8 @@ export const FormInput = memo<FormInputProps>((props) => {
                         variant='outlineLime'
                         size='m'
                         {...register(fieldName)}
-                        borderColor={error ? 'error.100' : 'lime.150'}
+                        borderColor={error || isErrorBorderColor ? 'error.100' : 'lime.150'}
+                        borderWidth={error || isErrorBorderColor ? '2px' : '1px'}
                     />
                     {note && (
                         <Text textStyle='xs' color='gray.150'>

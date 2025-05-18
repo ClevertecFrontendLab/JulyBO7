@@ -9,14 +9,19 @@ export const handleServerErrors = (
     errorData: FetchBaseQueryError,
     setErrorMessage: (error: string) => void,
     handleNetworkError?: () => void,
+    handleError403?: () => void,
 ) => {
     if (errorData.data) {
-        const apiErrorMessage = errorData.data as ApiError;
+        const apiError = errorData.data as ApiError;
 
-        if (Array.isArray(apiErrorMessage.message)) {
-            setErrorMessage(apiErrorMessage.message[0]);
+        if (apiError.statusCode === 403 && handleError403) {
+            handleError403();
+            return;
+        }
+        if (Array.isArray(apiError.message)) {
+            setErrorMessage(apiError.message[0]);
         } else {
-            setErrorMessage(apiErrorMessage.message);
+            setErrorMessage(apiError.message);
         }
     } else {
         if ('error' in errorData) {

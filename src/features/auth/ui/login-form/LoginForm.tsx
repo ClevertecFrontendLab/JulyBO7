@@ -10,6 +10,7 @@ import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
+import { SUCCESS_DATA_RECOVERY } from '../../model/constants/loginFormText';
 import { LoginFormData, loginFormSchema } from '../../model/schemas/loginFormSchema';
 import { useLoginMutation } from '../../model/services/authApi';
 import { FormInput } from '../form-input/FormInput';
@@ -18,24 +19,24 @@ import { FormModal } from '../form-modal/FormModal';
 export const LoginForm: FC = () => {
     const navigate = useNavigate();
 
-    const defaultValues = {
-        login: '',
-        password: '',
-    };
     const {
         register,
         handleSubmit,
         getValues,
         formState: { errors },
     } = useForm<LoginFormData>({
-        defaultValues,
+        defaultValues: {
+            login: '',
+            password: '',
+        },
         mode: 'all',
         resolver: zodResolver(loginFormSchema),
     });
-    const [trigger, { isLoading }] = useLoginMutation();
+    const [trigger, { isLoading, error: logInError }] = useLoginMutation();
 
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const onSubmit: SubmitHandler<LoginFormData> = useCallback(
         async ({ login, password }) => {
@@ -64,19 +65,7 @@ export const LoginForm: FC = () => {
     }, [getValues, onSubmit]);
 
     return (
-        <>
-            {isLoading && <AppLoader />}
-            {errorMessage && (
-                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
-            )}
-
-            <FormModal
-                isOpen={isOpenModal}
-                onClose={handleCloseModal}
-                type='loginError'
-                onRelogin={handleRelogin}
-            />
-
+        <VStack justify='center'>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack gap='24px' w='100%'>
                     <FormInput
@@ -99,6 +88,36 @@ export const LoginForm: FC = () => {
                     </Button>
                 </VStack>
             </form>
-        </>
+            <Button variant='clear' onClick={() => setIsOpenModal(true)}>
+                Забыли логин или пароль?
+            </Button>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
+            {successMessage && (
+                <Alert
+                    onClose={() => setSuccessMessage('')}
+                    title={successMessage}
+                    type='success'
+                />
+            )}
+            {logInError ? (
+                <FormModal
+                    isOpen={isOpenModal}
+                    onClose={handleCloseModal}
+                    type='loginError'
+                    onRelogin={handleRelogin}
+                />
+            ) : (
+                <FormModal
+                    isOpen={isOpenModal}
+                    onClose={handleCloseModal}
+                    type='dataRecovery'
+                    onSuccessDataRecovery={() => setSuccessMessage(SUCCESS_DATA_RECOVERY)}
+                />
+            )}
+        </VStack>
     );
 };

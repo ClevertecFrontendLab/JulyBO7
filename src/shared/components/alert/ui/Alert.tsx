@@ -49,7 +49,11 @@ export const Alert: FC<AlertProps> = ({ onClose, text, type, title }) => {
             p='12px 16px'
             w={{ base: '328px', lg: '400px' }}
         >
-            {type === 'error' ? <AlertErrorIcon color='bgColor' /> : <CheckCircleIcon />}
+            {type === 'error' ? (
+                <AlertErrorIcon color='bgColor' mr='12px' />
+            ) : (
+                <CheckCircleIcon color='bgColor' bg='green.500' mr='12px' />
+            )}
             <Box>
                 <AlertTitle color='bgColor' textStyle='m' fontWeight={700}>
                     {title}
