@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import { EMAIL_INPUT, SUBMIT_BUTTON } from '~/shared/constants/tests';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import {
@@ -47,6 +48,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSucces
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormInput
+                    dataTestId={EMAIL_INPUT}
                     label='Ваш e-mail'
                     fieldName='email'
                     register={register}
@@ -54,7 +56,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSucces
                     error={errors.email}
                     isErrorBorderColor={!!serverError && !getFieldState('email').isDirty}
                 />
-                <Button w='100%' type='submit' mt='24px'>
+                <Button data-test-id={SUBMIT_BUTTON} w='100%' type='submit' mt='24px'>
                     Получить код
                 </Button>
             </form>

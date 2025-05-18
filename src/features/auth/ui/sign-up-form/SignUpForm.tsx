@@ -7,6 +7,17 @@ import { useLocation } from 'react-router';
 
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import {
+    CONFIRM_PASSWORD_INPUT,
+    EMAIL_INPUT,
+    FIRST_NAME_INPUT,
+    LAST_NAME_INPUT,
+    LOGIN_INPUT,
+    PASSWORD_INPUT,
+    SIGN_UP_FORM,
+    SIGN_UP_PROGRESS,
+    SUBMIT_BUTTON,
+} from '~/shared/constants/tests';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { STEP_1, STEP_2 } from '../../model/constants/signUpFormText';
@@ -83,6 +94,11 @@ export const SignUpForm: FC = () => {
         setIsOpenModal(false);
     }, []);
 
+    const modalType =
+        location.state && location.state.isVerified === false
+            ? 'verificationError'
+            : 'verification';
+
     useEffect(() => {
         if (location.state && location.state.isVerified === false) {
             setIsOpenModal(true);
@@ -100,16 +116,13 @@ export const SignUpForm: FC = () => {
                 isOpen={isOpenModal}
                 onClose={handleCloseModal}
                 email={getValues().email}
-                type={
-                    location.state && location.state.isVerified === false
-                        ? 'verificationError'
-                        : 'verification'
-                }
+                type={modalType}
             />
             <Text as='label' fontSize='16px' fontWeight='400'>
                 {step == 1 ? STEP_1 : STEP_2}
             </Text>
             <Progress
+                data-test-id={SIGN_UP_PROGRESS}
                 hasStripe
                 max={6}
                 value={progressValue.length}
@@ -119,9 +132,10 @@ export const SignUpForm: FC = () => {
                 mb='24px'
                 className={cls.progress}
             />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form data-test-id={SIGN_UP_FORM} onSubmit={handleSubmit(onSubmit)}>
                 <VStack display={step === 1 ? 'flex' : 'none'} gap='24px'>
                     <FormInput
+                        dataTestId={FIRST_NAME_INPUT}
                         label='Ваше имя'
                         fieldName='firstName'
                         register={register}
@@ -129,6 +143,7 @@ export const SignUpForm: FC = () => {
                         error={errors.firstName}
                     />
                     <FormInput
+                        dataTestId={LAST_NAME_INPUT}
                         label='Ваша фамилия'
                         fieldName='lastName'
                         register={register}
@@ -136,6 +151,7 @@ export const SignUpForm: FC = () => {
                         error={errors.lastName}
                     />
                     <FormInput
+                        dataTestId={EMAIL_INPUT}
                         label='Ваш e-mail'
                         fieldName='email'
                         register={register}
@@ -146,6 +162,7 @@ export const SignUpForm: FC = () => {
 
                 <VStack display={step === 1 ? 'none' : 'flex'} gap='24px' w='100%'>
                     <FormInput
+                        dataTestId={LOGIN_INPUT}
                         label='Логин для входа на сайт'
                         fieldName='login'
                         register={register}
@@ -154,6 +171,7 @@ export const SignUpForm: FC = () => {
                         note={ValidationMessages.LOGIN_MIN_LENGTH_ONLY_LATIN}
                     />
                     <FormInput
+                        passwordDataTestId={PASSWORD_INPUT}
                         label='Пароль'
                         fieldName='password'
                         register={register}
@@ -163,6 +181,7 @@ export const SignUpForm: FC = () => {
                         note={ValidationMessages.PASSWORD_MIN_LENGTH_NUMBER_CAPITAL_LETTER}
                     />
                     <FormInput
+                        passwordDataTestId={CONFIRM_PASSWORD_INPUT}
                         label='Повторите пароль'
                         fieldName='confirmPassword'
                         register={register}
@@ -170,12 +189,13 @@ export const SignUpForm: FC = () => {
                         error={errors.confirmPassword}
                         type='password'
                     />
-                    <Button type='submit' w='100%' mt='24px'>
+                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='24px'>
                         Зарегистрироваться
                     </Button>
                 </VStack>
             </form>
             <Button
+                data-test-id={SUBMIT_BUTTON}
                 w='100%'
                 onClick={handleNextStep}
                 display={step === 1 ? 'block' : 'none'}

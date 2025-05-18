@@ -1,11 +1,16 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
+import { setIsAuthAction } from '~/app/store/app-slice';
 import { useAppDispatch } from '~/app/store/hooks';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
+import { useCheckAuthQuery } from '~/features/auth';
 import { PageLayout } from '~/shared/components/layouts';
+import { AppLoader } from '~/shared/components/loader';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
+import { AppRoutes, routePaths } from '~/shared/config/router';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
 
@@ -15,8 +20,10 @@ import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 
 export const MainPage: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
+    const { data, error, isLoading } = useCheckAuthQuery();
 
     const getFoundRecipes = useCallback((recipes: Recipe[]) => {
         setFilteredRecipes(recipes);
@@ -25,6 +32,16 @@ export const MainPage: FC = () => {
     useEffect(() => {
         dispatch(removeAllFiltersAction());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (error && 'status' in error && error.status === 403) {
+            navigate(routePaths[AppRoutes.LOGIN]);
+            return;
+        }
+        if (data) {
+            dispatch(setIsAuthAction(true));
+        }
+    }, [error, navigate, dispatch, data]);
 
     return (
         <PageLayout>
@@ -62,6 +79,7 @@ export const MainPage: FC = () => {
                     )}
                 </VStack>
             </VStack>
+            {isLoading && <AppLoader />}
         </PageLayout>
     );
 };

@@ -4,6 +4,7 @@ import { FC, useState } from 'react';
 
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import { VERIFICATION_CODE_INPUT } from '~/shared/constants/tests';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { useVerifyOtpMutation } from '../../model/services/authApi';
@@ -42,8 +43,8 @@ export const OtpPasswordForm: FC<OtpPasswordFormProps> = ({
             setPinInputValue('');
         }
     };
-    const pinInputFields = Array.from({ length: otpPasswordLength }, () => (
-        <PinInputField color='lime.800' />
+    const pinInputFields = Array.from({ length: otpPasswordLength }, (_, idx) => (
+        <PinInputField data-test-id={`${VERIFICATION_CODE_INPUT}-${idx}`} color='lime.800' />
     ));
     return (
         <HStack>

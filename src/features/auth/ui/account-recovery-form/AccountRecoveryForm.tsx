@@ -1,4 +1,4 @@
-import { Button, Heading, VStack } from '@chakra-ui/react';
+import { Button, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { FC, useState } from 'react';
@@ -6,9 +6,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import {
+    CONFIRM_PASSWORD_INPUT,
+    LOGIN_INPUT,
+    PASSWORD_INPUT,
+    SUBMIT_BUTTON,
+} from '~/shared/constants/tests';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
-import { ACCOUNT_RECOVERY } from '../../model/constants/dataRecovery';
 import { ValidationMessages } from '../../model/constants/validationMessages';
 import {
     AccountRecoveryFormData,
@@ -53,19 +58,10 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
 
     return (
         <>
-            <Heading
-                fontSize='24px'
-                fontWeight='700'
-                lineHeight='32px'
-                textAlign='center'
-                mb='24px'
-            >
-                {ACCOUNT_RECOVERY}
-            </Heading>
-
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack gap='24px' w='100%'>
                     <FormInput
+                        dataTestId={LOGIN_INPUT}
                         label='Логин для входа на сайт'
                         fieldName='login'
                         register={register}
@@ -74,6 +70,7 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
                         note={ValidationMessages.LOGIN_MIN_LENGTH_ONLY_LATIN}
                     />
                     <FormInput
+                        passwordDataTestId={PASSWORD_INPUT}
                         label='Пароль'
                         fieldName='password'
                         register={register}
@@ -83,6 +80,7 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
                         note={ValidationMessages.PASSWORD_MIN_LENGTH_NUMBER_CAPITAL_LETTER}
                     />
                     <FormInput
+                        passwordDataTestId={CONFIRM_PASSWORD_INPUT}
                         label='Повторите пароль'
                         fieldName='passwordConfirm'
                         register={register}
@@ -90,7 +88,7 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
                         error={errors.passwordConfirm}
                         type='password'
                     />
-                    <Button type='submit' w='100%' mt='8px'>
+                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='8px'>
                         Зарегистрироваться
                     </Button>
                 </VStack>

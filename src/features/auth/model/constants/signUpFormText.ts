@@ -9,3 +9,5 @@ export const VERIFICATION_MODAL_NOTE =
     'Не пришло письмо? Проверьте папку Спам. По другим вопросам свяжитесь с поддержкой';
 
 export const VERIFICATION_ERROR_MODAL_NOTE = 'Остались вопросы? Свяжитесь с поддержкой';
+export const WE_SENT_YOU_EMAIL = 'Мы отправили вам на почту';
+export const LINK_FOR_VERIFICATION = 'ссылку для верификации';

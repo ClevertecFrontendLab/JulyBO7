@@ -8,6 +8,13 @@ import { useNavigate } from 'react-router';
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import {
+    FORGOT_PASSWORD,
+    LOGIN_INPUT,
+    PASSWORD_INPUT,
+    SIGN_IN_FORM,
+    SUBMIT_BUTTON,
+} from '~/shared/constants/tests';
 import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { SUCCESS_DATA_RECOVERY } from '../../model/constants/loginFormText';
@@ -40,7 +47,6 @@ export const LoginForm: FC = () => {
 
     const onSubmit: SubmitHandler<LoginFormData> = useCallback(
         async ({ login, password }) => {
-            console.log('ON SUBMIT!');
             try {
                 await trigger({ login, password }).unwrap();
                 navigate(routePaths[AppRoutes.MAIN]);
@@ -49,6 +55,8 @@ export const LoginForm: FC = () => {
                 handleServerErrors(
                     error as FetchBaseQueryError,
                     setErrorMessage,
+                    undefined,
+                    undefined,
                     handleNetworkError,
                 );
             }
@@ -66,9 +74,10 @@ export const LoginForm: FC = () => {
 
     return (
         <VStack justify='center'>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form data-test-id={SIGN_IN_FORM} onSubmit={handleSubmit(onSubmit)}>
                 <VStack gap='24px' w='100%'>
                     <FormInput
+                        dataTestId={LOGIN_INPUT}
                         label='Логин для входа на сайт'
                         fieldName='login'
                         register={register}
@@ -76,6 +85,7 @@ export const LoginForm: FC = () => {
                         error={errors.login}
                     />
                     <FormInput
+                        passwordDataTestId={PASSWORD_INPUT}
                         label='Пароль'
                         fieldName='password'
                         register={register}
@@ -83,12 +93,16 @@ export const LoginForm: FC = () => {
                         error={errors.password}
                         type='password'
                     />
-                    <Button type='submit' w='100%' mt='88px'>
+                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='88px'>
                         Войти
                     </Button>
                 </VStack>
             </form>
-            <Button variant='clear' onClick={() => setIsOpenModal(true)}>
+            <Button
+                data-test-id={FORGOT_PASSWORD}
+                variant='clear'
+                onClick={() => setIsOpenModal(true)}
+            >
                 Забыли логин или пароль?
             </Button>
 
