@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    base: command === 'build' ? '/JulyBO7/' : '/',
     plugins: [react()],
     server: {
         host: true,
