@@ -4,13 +4,13 @@ import { Outlet } from 'react-router';
 
 import cls from './AppLayout.module.scss';
 
-type AppLayoutProps = {
-    header?: ReactNode;
-    menu?: ReactNode;
-    footer?: ReactNode;
-    sidebar?: ReactNode;
-    children?: ReactNode;
-};
+type AppLayoutProps = Partial<{
+    header: ReactNode;
+    menu: ReactNode;
+    footer: ReactNode;
+    sidebar: ReactNode;
+    children: ReactNode;
+}>;
 
 export const AppLayout: FC<AppLayoutProps> = (props) => {
     const { header, menu, footer, sidebar, children } = props;

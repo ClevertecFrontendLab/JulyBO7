@@ -1,13 +1,16 @@
-import { Box, Image, ModalCloseButton, ModalContent, Text, VStack } from '@chakra-ui/react';
+import { Box, Image, Link, ModalCloseButton, ModalContent, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { NavLink } from 'react-router';
 
 import verificationErrorModal from '~/shared/assets/Breakfast2.png';
+import CloseInCircle from '~/shared/assets/icons/components/CrossInCircle';
 import { CLOSE_BUTTON, EMAIL_VERIFICATION_FAILED_MODAL } from '~/shared/constants/tests';
 
 import {
     VERIFICATION_ERROR_MODAL_HEADER,
     VERIFICATION_ERROR_MODAL_NOTE,
     VERIFICATION_ERROR_MODAL_TEXT,
+    WITH_SUPPORT,
 } from '../../../model/constants/signUpFormText';
 
 export const VerificationErrorModal: FC = () => (
@@ -18,7 +21,9 @@ export const VerificationErrorModal: FC = () => (
         p='32px'
         w={{ base: '316px', lg: '396px' }}
     >
-        <ModalCloseButton data-test-id={CLOSE_BUTTON} />
+        <ModalCloseButton data-test-id={CLOSE_BUTTON}>
+            <CloseInCircle />
+        </ModalCloseButton>
         <VStack gap='32px' flexGrow={1}>
             <Image src={verificationErrorModal} w={{ base: '108px', lg: '206px' }} />
             <Box>
@@ -31,8 +36,11 @@ export const VerificationErrorModal: FC = () => (
                 </Text>
             </Box>
 
-            <Text textStyle='xs' textAlign='center' color='gray.100'>
+            <Text as='span' textStyle='xs' textAlign='center' color='gray.100'>
                 {VERIFICATION_ERROR_MODAL_NOTE}
+                <Link as={NavLink} to='#' textDecoration='solid'>
+                    {WITH_SUPPORT}
+                </Link>
             </Text>
         </VStack>
     </ModalContent>

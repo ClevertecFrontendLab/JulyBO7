@@ -12,7 +12,11 @@ import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath'
 import { Category } from '~/shared/types/categories';
 import { SearchPanel } from '~/widgets/search-panel';
 
-export const CategoryPage: FC<{ categoryData: Category }> = ({ categoryData }) => {
+type CategoryPageProps = {
+    categoryData: Category;
+};
+export const CategoryPage: FC<CategoryPageProps> = (props) => {
+    const { categoryData } = props;
     const { pathname } = useLocation();
     const dispatch = useAppDispatch();
 

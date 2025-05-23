@@ -15,7 +15,8 @@ type SubcategoryPageProps = {
     subcategoryData: SubCategory;
 };
 
-export const SubcategoryPage: FC<SubcategoryPageProps> = ({ categoryData, subcategoryData }) => {
+export const SubcategoryPage: FC<SubcategoryPageProps> = (props) => {
+    const { categoryData, subcategoryData } = props;
     const { data: categories } = useGetCategoriesQuery();
     const { data: subcategoryRecipes, isLoading: subcatRecipesIsLoading } =
         useGetCategoryRecipesQuery({

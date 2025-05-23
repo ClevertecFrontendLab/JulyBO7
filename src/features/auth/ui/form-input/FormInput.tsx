@@ -40,7 +40,6 @@ export const FormInput = memo<FormInputProps>((props) => {
         label,
         fieldName,
         register,
-
         error,
         type = 'default',
         note,

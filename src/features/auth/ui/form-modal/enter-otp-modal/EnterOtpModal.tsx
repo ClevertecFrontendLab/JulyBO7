@@ -1,6 +1,7 @@
 import { Image, ModalCloseButton, ModalContent, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
+import CloseInCircle from '~/shared/assets/icons/components/CrossInCircle';
 import otpPasswordModal from '~/shared/assets/otp.png';
 import { CLOSE_BUTTON, VERIFICATION_CODE_MODAL } from '~/shared/constants/tests';
 
@@ -18,7 +19,8 @@ type EnterOtpModalProps = {
     onSubmit: () => void;
 };
 
-export const EnterOtpModal: React.FC<EnterOtpModalProps> = ({ email, onSubmit }) => {
+export const EnterOtpModal: React.FC<EnterOtpModalProps> = (props) => {
+    const { email, onSubmit } = props;
     const [isShowInvalidCodeError, setIsShowInvalidCodeError] = useState(false);
 
     const handleFailedSubmit = (value: boolean) => {
@@ -33,7 +35,9 @@ export const EnterOtpModal: React.FC<EnterOtpModalProps> = ({ email, onSubmit })
             p='32px'
             w={{ base: '316px', lg: '396px' }}
         >
-            <ModalCloseButton data-test-id={CLOSE_BUTTON} />
+            <ModalCloseButton data-test-id={CLOSE_BUTTON}>
+                <CloseInCircle />
+            </ModalCloseButton>
             <VStack flexGrow={1}>
                 <Image src={otpPasswordModal} w={{ base: '108px', lg: '206px' }} mb='32px' />
                 {isShowInvalidCodeError && (
@@ -42,12 +46,10 @@ export const EnterOtpModal: React.FC<EnterOtpModalProps> = ({ email, onSubmit })
                     </Text>
                 )}
                 <Text color='gray.400' fontSize='m' mb='16px' textAlign='center'>
-                    <Text as='span'>{`${WE_SENT_YOU_EMAIL} `}</Text>
-                    <Text as='span' fontWeight={600} fontSize='m'>
-                        {`${email} `}
-                    </Text>
-                    <Text as='span'>{`${SIX_DIGIT_CODE} `}</Text>
-                    <Text as='span'>{`${ENTER_IT_BELOW}`}</Text>
+                    <Text>{WE_SENT_YOU_EMAIL}</Text>
+                    <Text fontWeight={600}>{email}</Text>
+                    <Text as='span'>{SIX_DIGIT_CODE}</Text>
+                    <Text as='span'>{ENTER_IT_BELOW}</Text>
                 </Text>
                 <OtpPasswordForm
                     email={email}

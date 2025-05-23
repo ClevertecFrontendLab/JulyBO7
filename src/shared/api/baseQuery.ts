@@ -39,8 +39,6 @@ export const baseQueryWithReauth: BaseQueryFn<
                     }
 
                     result = await baseQuery(args, api, extraOptions);
-                } else {
-                    // api.dispatch(loggedOut());
                 }
             } finally {
                 release();

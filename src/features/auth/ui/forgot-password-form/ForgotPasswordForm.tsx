@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import React, { useRef } from 'react';
+import { FC, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '~/shared/components/alert';
@@ -20,7 +20,8 @@ type ForgotPasswordFormProps = {
     onSuccessSubmit: (email: string) => void;
 };
 
-export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSuccessSubmit }) => {
+export const ForgotPasswordForm: FC<ForgotPasswordFormProps> = (props) => {
+    const { onSuccessSubmit } = props;
     const {
         register,
         handleSubmit,
@@ -71,7 +72,15 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSucces
                     isErrorBorderColor={!!serverError && !getFieldState('email').isDirty}
                     onBlur={handleInputBlur}
                 />
-                <Button data-test-id={SUBMIT_BUTTON} w='100%' type='submit' mt='24px'>
+                <Button
+                    data-test-id={SUBMIT_BUTTON}
+                    w='100%'
+                    type='submit'
+                    mt='24px'
+                    h='48px'
+                    fontSize='l'
+                    fontWeight={600}
+                >
                     Получить код
                 </Button>
             </form>

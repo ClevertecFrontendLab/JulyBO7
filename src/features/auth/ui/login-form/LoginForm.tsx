@@ -118,7 +118,15 @@ export const LoginForm: FC = () => {
                         error={errors.password}
                         type='password'
                     />
-                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='88px'>
+                    <Button
+                        data-test-id={SUBMIT_BUTTON}
+                        type='submit'
+                        w='100%'
+                        mt='88px'
+                        h='48px'
+                        fontSize='l'
+                        fontWeight={600}
+                    >
                         Войти
                     </Button>
                 </VStack>
@@ -138,6 +146,9 @@ export const LoginForm: FC = () => {
                     type='error'
                     text={errorMessage.current.description}
                     onClose={handleErrorAlertClose}
+                    bottom={{ base: '100px', lg: '80px' }}
+                    left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
+                    transform='translateX(0)'
                 />
             )}
             {successMessage && (
@@ -145,6 +156,8 @@ export const LoginForm: FC = () => {
                     onClose={() => setSuccessMessage('')}
                     title={successMessage}
                     type='success'
+                    bottom={{ base: '100px', lg: '80px' }}
+                    left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
                 />
             )}
             {logInError && 'status' in logInError && logInError.status === 500 && isOpenModal && (
@@ -155,6 +168,7 @@ export const LoginForm: FC = () => {
                     onRelogin={handleRelogin}
                 />
             )}
+
             {!logInError && isOpenModal && (
                 <FormModal
                     isOpen={isOpenModal}

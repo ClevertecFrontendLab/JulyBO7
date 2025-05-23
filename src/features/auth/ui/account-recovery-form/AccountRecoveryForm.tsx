@@ -26,7 +26,9 @@ type AccountRecoveryFormProps = {
     onSuccess: () => void;
     email: string;
 };
-export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, email }) => {
+
+export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = (props) => {
+    const { onSuccess, email } = props;
     const {
         register,
         handleSubmit,
@@ -101,7 +103,15 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
                         error={errors.passwordConfirm}
                         type='password'
                     />
-                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='8px'>
+                    <Button
+                        data-test-id={SUBMIT_BUTTON}
+                        type='submit'
+                        w='100%'
+                        mt='8px'
+                        h='48px'
+                        fontSize='l'
+                        fontWeight={600}
+                    >
                         Зарегистрироваться
                     </Button>
                 </VStack>

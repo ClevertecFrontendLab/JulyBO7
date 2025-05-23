@@ -20,7 +20,8 @@ type AlertProps = {
     onClose?: () => void;
 } & ChakraAlertProps;
 
-export const Alert: FC<AlertProps> = ({ onClose, text, type, title, ...rest }) => {
+export const Alert: FC<AlertProps> = (props) => {
+    const { onClose, text, type, title, ...rest } = props;
     const { isOpen: isVisible, onClose: onCloseAlert } = useDisclosure({ defaultIsOpen: true });
 
     const handleClose = () => {

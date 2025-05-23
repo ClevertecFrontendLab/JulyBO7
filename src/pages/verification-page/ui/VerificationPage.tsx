@@ -18,5 +18,5 @@ export const VerificationPage: FC = () => {
         }
     }, [emailVerified, navigate]);
 
-    return 'VerificationPage';
+    return null;
 };

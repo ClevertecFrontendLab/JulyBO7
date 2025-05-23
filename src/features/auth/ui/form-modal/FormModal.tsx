@@ -23,18 +23,26 @@ export const FormModal: FC<FormModalProps> = (props) => {
         onSuccessDataRecovery?.();
         onClose();
     };
+    let modalContent;
+
+    switch (type) {
+        case 'loginError':
+            modalContent = <LoginErrorModal onRelogin={onRelogin} />;
+            break;
+        case 'verification':
+            modalContent = <VerificationModal email={email} />;
+            break;
+        case 'verificationError':
+            modalContent = <VerificationErrorModal />;
+            break;
+        default:
+            modalContent = <DataRecovery onSuccessAccountRecovery={handleSuccessDataRecovery} />;
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay backdropFilter='blur(4px)' bg='rgba(0, 0, 0, 0.16)' />
-            {type === 'loginError' ? (
-                <LoginErrorModal onRelogin={onRelogin} />
-            ) : type === 'verification' ? (
-                <VerificationModal email={email} />
-            ) : type === 'verificationError' ? (
-                <VerificationErrorModal />
-            ) : (
-                <DataRecovery onSuccessAccountRecovery={handleSuccessDataRecovery} />
-            )}
+            {modalContent}
         </Modal>
     );
 };

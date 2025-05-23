@@ -4,9 +4,12 @@ import { AccountRecoveryModal } from '../form-modal/account-recovery-modal/Accou
 import { EnterEmailModal } from '../form-modal/enter-email-modal/EnterEmailModal';
 import { EnterOtpModal } from '../form-modal/enter-otp-modal/EnterOtpModal';
 
-export const DataRecovery: FC<{ onSuccessAccountRecovery: () => void }> = ({
-    onSuccessAccountRecovery,
-}) => {
+type DataRecoveryProps = {
+    onSuccessAccountRecovery: () => void;
+};
+
+export const DataRecovery: FC<DataRecoveryProps> = (props) => {
+    const { onSuccessAccountRecovery } = props;
     const [recoveryStep, setRecoveryStep] = useState(1);
     const [email, setEmail] = useState('');
 

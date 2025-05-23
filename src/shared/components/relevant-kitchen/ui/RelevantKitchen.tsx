@@ -11,7 +11,10 @@ import { Alert } from '../../alert';
 import { WithoutTextCard } from '../../card/ui/without-text-card/WithoutTextCard';
 import { getRandomId } from '../model/lib/getRandomId';
 
-export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
+type RelevantKitchenProps = Partial<{ category: string }>;
+
+export const RelevantKitchen = memo<RelevantKitchenProps>((props) => {
+    const { category } = props;
     const { data: categories } = useGetCategoriesQuery();
     const [errorMessage, setErrorMessage] = useState('');
 
