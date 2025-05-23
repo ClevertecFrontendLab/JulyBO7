@@ -1,7 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { FC, useState } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '~/shared/components/alert';
@@ -12,9 +12,9 @@ import {
     PASSWORD_INPUT,
     SUBMIT_BUTTON,
 } from '~/shared/constants/tests';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { ValidationMessages } from '../../model/constants/validationMessages';
+import { AuthFormName, errorMessages } from '../../model/lib/errorMessages';
 import {
     AccountRecoveryFormData,
     accountRecoveryFormSchema,
@@ -31,6 +31,8 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
         register,
         handleSubmit,
         formState: { errors },
+        getValues,
+        setValue,
     } = useForm<AccountRecoveryFormData>({
         defaultValues: {
             login: '',
@@ -40,8 +42,8 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
         mode: 'all',
         resolver: zodResolver(accountRecoveryFormSchema),
     });
-    const [trigger, { isLoading }] = useResetPasswordMutation();
-    const [errorMessage, setErrorMessage] = useState('');
+    const [trigger, { isLoading, error: resetPasswordError }] = useResetPasswordMutation();
+    const errorMessage = useRef({ title: '', description: '' });
 
     const onSubmit: SubmitHandler<AccountRecoveryFormData> = async ({
         login,
@@ -52,8 +54,18 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
             await trigger({ login, password, passwordConfirm, email }).unwrap();
             onSuccess();
         } catch (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
+            const dataError = error as FetchBaseQueryError;
+
+            errorMessage.current.title =
+                errorMessages[AuthFormName.ACCOUNT_RECOVERY][Number(dataError.status)].title;
+            errorMessage.current.description =
+                errorMessages[AuthFormName.ACCOUNT_RECOVERY][Number(dataError.status)].description;
         }
+    };
+
+    const handleInputBlur = () => {
+        const valueWithoutSpaces = getValues('login').trim();
+        setValue('login', valueWithoutSpaces);
     };
 
     return (
@@ -68,6 +80,7 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
                         placeholder='Логин'
                         error={errors.login}
                         note={ValidationMessages.LOGIN_MIN_LENGTH_ONLY_LATIN}
+                        onBlur={handleInputBlur}
                     />
                     <FormInput
                         passwordDataTestId={PASSWORD_INPUT}
@@ -95,8 +108,16 @@ export const AccountRecoveryForm: FC<AccountRecoveryFormProps> = ({ onSuccess, e
             </form>
 
             {isLoading && <AppLoader />}
-            {errorMessage && (
-                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            {resetPasswordError && (
+                <Alert
+                    onClose={() => {
+                        errorMessage.current.description = '';
+                        errorMessage.current.title = '';
+                    }}
+                    title={errorMessage.current.title}
+                    text={errorMessage.current.description}
+                    type='error'
+                />
             )}
         </>
     );

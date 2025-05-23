@@ -38,6 +38,7 @@ export const signUpFormSchema = z
             .min(1, ValidationMessages.ENTER_LOGIN)
             .min(5, ValidationMessages.NOT_MATCH_FORMAT)
             .max(50, ValidationMessages.MAX_LENGTH)
+
             .regex(new RegExp(/^[A-Z0-9!@#$&_+-.]+$/i), {
                 message: ValidationMessages.NOT_MATCH_FORMAT,
             }),
@@ -47,12 +48,10 @@ export const signUpFormSchema = z
             .min(1, ValidationMessages.ENTER_PASSWORD)
             .min(8, ValidationMessages.NOT_MATCH_FORMAT)
             .max(50, ValidationMessages.MAX_LENGTH)
-            .regex(new RegExp(/^[A-Z0-9!@#$&_+-.]+$/i), {
+
+            .regex(new RegExp(/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$&_+-.*]+$/), {
                 message: ValidationMessages.NOT_MATCH_FORMAT,
             }),
-        // .regex(new RegExp(/^(?=.*[A-Z])(?=.*d)[A-Za-zd!@#$&_+-.]+$/), {
-        //     message: ValidationMessages.NOT_MATCH_FORMAT,
-        // }),
 
         confirmPassword: z.string().min(1, ValidationMessages.REPLICATE_PASSWORD),
     })

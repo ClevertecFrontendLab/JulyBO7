@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay } from '@chakra-ui/react';
-import { memo } from 'react';
+import { FC } from 'react';
 
 import { DataRecovery } from '../data-recovery/DataRecovery';
 import { LoginErrorModal } from './login-error-modal/LoginErrorModal';
@@ -16,7 +16,7 @@ type FormModalProps = {
     onSuccessDataRecovery?: () => void;
 };
 
-export const FormModal = memo<FormModalProps>((props) => {
+export const FormModal: FC<FormModalProps> = (props) => {
     const { isOpen, onClose, email, type, onRelogin, onSuccessDataRecovery } = props;
 
     const handleSuccessDataRecovery = () => {
@@ -37,4 +37,4 @@ export const FormModal = memo<FormModalProps>((props) => {
             )}
         </Modal>
     );
-});
+};

@@ -1,5 +1,4 @@
 import { VStack } from '@chakra-ui/react';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
@@ -12,7 +11,7 @@ import { PageLayout } from '~/shared/components/layouts/ui/page-layout/PageLayou
 import { AppLoader } from '~/shared/components/loader';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { AppRoutes, routePaths } from '~/shared/config/router';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { UrlState } from '~/shared/types/url';
 
 import { NutritionValueBlock } from './calorie-content/NutritionValueBlock';
@@ -31,7 +30,7 @@ export const RecipePage: FC = () => {
         data: recipe,
         isLoading,
         isError: isErrorRecipe,
-        error,
+        error: getRecipeByIdError,
     } = useGetRecipeByIdQuery(recipeId!);
 
     useEffect(() => {
@@ -54,9 +53,12 @@ export const RecipePage: FC = () => {
             navigate(location.state.fromPath, {
                 state,
             });
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
         }
-    }, [dispatch, isErrorRecipe, location.state, navigate, error]);
+    }, [dispatch, isErrorRecipe, location.state, navigate]);
+
+    if (getRecipeByIdError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     if (!recipe) {
         return null;

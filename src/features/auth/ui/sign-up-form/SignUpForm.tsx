@@ -1,12 +1,13 @@
 import { Button, Progress, Text, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
+import { AppRoutes, routePaths } from '~/shared/config/router';
 import {
     CONFIRM_PASSWORD_INPUT,
     EMAIL_INPUT,
@@ -18,18 +19,20 @@ import {
     SIGN_UP_PROGRESS,
     SUBMIT_BUTTON,
 } from '~/shared/constants/tests';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 
 import { STEP_1, STEP_2 } from '../../model/constants/signUpFormText';
 import { ValidationMessages } from '../../model/constants/validationMessages';
+import { AuthFormName, errorMessages } from '../../model/lib/errorMessages';
 import { SignUpFormData, signUpFormSchema } from '../../model/schemas/signUpFormSchema';
 import { useRegistrationMutation } from '../../model/services/authApi';
+import { ApiError } from '../../model/types/errors';
 import { FormInput } from '../form-input/FormInput';
 import { FormModal } from '../form-modal/FormModal';
 import cls from './SignUpForm.module.scss';
 
 export const SignUpForm: FC = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const defaultValues: SignUpFormData = {
         firstName: '',
@@ -46,16 +49,18 @@ export const SignUpForm: FC = () => {
         formState: { errors, dirtyFields },
         getFieldState,
         getValues,
+        setValue,
     } = useForm<SignUpFormData>({
         defaultValues,
         mode: 'all',
         resolver: zodResolver(signUpFormSchema),
     });
-    const [trigger, { isLoading }] = useRegistrationMutation();
+    const [trigger, { isLoading, error: signUpError }] = useRegistrationMutation();
     const [progressValue, setProgressValue] = useState<string[]>([]);
     const [step, setStep] = useState(1);
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+
+    const errorMessage = useRef({ title: '', description: '' });
 
     const onSubmit = async (formData: SignUpFormData) => {
         const body = {
@@ -69,7 +74,20 @@ export const SignUpForm: FC = () => {
             await trigger(body).unwrap();
             setIsOpenModal(true);
         } catch (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
+            const dataError = error as FetchBaseQueryError;
+            if (dataError.status === 500) {
+                const title = errorMessages[AuthFormName.SIGN_UP][dataError.status].title;
+                const description =
+                    errorMessages[AuthFormName.SIGN_UP][dataError.status].description;
+                errorMessage.current = { title, description };
+            }
+            if (dataError.status === 400 && 'data' in dataError) {
+                const apiError = dataError.data as ApiError;
+                const title = Array.isArray(apiError.message)
+                    ? apiError.message[0]
+                    : apiError.message;
+                errorMessage.current = { title, description: '' };
+            }
         }
     };
 
@@ -88,9 +106,27 @@ export const SignUpForm: FC = () => {
     }
 
     const handleNextStep = () => {
-        setStep((prev) => prev + 1);
+        const firstNameFieldState = getFieldState('firstName');
+        const lastNameFieldState = getFieldState('lastName');
+        const emailFieldState = getFieldState('email');
+
+        if (
+            !firstNameFieldState.invalid &&
+            firstNameFieldState.isDirty &&
+            !lastNameFieldState.invalid &&
+            lastNameFieldState.isDirty &&
+            !emailFieldState.invalid &&
+            emailFieldState.isDirty
+        ) {
+            setStep((prev) => prev + 1);
+        }
     };
-    const handleCloseModal = useCallback(() => {
+
+    const handleCloseVerificationModal = useCallback(() => {
+        navigate(routePaths[AppRoutes.LOGIN]);
+    }, [navigate]);
+
+    const handleCloseVerificationErrorModal = useCallback(() => {
         setIsOpenModal(false);
     }, []);
 
@@ -98,6 +134,11 @@ export const SignUpForm: FC = () => {
         location.state && location.state.isVerified === false
             ? 'verificationError'
             : 'verification';
+
+    const handleInputBlur = (fieldName: keyof SignUpFormData) => () => {
+        const valueWithoutSpaces = getValues(fieldName).trim();
+        setValue(fieldName, valueWithoutSpaces, { shouldValidate: true });
+    };
 
     useEffect(() => {
         if (location.state && location.state.isVerified === false) {
@@ -107,14 +148,13 @@ export const SignUpForm: FC = () => {
 
     return (
         <>
-            {isLoading && <AppLoader />}
-            {errorMessage && (
-                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
-            )}
-
             <FormModal
                 isOpen={isOpenModal}
-                onClose={handleCloseModal}
+                onClose={
+                    modalType === 'verification'
+                        ? handleCloseVerificationModal
+                        : handleCloseVerificationErrorModal
+                }
                 email={getValues().email}
                 type={modalType}
             />
@@ -124,8 +164,8 @@ export const SignUpForm: FC = () => {
             <Progress
                 data-test-id={SIGN_UP_PROGRESS}
                 hasStripe
-                max={6}
-                value={progressValue.length}
+                max={100}
+                value={(100 / 6) * progressValue.length}
                 isAnimated
                 bg='gray.300'
                 h='8px'
@@ -133,7 +173,11 @@ export const SignUpForm: FC = () => {
                 className={cls.progress}
             />
             <form data-test-id={SIGN_UP_FORM} onSubmit={handleSubmit(onSubmit)}>
-                <VStack display={step === 1 ? 'flex' : 'none'} gap='24px'>
+                <VStack
+                    opacity={step === 1 ? 1 : 0}
+                    position={step === 1 ? 'static' : 'absolute'}
+                    gap='24px'
+                >
                     <FormInput
                         dataTestId={FIRST_NAME_INPUT}
                         label='Ваше имя'
@@ -141,6 +185,7 @@ export const SignUpForm: FC = () => {
                         register={register}
                         placeholder='Имя'
                         error={errors.firstName}
+                        onBlur={handleInputBlur('firstName')}
                     />
                     <FormInput
                         dataTestId={LAST_NAME_INPUT}
@@ -149,6 +194,7 @@ export const SignUpForm: FC = () => {
                         register={register}
                         placeholder='Фамилия'
                         error={errors.lastName}
+                        onBlur={handleInputBlur('lastName')}
                     />
                     <FormInput
                         dataTestId={EMAIL_INPUT}
@@ -157,10 +203,27 @@ export const SignUpForm: FC = () => {
                         register={register}
                         placeholder='e-mail'
                         error={errors.email}
+                        onBlur={handleInputBlur('email')}
                     />
+                    {step === 1 && (
+                        <Button
+                            data-test-id={SUBMIT_BUTTON}
+                            type='submit'
+                            w='100%'
+                            onClick={handleNextStep}
+                            display={step === 1 ? 'block' : 'none'}
+                            mt='48px'
+                        >
+                            Дальше
+                        </Button>
+                    )}
                 </VStack>
 
-                <VStack display={step === 1 ? 'none' : 'flex'} gap='24px' w='100%'>
+                <VStack
+                    opacity={step === 1 ? 0 : 1}
+                    position={step === 1 ? 'absolute' : 'static'}
+                    gap='24px'
+                >
                     <FormInput
                         dataTestId={LOGIN_INPUT}
                         label='Логин для входа на сайт'
@@ -169,6 +232,7 @@ export const SignUpForm: FC = () => {
                         placeholder='Логин'
                         error={errors.login}
                         note={ValidationMessages.LOGIN_MIN_LENGTH_ONLY_LATIN}
+                        onBlur={handleInputBlur('login')}
                     />
                     <FormInput
                         passwordDataTestId={PASSWORD_INPUT}
@@ -189,20 +253,26 @@ export const SignUpForm: FC = () => {
                         error={errors.confirmPassword}
                         type='password'
                     />
-                    <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='24px'>
-                        Зарегистрироваться
-                    </Button>
+                    {step === 2 && (
+                        <Button data-test-id={SUBMIT_BUTTON} type='submit' w='100%' mt='24px'>
+                            Зарегистрироваться
+                        </Button>
+                    )}
                 </VStack>
             </form>
-            <Button
-                data-test-id={SUBMIT_BUTTON}
-                w='100%'
-                onClick={handleNextStep}
-                display={step === 1 ? 'block' : 'none'}
-                mt='48px'
-            >
-                Дальше
-            </Button>
+
+            {isLoading && <AppLoader />}
+            {signUpError && (
+                <Alert
+                    onClose={() => {
+                        errorMessage.current.description = '';
+                        errorMessage.current.title = '';
+                    }}
+                    title={errorMessage.current.title}
+                    text={errorMessage.current.description}
+                    type='error'
+                />
+            )}
         </>
     );
 };

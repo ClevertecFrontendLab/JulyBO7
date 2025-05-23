@@ -1,5 +1,4 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -11,9 +10,9 @@ import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/Hori
 import { PageLayout } from '~/shared/components/layouts';
 import { AppLoader } from '~/shared/components/loader';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { LOAD_MORE_BUTTON } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
@@ -28,8 +27,8 @@ export const JuiciestPage: FC = () => {
 
     const {
         data: recipes,
-        error,
-        isFetching,
+        error: getRecipesError,
+        isLoading: getRecipesIsLoading,
     } = useGetRecipesQuery({
         page,
         limit,
@@ -42,6 +41,10 @@ export const JuiciestPage: FC = () => {
     const navigate = useNavigate();
 
     const totalCountPages = recipes && Math.ceil(recipes.meta.total / limit);
+
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     const handleLoading = () => {
         setPage(page + 1);
@@ -86,12 +89,8 @@ export const JuiciestPage: FC = () => {
     useEffect(() => {
         if (recipes) {
             setLoadedRecipes([...loadedRecipes, ...recipes.data]);
-            return;
         }
-        if (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
-        }
-    }, [recipes, error]);
+    }, [recipes]);
 
     useEffect(
         () => () => {
@@ -137,7 +136,7 @@ export const JuiciestPage: FC = () => {
             {errorMessage && (
                 <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
             )}
-            {isFetching && <AppLoader />}
+            {getRecipesIsLoading && <AppLoader />}
         </PageLayout>
     );
 };

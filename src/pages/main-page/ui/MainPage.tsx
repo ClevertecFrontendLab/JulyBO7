@@ -2,12 +2,9 @@ import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { setIsAuthAction } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
+import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
-import { useCheckAuthQuery } from '~/features/auth';
 import { PageLayout } from '~/shared/components/layouts';
-import { AppLoader } from '~/shared/components/loader';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
 import { AppRoutes, routePaths } from '~/shared/config/router';
@@ -23,25 +20,25 @@ export const MainPage: FC = () => {
     const navigate = useNavigate();
 
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
-    const { data, error, isLoading } = useCheckAuthQuery();
 
     const getFoundRecipes = useCallback((recipes: Recipe[]) => {
         setFilteredRecipes(recipes);
     }, []);
+
+    const isAuth = useAppSelector((state) => state.app.isAuth);
+    const isInit = useAppSelector((state) => state.app.isInit);
 
     useEffect(() => {
         dispatch(removeAllFiltersAction());
     }, [dispatch]);
 
     useEffect(() => {
-        if (error && 'status' in error && error.status === 403) {
+        if (!isAuth && isInit) {
             navigate(routePaths[AppRoutes.LOGIN]);
-            return;
         }
-        if (data) {
-            dispatch(setIsAuthAction(true));
-        }
-    }, [error, navigate, dispatch, data]);
+    }, [isAuth, navigate, isInit]);
+
+    if (!isAuth) return null;
 
     return (
         <PageLayout>
@@ -79,7 +76,6 @@ export const MainPage: FC = () => {
                     )}
                 </VStack>
             </VStack>
-            {isLoading && <AppLoader />}
         </PageLayout>
     );
 };

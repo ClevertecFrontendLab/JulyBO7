@@ -1,4 +1,12 @@
-import { Box, Button, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Input,
+    InputGroup,
+    InputProps,
+    InputRightElement,
+    Text,
+} from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import { FieldError, UseFormRegister } from 'react-hook-form';
 
@@ -19,32 +27,37 @@ type FormInputProps = {
     label: string;
     fieldName: keyof SignUpFormData | keyof AccountRecoveryFormData;
     register: Register;
-    placeholder: string;
     error?: FieldError;
     type?: 'password' | 'default';
     note?: ValidationMessages;
     isErrorBorderColor?: boolean;
     dataTestId?: string;
     passwordDataTestId?: string;
-};
+} & InputProps;
 
 export const FormInput = memo<FormInputProps>((props) => {
     const {
         label,
         fieldName,
         register,
-        placeholder,
+
         error,
         type = 'default',
         note,
         isErrorBorderColor,
         dataTestId,
         passwordDataTestId,
+        ...rest
     } = props;
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleClick = () => setShowPassword(!showPassword);
+    const handleMouseDown = () => {
+        setShowPassword(true);
+    };
+    const handleMouseUp = () => {
+        setShowPassword(false);
+    };
 
     return (
         <>
@@ -55,12 +68,12 @@ export const FormInput = memo<FormInputProps>((props) => {
                     </Text>
                     <Input
                         data-test-id={dataTestId}
-                        placeholder={placeholder}
                         variant='outlineLime'
                         size='m'
                         {...register(fieldName)}
                         borderColor={error || isErrorBorderColor ? 'error.100' : 'lime.150'}
                         borderWidth={error || isErrorBorderColor ? '2px' : '1px'}
+                        {...rest}
                     />
                     {note && (
                         <Text textStyle='xs' color='gray.150'>
@@ -86,13 +99,15 @@ export const FormInput = memo<FormInputProps>((props) => {
                             size='m'
                             type={showPassword ? 'text' : 'password'}
                             borderColor={error ? 'error.100' : 'lime.150'}
-                            placeholder={placeholder}
+                            pr='48px'
+                            {...rest}
                         />
                         <InputRightElement w='48px' h='48px'>
                             <Button
                                 data-test-id={PASSWORD_VISIBILITY_BUTTON}
                                 variant='clear'
-                                onClick={handleClick}
+                                onMouseDown={handleMouseDown}
+                                onMouseUp={handleMouseUp}
                             >
                                 {showPassword ? <EyeIcon /> : <CrossOutEyeIcon />}
                             </Button>

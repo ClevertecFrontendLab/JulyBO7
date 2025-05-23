@@ -1,5 +1,4 @@
 import { Box, Button, Heading, HStack, Text, useMediaQuery, VStack } from '@chakra-ui/react';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
@@ -9,6 +8,7 @@ import { Recipe, useGetRecipesQuery } from '~/entities/recipe';
 import FilterMenu from '~/shared/assets/icons/components/Filter';
 import { Alert } from '~/shared/components/alert';
 import { Loader } from '~/shared/components/loader';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import {
     ALLERGEN,
     ALLERGENS_MENU_BUTTON,
@@ -16,7 +16,6 @@ import {
     FILTER_BUTTON,
     LOADER_SEARCH_BLOCK,
 } from '~/shared/constants/tests';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { Category } from '~/shared/types/categories';
 import {
     AllergensExclusion,
@@ -65,7 +64,9 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
     let subcategoriesIds: string[] = [];
 
     if (searchWithinCategory) {
-        subcategoriesIds = searchWithinCategory.subCategories.map((subcat) => subcat._id);
+        subcategoriesIds = Array.isArray(searchWithinCategory.subCategories)
+            ? searchWithinCategory.subCategories.map((subcat) => subcat._id)
+            : [];
     }
 
     if (!searchWithinCategory && categories) {
@@ -75,7 +76,7 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
     const {
         data: recipes,
         isLoading,
-        error,
+        error: getRecipesError,
     } = useGetRecipesQuery(
         {
             allergens: getParam(allergen),
@@ -111,11 +112,11 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         if (recipes?.data) {
             getFoundRecipes(recipes.data);
         }
-        if (recipes?.data.length === 0) {
+        if (recipes && Array.isArray(recipes.data) && recipes.data.length === 0) {
             dispatch(removeAllFiltersAction());
             setCanSearch(false);
         }
-        if (recipes && recipes.data.length !== 0) {
+        if (recipes && Array.isArray(recipes.data) && recipes.data.length !== 0) {
             setIsActive(false);
         }
     }, [getFoundRecipes, dispatch, recipes?.data, recipes]);
@@ -128,11 +129,9 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
         [pathname],
     );
 
-    useEffect(() => {
-        if (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
-        }
-    }, [error]);
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     return (
         <VStack
@@ -148,7 +147,7 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
                     : 'none'
             }
         >
-            {recipes && recipes.data.length === 0 ? (
+            {recipes && Array.isArray(recipes.data) && recipes.data.length === 0 ? (
                 <Text
                     textStyle='m'
                     fontWeight={600}
@@ -161,6 +160,7 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
             ) : (
                 <>
                     <Heading
+                        as='h1'
                         mb={isLoading ? '10px' : { base: '16px', lg: '32px' }}
                         fontSize={{ base: '24px', lg: '2xl' }}
                         fontWeight={700}
@@ -204,8 +204,18 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
                             <SearchInput
                                 onSearch={handleSearchInit}
                                 onFocus={handleInputFocus}
-                                clearInput={recipes?.data.length === 0}
-                                borderColor={recipes && recipes.data.length > 0 ? 'lime.600' : ''}
+                                clearInput={
+                                    recipes &&
+                                    Array.isArray(recipes.data) &&
+                                    recipes.data.length === 0
+                                }
+                                borderColor={
+                                    recipes &&
+                                    Array.isArray(recipes.data) &&
+                                    recipes.data.length > 0
+                                        ? 'lime.600'
+                                        : ''
+                                }
                             />
                         </HStack>
                         {isSmallerThan1400 ? null : (
@@ -216,7 +226,11 @@ export const SearchPanel: FC<SearchPanelProps> = (props) => {
                                     forTestCheckbox={ALLERGEN}
                                     direction='row'
                                     type='header'
-                                    disableSwitch={recipes?.data.length === 0}
+                                    disableSwitch={
+                                        recipes &&
+                                        Array.isArray(recipes.data) &&
+                                        recipes.data.length === 0
+                                    }
                                 />
                             </Box>
                         )}

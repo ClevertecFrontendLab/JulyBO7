@@ -9,7 +9,7 @@ import {
     Tabs,
     VStack,
 } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 
 import authPageImage from '~/shared/assets/authImage.png';
@@ -25,16 +25,17 @@ export const AuthPage: FC = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
 
-    const [currentTabIndex, setCurrentTabIndex] = useState(
-        authPagesData.findIndex((item) => item.path === pathname),
-    );
+    const tabIndexFromPath = authPagesData.findIndex((item) => item.path === pathname);
+
+    const [currentTabIndex, setCurrentTabIndex] = useState(tabIndexFromPath);
 
     const handleTab = (path: string) => () => {
         navigate(path);
     };
-    const handleTabChange = (ind: number) => {
-        setCurrentTabIndex(ind);
-    };
+
+    useEffect(() => {
+        setCurrentTabIndex(tabIndexFromPath);
+    }, [pathname]);
 
     return (
         <HStack
@@ -54,7 +55,6 @@ export const AuthPage: FC = () => {
                 <Tabs
                     w={{ base: '328px', md: '355px', lg: '450px', '2xl': '460px' }}
                     index={currentTabIndex}
-                    onChange={handleTabChange}
                 >
                     <TabList gap='16px'>
                         {authPagesData.map((item) => (
@@ -73,11 +73,12 @@ export const AuthPage: FC = () => {
                     <TabIndicator mt='-1.5px' height='2px' bg='lime.700' />
 
                     <TabPanels mt='40px'>
-                        {authPagesData.map((item) => (
-                            <TabPanel key={item.path} padding={0}>
-                                <Outlet />
-                            </TabPanel>
-                        ))}
+                        <TabPanel padding={0}>
+                            {pathname === routePaths[AppRoutes.LOGIN] ? <Outlet /> : null}
+                        </TabPanel>
+                        <TabPanel padding={0}>
+                            {pathname === routePaths[AppRoutes.SIGNUP] ? <Outlet /> : null}
+                        </TabPanel>
                     </TabPanels>
                 </Tabs>
             </VStack>

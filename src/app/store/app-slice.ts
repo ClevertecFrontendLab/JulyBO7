@@ -4,6 +4,7 @@ export type AppState = typeof initialState;
 
 const initialState = {
     isAuth: false,
+    isInit: false,
 };
 
 export const appSlice = createSlice({
@@ -13,8 +14,11 @@ export const appSlice = createSlice({
         setIsAuth(state, action: PayloadAction<boolean>) {
             state.isAuth = action.payload;
         },
+        setIsInit(state, action: PayloadAction<boolean>) {
+            state.isInit = action.payload;
+        },
     },
 });
 
-export const { setIsAuth: setIsAuthAction } = appSlice.actions;
+export const { setIsAuth: setIsAuthAction, setIsInit: setIsInitAction } = appSlice.actions;
 export default appSlice.reducer;

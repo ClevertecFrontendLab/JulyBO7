@@ -1,8 +1,7 @@
 import 'swiper/scss';
 
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,9 +11,9 @@ import { Recipe, useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
 
 import { Alert } from '../../alert';
@@ -31,7 +30,7 @@ export const NewRecipesBlock: FC = () => {
 
     const {
         data: newRecipes,
-        error,
+        error: getRecipesError,
         isLoading,
     } = useGetRecipesQuery({
         page: 1,
@@ -42,15 +41,15 @@ export const NewRecipesBlock: FC = () => {
     const prefetchPage = usePrefetch('getRecipeById');
     let newRecipesCards;
 
-    if (categories && newRecipes) {
+    if (categories && newRecipes && Array.isArray(newRecipes.data)) {
         //FOR TESTS:
-        const newRecipesForRender = [...newRecipes.data].sort((a, b) => {
-            const value1 = new Date(a.createdAt).valueOf();
-            const value2 = new Date(b.createdAt).valueOf();
-            return value2 - value1;
-        });
+        // const newRecipesForRender = [...newRecipes.data].sort((a, b) => {
+        //     const value1 = new Date(a.createdAt).valueOf();
+        //     const value2 = new Date(b.createdAt).valueOf();
+        //     return value2 - value1;
+        // });
         //
-        newRecipesCards = newRecipesForRender.map((recipe: Recipe, idx: number) => {
+        newRecipesCards = newRecipes.data.map((recipe: Recipe, idx: number) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;
@@ -79,12 +78,9 @@ export const NewRecipesBlock: FC = () => {
             );
         });
     }
-
-    useEffect(() => {
-        if (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
-        }
-    }, [error]);
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     return (
         <Box w='100%' position={{ base: 'static', lg: 'relative' }}>

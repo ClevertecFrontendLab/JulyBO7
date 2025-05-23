@@ -3,6 +3,7 @@ import {
     Alert as ChakraAlert,
     AlertDescription,
     AlertIcon as AlertErrorIcon,
+    AlertProps as ChakraAlertProps,
     AlertTitle,
     Box,
     CloseButton,
@@ -14,11 +15,12 @@ import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/shared/constants/tests
 
 type AlertProps = {
     type: 'error' | 'success';
-    title: string;
+    title?: string;
     text?: string;
     onClose?: () => void;
-};
-export const Alert: FC<AlertProps> = ({ onClose, text, type, title }) => {
+} & ChakraAlertProps;
+
+export const Alert: FC<AlertProps> = ({ onClose, text, type, title, ...rest }) => {
     const { isOpen: isVisible, onClose: onCloseAlert } = useDisclosure({ defaultIsOpen: true });
 
     const handleClose = () => {
@@ -48,6 +50,7 @@ export const Alert: FC<AlertProps> = ({ onClose, text, type, title }) => {
             bg={type === 'error' ? 'error.100' : 'green.500'}
             p='12px 16px'
             w={{ base: '328px', lg: '400px' }}
+            {...rest}
         >
             {type === 'error' ? (
                 <AlertErrorIcon color='bgColor' mr='12px' />

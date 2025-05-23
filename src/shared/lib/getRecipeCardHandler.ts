@@ -17,7 +17,7 @@ export const getRecipeCardHandler = (
             breadcrumb: [
                 {
                     title: categoryData.title,
-                    path: `${categoryData.category}/${categoryData.subCategories[0].category}`,
+                    path: `/${categoryData.category}/${categoryData.subCategories[0].category}`,
                     category: categoryData.category,
                 },
                 {

@@ -12,7 +12,7 @@ export const getCurrentCategoryByPath = (path: string, data: Category[] | Catego
         currentMenuItem = data;
     }
 
-    if (currentMenuItem) {
+    if (currentMenuItem && Array.isArray(currentMenuItem.subCategories)) {
         index = currentMenuItem.subCategories.findIndex(
             (item) => item.category === pathSegments[2],
         );

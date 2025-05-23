@@ -10,7 +10,7 @@ export const LoginPage: React.FC = () => {
     const location = useLocation();
     const [successMessage, setSuccessMessage] = useState('');
 
-    if (location.state && location.state.isVerified) {
+    if (location.state && location.state.isVerified && !successMessage) {
         setSuccessMessage(VERIFICATION_SUCCESS_MESSAGE);
     }
 

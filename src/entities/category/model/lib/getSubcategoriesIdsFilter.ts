@@ -1,7 +1,9 @@
 import { Category } from '~/shared/types/categories';
 
 export const getSubcategoriesIdsFilter = (categoryFilter: string[], categories: Category[]) => {
-    const categoriesData = categories.filter((cat) => !cat.rootCategoryId);
+    const categoriesData = Array.isArray(categories)
+        ? categories.filter((cat) => !cat.rootCategoryId)
+        : [];
     const subcategoriesIds: string[] = [];
 
     for (let i = 0; i < categoryFilter.length; i++) {

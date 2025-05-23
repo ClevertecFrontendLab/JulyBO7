@@ -1,5 +1,6 @@
-import { apiSlice, Tags } from '~/shared/api';
+import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
+import { Tags } from '~/shared/api/constants/tags';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '~/shared/constants/localStorage';
 
 import { OtpPasswordFormData } from '../../ui/otp-password-form/OtpPasswordForm';
@@ -7,70 +8,71 @@ import { AccountRecoveryFormData } from '../schemas/accountRecoveryFormSchema';
 import { ForgotPasswordFormData } from '../schemas/forgotPasswordFormSchema';
 import { LoginFormData } from '../schemas/loginFormSchema';
 import { SignUpFormData } from '../schemas/signUpFormSchema';
+import { AuthResponse } from '../types/errors';
 
-type AuthResponse = Partial<{
-    statusText: string;
-    message: string;
-    error: string;
-    statusCode: number;
-}>;
-export const authApi = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
-        checkAuth: builder.query<AuthResponse, void>({
-            query: () => ({
-                method: 'GET',
-                url: ApiEndpoints.CHECK_AUTH,
-            }),
-            providesTags: [Tags.API],
-        }),
+type ResetPasswordRequest = AccountRecoveryFormData & { email: string };
 
-        registration: builder.mutation<AuthResponse, Omit<SignUpFormData, 'confirmPassword'>>({
-            query: (body) => ({
-                body,
-                method: 'POST',
-                url: ApiEndpoints.SIGN_UP,
+export const authApi = apiSlice
+    .enhanceEndpoints({
+        addTagTypes: [Tags.AUTH],
+    })
+    .injectEndpoints({
+        endpoints: (builder) => ({
+            checkAuth: builder.query<AuthResponse, void>({
+                query: () => ({
+                    method: 'GET',
+                    url: ApiEndpoints.CHECK_AUTH,
+                }),
+                providesTags: [Tags.AUTH],
             }),
-        }),
-        forgotPassword: builder.mutation<AuthResponse, ForgotPasswordFormData>({
-            query: (body) => ({
-                body,
-                method: 'POST',
-                url: ApiEndpoints.FORGOT_PASSWORD,
+            registration: builder.mutation<AuthResponse, Omit<SignUpFormData, 'confirmPassword'>>({
+                query: (body) => ({
+                    body,
+                    method: 'POST',
+                    url: ApiEndpoints.SIGN_UP,
+                }),
             }),
-        }),
-        verifyOtp: builder.mutation<AuthResponse, OtpPasswordFormData>({
-            query: (body) => ({
-                body,
-                method: 'POST',
-                url: ApiEndpoints.VERIFY_OTP,
+            forgotPassword: builder.mutation<AuthResponse, ForgotPasswordFormData>({
+                query: (body) => ({
+                    body,
+                    method: 'POST',
+                    url: ApiEndpoints.FORGOT_PASSWORD,
+                }),
             }),
-        }),
-        resetPassword: builder.mutation<AuthResponse, AccountRecoveryFormData & { email: string }>({
-            query: (body) => ({
-                body,
-                method: 'POST',
-                url: ApiEndpoints.RESET_PASSWORD,
+            verifyOtp: builder.mutation<AuthResponse, OtpPasswordFormData>({
+                query: (body) => ({
+                    body,
+                    method: 'POST',
+                    url: ApiEndpoints.VERIFY_OTP,
+                }),
             }),
-        }),
-        login: builder.mutation<AuthResponse, LoginFormData>({
-            query: (body) => ({
-                body,
-                method: 'POST',
-                url: ApiEndpoints.LOGIN,
+            resetPassword: builder.mutation<AuthResponse, ResetPasswordRequest>({
+                query: (body) => ({
+                    body,
+                    method: 'POST',
+                    url: ApiEndpoints.RESET_PASSWORD,
+                }),
             }),
-            invalidatesTags: [Tags.API],
-            transformResponse: (response, meta) => {
-                const headers = meta?.response?.headers;
-                const customHeader = headers?.get('Authentication-Access');
-                if (customHeader) {
-                    localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, customHeader);
-                }
+            login: builder.mutation<AuthResponse, LoginFormData>({
+                query: (body) => ({
+                    body,
+                    method: 'POST',
+                    url: ApiEndpoints.LOGIN,
+                }),
+                invalidatesTags: [Tags.AUTH],
+                transformResponse: (response, meta) => {
+                    const headers = meta?.response?.headers;
 
-                return { response, customHeader };
-            },
+                    const customHeader = headers?.get('Authentication-Access');
+                    if (customHeader) {
+                        localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, customHeader);
+                    }
+
+                    return { response, customHeader };
+                },
+            }),
         }),
-    }),
-});
+    });
 
 export const {
     useRegistrationMutation,

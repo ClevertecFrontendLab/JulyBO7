@@ -82,9 +82,9 @@ export const Drawer = memo<DrawerProps>((props) => {
     const { data: categories } = useGetCategoriesQuery();
     const filters = useSelector(selectFilters);
 
-    const optionsForSelect = categories
-        ?.filter((category) => !category.rootCategoryId)
-        .map((categ) => categ.title);
+    const optionsForSelect = Array.isArray(categories)
+        ? categories.filter((category) => !category.rootCategoryId).map((categ) => categ.title)
+        : undefined;
 
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {

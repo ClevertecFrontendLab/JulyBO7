@@ -9,7 +9,6 @@ export const DataRecovery: FC<{ onSuccessAccountRecovery: () => void }> = ({
 }) => {
     const [recoveryStep, setRecoveryStep] = useState(1);
     const [email, setEmail] = useState('');
-    // const [isFailedOtpSubmit, setIsFailedOtpSubmit] = useState(false);
 
     const handleForgotPasswordFormSubmit = (email: string) => {
         setRecoveryStep((prev) => prev + 1);

@@ -1,7 +1,6 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { FC, useEffect, useState } from 'react';
+import { Box, Button, Heading, HStack, Stack } from '@chakra-ui/react';
+import { FC, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { useGetCategoriesQuery } from '~/entities/category';
@@ -10,17 +9,15 @@ import { Alert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
-import { handleServerErrors } from '~/shared/lib/handleServerErrors';
 import { SubCategory } from '~/shared/types/categories';
 
 import { THE_JUICIEST_ } from '../../model/constants/mainpage';
 
 export const JuisiestBlock: FC = () => {
     const { data: categories } = useGetCategoriesQuery();
-    const [isMoreThan760] = useMediaQuery('(min-width: 760px)');
-    const [isSmallerThan1400] = useMediaQuery('(max-width: 1400px)');
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -28,7 +25,7 @@ export const JuisiestBlock: FC = () => {
 
     const {
         data: recipes,
-        error,
+        error: getRecipesError,
         isLoading,
     } = useGetRecipesQuery({
         page: 1,
@@ -45,13 +42,12 @@ export const JuisiestBlock: FC = () => {
             sortBy: 'likes',
             sortOrder: 'desc',
         });
-
         navigate(routePaths[AppRoutes.THE_JUICIEST]);
     };
 
     let juiciestCards;
-    if (categories && recipes) {
-        juiciestCards = recipes?.data.map((recipe, idx) => {
+    if (categories && recipes && Array.isArray(recipes.data)) {
+        juiciestCards = recipes.data.map((recipe, idx) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;
@@ -78,18 +74,17 @@ export const JuisiestBlock: FC = () => {
             );
         });
     }
-    useEffect(() => {
-        if (error) {
-            handleServerErrors(error as FetchBaseQueryError, setErrorMessage);
-        }
-    }, [error]);
+
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     return (
         <Box>
             <HStack justify='space-between'>
                 <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{THE_JUICIEST_}</Heading>
                 <Button
-                    data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
+                    data-test-id={JUICIEST_LINK}
                     onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
@@ -112,9 +107,7 @@ export const JuisiestBlock: FC = () => {
             >
                 {juiciestCards}
                 <Button
-                    data-test-id={
-                        isMoreThan760 && isSmallerThan1400 ? JUICIEST_LINK : JUICIEST_LINK_MOBILE
-                    }
+                    data-test-id={JUICIEST_LINK_MOBILE}
                     onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'

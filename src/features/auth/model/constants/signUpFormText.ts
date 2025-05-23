@@ -10,4 +10,4 @@ export const VERIFICATION_MODAL_NOTE =
 
 export const VERIFICATION_ERROR_MODAL_NOTE = 'Остались вопросы? Свяжитесь с поддержкой';
 export const WE_SENT_YOU_EMAIL = 'Мы отправили вам на почту';
-export const LINK_FOR_VERIFICATION = 'ссылку для верификации';
+export const LINK_FOR_VERIFICATION = 'ссылку для верификации.';

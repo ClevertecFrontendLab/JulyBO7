@@ -19,9 +19,10 @@ type EnterOtpModalProps = {
 };
 
 export const EnterOtpModal: React.FC<EnterOtpModalProps> = ({ email, onSubmit }) => {
-    const [isFailedOtpSubmit, setIsFailedOtpSubmit] = useState(false);
-    const handleFailedSubmit = () => {
-        setIsFailedOtpSubmit(true);
+    const [isShowInvalidCodeError, setIsShowInvalidCodeError] = useState(false);
+
+    const handleFailedSubmit = (value: boolean) => {
+        setIsShowInvalidCodeError(value);
     };
 
     return (
@@ -35,7 +36,7 @@ export const EnterOtpModal: React.FC<EnterOtpModalProps> = ({ email, onSubmit })
             <ModalCloseButton data-test-id={CLOSE_BUTTON} />
             <VStack flexGrow={1}>
                 <Image src={otpPasswordModal} w={{ base: '108px', lg: '206px' }} mb='32px' />
-                {isFailedOtpSubmit && (
+                {isShowInvalidCodeError && (
                     <Text fontSize='24px' fontWeight={700}>
                         {INVALID_CODE}
                     </Text>
