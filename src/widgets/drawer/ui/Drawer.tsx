@@ -31,6 +31,9 @@ import {
     FIND_RECIPE_BUTTON,
 } from '~/shared/constants/tests';
 
+import { authors } from '../model/lib/mockData/authorsList';
+import { meets } from '../model/lib/mockData/meatList';
+import { sides } from '../model/lib/mockData/sidesList';
 import { selectFilters } from '../model/selectors/selectFilters';
 import {
     removeAllFiltersAction,
@@ -47,29 +50,6 @@ import { AllergensExclusion } from './allergens-exclusion/AllergensExclusion';
 import { FiltersSelect } from './filters-select/FiltersSelect';
 import { FiltersTags } from './filters-tags/FiltersTags';
 
-const authors = [
-    'Елена Мин',
-    'Мирием Чонишвили',
-    'Елена Прекрасная',
-    'Alex Cook',
-    'Екатерина Константинопольская',
-    'Инна Высоцкая',
-    'Анна Рогачева',
-    'Повар Ши',
-    'Иван Орлов',
-];
-const meets = ['Курица', 'Свинина', 'Говядина', 'Индейка', 'Утка'];
-const sides = [
-    'Картошка',
-    'Гречка',
-    'Паста',
-    'Спагетти',
-    'Рис',
-    'Капуста',
-    'Фасоль',
-    'Другие овощи',
-];
-
 type DrawerProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -82,9 +62,9 @@ export const Drawer = memo<DrawerProps>((props) => {
     const { data: categories } = useGetCategoriesQuery();
     const filters = useSelector(selectFilters);
 
-    const optionsForSelect = categories
-        ?.filter((category) => !category.rootCategoryId)
-        .map((categ) => categ.title);
+    const optionsForSelect = Array.isArray(categories)
+        ? categories.filter((category) => !category.rootCategoryId).map((categ) => categ.title)
+        : undefined;
 
     const handleMeetType = (meetType: string) => (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.checked) {

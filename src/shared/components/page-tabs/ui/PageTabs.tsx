@@ -7,62 +7,66 @@ import { UrlState } from '~/shared/types/url';
 
 import cls from './PageTabs.module.scss';
 
-type PageTabsProps = Partial<{
-    onChangeTab: (index: number) => void;
+type PageTabsProps = {
     categoryData: Category;
     tabIndex: number;
-    style: TabsProps;
-}>;
+    style?: TabsProps;
+};
 
 export const PageTabs: FC<PageTabsProps> = (props) => {
-    const { onChangeTab, tabIndex, style, categoryData } = props;
+    const { tabIndex, style, categoryData } = props;
     const navigate = useNavigate();
 
-    const tabList = categoryData?.subCategories.map((subcat, idx) => {
-        const categoryPath = `/${categoryData.category}/${categoryData.subCategories[0].category}`;
-        const subcatPath = `/${categoryData.category}/${subcat.category}`;
-        const state: UrlState = {
-            breadcrumb: [
-                {
-                    title: categoryData.title,
-                    path: categoryPath,
-                    category: categoryData.category,
-                },
-                { title: subcat.title, path: subcatPath },
-            ],
-        };
+    const tabList =
+        Array.isArray(categoryData.subCategories) &&
+        categoryData.subCategories.map((subcat, idx) => {
+            const categoryPath = `/${categoryData.category}/${categoryData.subCategories[0].category}`;
+            const subcatPath = `/${categoryData.category}/${subcat.category}`;
+            const state: UrlState = {
+                breadcrumb: [
+                    {
+                        title: categoryData.title,
+                        path: categoryPath,
+                        category: categoryData.category,
+                    },
+                    { title: subcat.title, path: subcatPath },
+                ],
+            };
 
-        const handleTab = () => {
-            navigate(subcatPath, { state });
-        };
-        return (
-            <Tab
-                data-test-id={
-                    subcat.category === 'side-dishes'
-                        ? `tab-${subcat.category}-1` //  ДЛЯ ТЕСТОВ - ТЕСТ ИЩЕТ [data-test-id="tab-side-dishes-1"]
-                        : `tab-${subcat.category}-${idx}`
-                }
-                onClick={handleTab}
-                _selected={{
-                    color: 'lime.600',
-                    borderBottomWidth: '2px',
-                    borderBottomStyle: 'solid',
-                    borderBottomColor: 'lime.600',
-                }}
-                flexShrink={0}
-                padding={{ base: '4px 16px', lg: '8px 16px' }}
-                key={idx}
-            >
-                <Text textStyle={{ base: 'md', lg: 'm' }}>{subcat.title}</Text>
-            </Tab>
-        );
-    });
+            const handleTab = () => {
+                navigate(subcatPath, { state });
+            };
+            return (
+                <Tab
+                    data-test-id={`tab-${subcat.category}-${idx}`}
+                    onClick={handleTab}
+                    _selected={{
+                        color: 'lime.600',
+                        borderBottomWidth: '2px',
+                        borderBottomStyle: 'solid',
+                        borderBottomColor: 'lime.600',
+                    }}
+                    flexShrink={0}
+                    padding={{ base: '4px 16px', lg: '8px 16px' }}
+                    key={idx}
+                >
+                    <Text textStyle={{ base: 'md', lg: 'm' }}>{subcat.title}</Text>
+                </Tab>
+            );
+        });
+
+    const tabPanels = Array.isArray(categoryData.subCategories)
+        ? Array.from({ length: categoryData.subCategories.length }, (_, idx) => (
+              <TabPanel key={idx} padding='12px 0 0 0'>
+                  {idx === tabIndex ? <Outlet /> : null}
+              </TabPanel>
+          ))
+        : null;
 
     return (
         <Tabs
             index={tabIndex}
             color='lime.800'
-            onChange={onChangeTab}
             position='relative'
             variant='unstyled'
             mt='32px'
@@ -82,13 +86,7 @@ export const PageTabs: FC<PageTabsProps> = (props) => {
             >
                 {tabList}
             </TabList>
-            <TabPanels>
-                {categoryData?.subCategories.map((_, idx) => (
-                    <TabPanel key={idx} padding='12px 0 0 0'>
-                        <Outlet />
-                    </TabPanel>
-                ))}
-            </TabPanels>
+            <TabPanels>{tabPanels}</TabPanels>
         </Tabs>
     );
 };

@@ -1,19 +1,23 @@
 import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetCategoryRecipesQuery } from '~/entities/recipe';
 import { WithoutImageCard } from '~/shared/components/card/ui/without-image-card/WithoutImageCard';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
+import { Alert } from '../../alert';
 import { WithoutTextCard } from '../../card/ui/without-text-card/WithoutTextCard';
 import { getRandomId } from '../model/lib/getRandomId';
 
-export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
+type RelevantKitchenProps = Partial<{ category: string }>;
+
+export const RelevantKitchen = memo<RelevantKitchenProps>((props) => {
+    const { category } = props;
     const { data: categories } = useGetCategoriesQuery();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
+
     const limit = 5;
 
     const { randomSubcategoryId, randomCategoryId } = useMemo(
@@ -21,21 +25,22 @@ export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
         [categories, category],
     );
 
-    const { data: randomSubcategoryRecipes, isError } = useGetCategoryRecipesQuery(
-        {
-            categoryId: randomSubcategoryId,
-            limit,
-        },
-        { skip: !randomSubcategoryId && !categories },
-    );
+    const { data: randomSubcategoryRecipes, error: getCategoryRecipesError } =
+        useGetCategoryRecipesQuery(
+            {
+                categoryId: randomSubcategoryId,
+                limit,
+            },
+            { skip: !randomSubcategoryId && !categories },
+        );
 
-    const randomCategory = categories?.find((category) => category._id === randomCategoryId);
+    const randomCategory = Array.isArray(categories)
+        ? categories.find((category) => category._id === randomCategoryId)
+        : undefined;
 
-    useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
-        }
-    }, [isError, dispatch]);
+    if (getCategoryRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     return (
         <VStack
@@ -93,6 +98,9 @@ export const RelevantKitchen = memo<{ category?: string }>(({ category }) => {
                         ))}
                 </VStack>
             </Stack>
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </VStack>
     );
 });

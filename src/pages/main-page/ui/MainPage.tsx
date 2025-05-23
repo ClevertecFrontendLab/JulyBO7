@@ -1,11 +1,13 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
-import { useAppDispatch } from '~/app/store/hooks';
+import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
+import { PageLayout } from '~/shared/components/layouts';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
-import { Page } from '~/shared/components/page/ui/Page';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
+import { AppRoutes, routePaths } from '~/shared/config/router';
 import { removeAllFiltersAction } from '~/widgets/drawer';
 import { SearchPanel } from '~/widgets/search-panel';
 
@@ -15,6 +17,7 @@ import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 
 export const MainPage: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
 
@@ -22,12 +25,23 @@ export const MainPage: FC = () => {
         setFilteredRecipes(recipes);
     }, []);
 
+    const isAuth = useAppSelector((state) => state.app.isAuth);
+    const isInit = useAppSelector((state) => state.app.isInit);
+
     useEffect(() => {
         dispatch(removeAllFiltersAction());
     }, [dispatch]);
 
+    useEffect(() => {
+        if (!isAuth && isInit) {
+            navigate(routePaths[AppRoutes.LOGIN]);
+        }
+    }, [isAuth, navigate, isInit]);
+
+    if (!isAuth) return null;
+
     return (
-        <Page>
+        <PageLayout>
             <VStack align='center'>
                 <SearchPanel title={TITLE} getFoundRecipes={getFoundRecipes} />
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
@@ -62,6 +76,6 @@ export const MainPage: FC = () => {
                     )}
                 </VStack>
             </VStack>
-        </Page>
+        </PageLayout>
     );
 };

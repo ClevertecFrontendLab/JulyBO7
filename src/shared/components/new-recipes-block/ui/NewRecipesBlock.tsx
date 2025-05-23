@@ -1,22 +1,23 @@
 import 'swiper/scss';
 
 import { Box, Button, Heading } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { Recipe, useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
 import ArrowLeftIcon from '~/shared/assets/icons/components/ArrowLeft';
 import ArrowRightIcon from '~/shared/assets/icons/components/ArrowRight';
 import { VerticalCard } from '~/shared/components/card/ui/vertical-card/VerticalCard';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { SubCategory } from '~/shared/types/categories';
 
+import { Alert } from '../../alert';
+import { AppLoader } from '../../loader';
 import { useSlider } from '../model/useSlider';
 
 export const NewRecipesBlock: FC = () => {
@@ -25,9 +26,13 @@ export const NewRecipesBlock: FC = () => {
     const { handleNext, handlePrev, handleSwiperInit, breakpoints } = useSlider();
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const { data: newRecipes, isError } = useGetRecipesQuery({
+    const {
+        data: newRecipes,
+        error: getRecipesError,
+        isLoading,
+    } = useGetRecipesQuery({
         page: 1,
         limit: 10,
         sortBy: 'createdAt',
@@ -36,15 +41,8 @@ export const NewRecipesBlock: FC = () => {
     const prefetchPage = usePrefetch('getRecipeById');
     let newRecipesCards;
 
-    if (categories && newRecipes) {
-        //FOR TESTS:
-        const newRecipesForRender = [...newRecipes.data].sort((a, b) => {
-            const value1 = new Date(a.createdAt).valueOf();
-            const value2 = new Date(b.createdAt).valueOf();
-            return value2 - value1;
-        });
-        //
-        newRecipesCards = newRecipesForRender.map((recipe: Recipe, idx: number) => {
+    if (categories && newRecipes && Array.isArray(newRecipes.data)) {
+        newRecipesCards = newRecipes.data.map((recipe: Recipe, idx: number) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;
@@ -73,12 +71,9 @@ export const NewRecipesBlock: FC = () => {
             );
         });
     }
-
-    useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('на сервере произошла ошибка попробуйте позже'));
-        }
-    }, [isError, dispatch]);
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
 
     return (
         <Box w='100%' position={{ base: 'static', lg: 'relative' }}>
@@ -131,6 +126,11 @@ export const NewRecipesBlock: FC = () => {
             >
                 <ArrowRightIcon fill='lime.50' />
             </Button>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </Box>
     );
 };

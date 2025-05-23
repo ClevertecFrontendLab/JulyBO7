@@ -4,19 +4,21 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
 import { useAppDispatch } from '~/app/store/hooks';
-import { useGetCategoryByIdQuery } from '~/entities/category';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
-import { Page } from '~/shared/components/page/ui/Page';
+import { PageLayout } from '~/shared/components/layouts';
 import { PageTabs } from '~/shared/components/page-tabs/ui/PageTabs';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen/ui/RelevantKitchen';
 import { getCurrentCategoryByPath } from '~/shared/lib/getCurrentCategoryByPath';
+import { Category } from '~/shared/types/categories';
 import { SearchPanel } from '~/widgets/search-panel';
 
-export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
+type CategoryPageProps = {
+    categoryData: Category;
+};
+export const CategoryPage: FC<CategoryPageProps> = (props) => {
+    const { categoryData } = props;
     const { pathname } = useLocation();
     const dispatch = useAppDispatch();
-
-    const { data: category } = useGetCategoryByIdQuery(categoryId);
 
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
@@ -25,32 +27,26 @@ export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
         setFilteredRecipes(recipes);
     }, []);
 
-    const onChangeTab = (ind: number) => {
-        setCurrentTabIndex(ind);
-    };
-
     useEffect(() => {
         setFilteredRecipes([]);
-    }, [dispatch, categoryId]);
+    }, [dispatch, categoryData]);
 
     useEffect(() => {
-        if (category) {
-            const tabIndex = getCurrentCategoryByPath(pathname, category);
+        if (categoryData) {
+            const tabIndex = getCurrentCategoryByPath(pathname, categoryData);
             if (tabIndex !== undefined) {
                 setCurrentTabIndex(tabIndex);
             }
         }
-    }, [pathname, dispatch, category]);
-
-    if (!category) return null;
+    }, [pathname, dispatch, categoryData]);
 
     return (
-        <Page>
+        <PageLayout>
             <VStack align='center'>
                 <SearchPanel
-                    title={category.title}
+                    title={categoryData.title}
                     getFoundRecipes={getFoundRecipes}
-                    searchWithinCategory={category}
+                    searchWithinCategory={categoryData}
                 />
 
                 {filteredRecipes && filteredRecipes.length > 0 ? (
@@ -76,15 +72,11 @@ export const CategoryPage: FC<{ categoryId: string }> = ({ categoryId }) => {
                     </VStack>
                 ) : (
                     <>
-                        <PageTabs
-                            categoryData={category}
-                            onChangeTab={onChangeTab}
-                            tabIndex={currentTabIndex}
-                        />
-                        <RelevantKitchen category={category.category} />
+                        <PageTabs categoryData={categoryData} tabIndex={currentTabIndex} />
+                        <RelevantKitchen category={categoryData.category} />
                     </>
                 )}
             </VStack>
-        </Page>
+        </PageLayout>
     );
 };

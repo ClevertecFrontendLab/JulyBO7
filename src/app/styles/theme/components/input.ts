@@ -32,6 +32,16 @@ const outline = definePartsStyle({
         },
     }),
 });
+
+const outlineLime = definePartsStyle({
+    field: defineStyle({
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        borderColor: 'lime.150',
+        _placeholder: { opacity: 1, color: 'lime.800' },
+    }),
+});
+
 const search = definePartsStyle({
     field: defineStyle({
         borderStyle: 'solid',
@@ -45,13 +55,20 @@ const s = defineStyle({
     h: '32px',
     textStyle: 's',
 });
+const m = defineStyle({
+    borderRadius: '6px',
+    p: '0px 16px',
+    h: '48px',
+    textStyle: 'l',
+});
 
 const sizes = {
     s: definePartsStyle({ field: s, addon: s }),
+    m: definePartsStyle({ field: m, addon: m }),
 };
 
 export const inputTheme = defineMultiStyleConfig({
     baseStyle,
-    variants: { outline, search },
+    variants: { outline, search, outlineLime },
     sizes,
 });

@@ -10,14 +10,18 @@ type LoaderProps = Partial<
     } & SpinnerProps
 >;
 
-export const Loader: FC<LoaderProps> = ({ width, height, ...rest }) => (
-    <HStack
-        align='center'
-        justify='center'
-        w={width ? width : { base: '134px', md: '206px' }}
-        h={height ? height : { base: '134px', md: '206px' }}
-        bg='radial-gradient(50% 50% at 50% 50%, #c4ff61 0%, rgba(255, 255, 255, 0) 100%)'
-    >
-        <Spinner data-test-id={APP_LOADER} {...rest} />
-    </HStack>
-);
+export const Loader: FC<LoaderProps> = (props) => {
+    const { width, height, ...rest } = props;
+
+    return (
+        <HStack
+            align='center'
+            justify='center'
+            w={width ? width : { base: '134px', md: '206px' }}
+            h={height ? height : { base: '134px', md: '206px' }}
+            bg='radial-gradient(50% 50% at 50% 50%, #c4ff61 0%, rgba(255, 255, 255, 0) 100%)'
+        >
+            <Spinner data-test-id={APP_LOADER} {...rest} />
+        </HStack>
+    );
+};

@@ -1,31 +1,31 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
-import { FC, useEffect } from 'react';
+import { Box, Button, Heading, HStack, Stack } from '@chakra-ui/react';
+import { FC, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { setAppError } from '~/app/store/app-slice';
-import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useGetRecipesQuery, usePrefetch } from '~/entities/recipe';
+import { Alert } from '~/shared/components/alert';
 import { HorizontalCard } from '~/shared/components/card/ui/horizontal-card/HorizontalCard';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import { ERROR_MESSAGE } from '~/shared/constants/commonErrorMessages';
 import { JUICIEST_LINK, JUICIEST_LINK_MOBILE } from '~/shared/constants/tests';
 import { getRecipeCardHandler } from '~/shared/lib/getRecipeCardHandler';
 import { SubCategory } from '~/shared/types/categories';
 
+import { THE_JUICIEST_ } from '../../model/constants/mainpage';
+
 export const JuisiestBlock: FC = () => {
     const { data: categories } = useGetCategoriesQuery();
-    const [isMoreThan760] = useMediaQuery('(min-width: 760px)');
-    const [isSmallerThan1400] = useMediaQuery('(max-width: 1400px)');
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const {
         data: recipes,
-        isError,
+        error: getRecipesError,
         isLoading,
     } = useGetRecipesQuery({
         page: 1,
@@ -42,13 +42,12 @@ export const JuisiestBlock: FC = () => {
             sortBy: 'likes',
             sortOrder: 'desc',
         });
-
         navigate(routePaths[AppRoutes.THE_JUICIEST]);
     };
 
     let juiciestCards;
-    if (categories && recipes) {
-        juiciestCards = recipes?.data.map((recipe, idx) => {
+    if (categories && recipes && Array.isArray(recipes.data)) {
+        juiciestCards = recipes.data.map((recipe, idx) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
             )!;
@@ -75,20 +74,17 @@ export const JuisiestBlock: FC = () => {
             );
         });
     }
-    const title = 'Самое сочное ';
 
-    useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('ошибка'));
-        }
-    }, [isError, dispatch]);
+    if (getRecipesError && !errorMessage) {
+        setErrorMessage(ERROR_MESSAGE);
+    }
+
     return (
         <Box>
-            {isLoading ? <AppLoader /> : null}
             <HStack justify='space-between'>
-                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{title}</Heading>
+                <Heading variant={{ base: 's', lg: 'lm', '2xl': 'xl' }}>{THE_JUICIEST_}</Heading>
                 <Button
-                    data-test-id={isSmallerThan1400 ? '' : JUICIEST_LINK}
+                    data-test-id={JUICIEST_LINK}
                     onClick={handleSelection}
                     display={{ base: 'none', lg: 'flex' }}
                     alignItems='center'
@@ -101,7 +97,6 @@ export const JuisiestBlock: FC = () => {
                     Вся подборка
                 </Button>
             </HStack>
-
             <Stack
                 direction={{ base: 'column', md: 'row', lg: 'column', '2xl': 'row' }}
                 wrap='wrap'
@@ -112,9 +107,7 @@ export const JuisiestBlock: FC = () => {
             >
                 {juiciestCards}
                 <Button
-                    data-test-id={
-                        isMoreThan760 && isSmallerThan1400 ? JUICIEST_LINK : JUICIEST_LINK_MOBILE
-                    }
+                    data-test-id={JUICIEST_LINK_MOBILE}
                     onClick={handleSelection}
                     display={{ base: 'flex', lg: 'none' }}
                     alignItems='center'
@@ -127,6 +120,11 @@ export const JuisiestBlock: FC = () => {
                     Вся подборка
                 </Button>
             </Stack>
+
+            {isLoading && <AppLoader />}
+            {errorMessage && (
+                <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
         </Box>
     );
 };
