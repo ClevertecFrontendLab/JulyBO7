@@ -1,4 +1,5 @@
 import {
+    Box,
     HStack,
     Image,
     Tab,
@@ -41,18 +42,24 @@ export const AuthPage: FC = () => {
     }, [pathname]);
 
     return (
-        <>
-            <HStack
+        <HStack
+            w='100%'
+            h='100%'
+            justify='space-between'
+            position='relative'
+            bgGradient='linear-gradient(208deg, #eaffc7 0%, #29813f 100%)'
+        >
+            <VStack
                 w='100%'
                 h='100%'
+                align='center'
+                pt={{ base: '72px', md: '140px', lg: '170px' }}
                 justify='space-between'
-                bgGradient='linear-gradient(208deg, #eaffc7 0%, #29813f 100%)'
             >
                 <VStack
                     w='100%'
                     h='100%'
                     align='center'
-                    pt={{ base: '72px', md: '140px', lg: '170px' }}
                     gap={{ base: '40px', md: '56px', lg: '80px' }}
                 >
                     <Logo w={{ base: '158px', lg: '271px' }} h={{ base: '38px', lg: '64px' }} />
@@ -88,25 +95,23 @@ export const AuthPage: FC = () => {
                     </Tabs>
                 </VStack>
 
-                <Image
-                    src={authPageImage}
-                    display={{ base: 'none', lg: 'block' }}
-                    w={{ lg: '732px', '2xl': '972px' }}
-                    h='100%'
-                />
-            </HStack>
-            <HStack
-                as='footer'
-                h='60px'
-                w='100%'
-                position='fixed'
-                bottom={0}
-                justify='space-between'
-            >
-                <Text fontSize='xs' fontWeight={600} pl='30px' pr={{ base: '30px', md: 0 }}>
+                <Text
+                    fontSize='xs'
+                    fontWeight={600}
+                    pl='30px'
+                    pr={{ base: '30px', md: 0 }}
+                    mb='30px'
+                    alignSelf='flex-start'
+                >
                     {COPYRIGHT_TEXT}
                 </Text>
+            </VStack>
+            <Box h='100%' w='100%' position='relative' display={{ base: 'none', lg: 'block' }}>
+                <Image src={authPageImage} w={{ lg: '732px', '2xl': '972px' }} h='100%' />
                 <Text
+                    position='absolute'
+                    bottom='30px'
+                    right='30px'
                     fontSize='xs'
                     fontWeight={600}
                     pr='30px'
@@ -114,7 +119,7 @@ export const AuthPage: FC = () => {
                 >
                     {THE_BEST_SERVICE_FOR_CULINARY}
                 </Text>
-            </HStack>
-        </>
+            </Box>
+        </HStack>
     );
 };

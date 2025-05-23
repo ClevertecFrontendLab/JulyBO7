@@ -271,6 +271,9 @@ export const SignUpForm: FC = () => {
                     title={errorMessage.current.title}
                     text={errorMessage.current.description}
                     type='error'
+                    bottom={{ base: '100px', lg: '80px' }}
+                    left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
+                    transform='translateX(0)'
                 />
             )}
         </>

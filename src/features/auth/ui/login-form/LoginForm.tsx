@@ -158,6 +158,7 @@ export const LoginForm: FC = () => {
                     type='success'
                     bottom={{ base: '100px', lg: '80px' }}
                     left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
+                    transform='translateX(0)'
                 />
             )}
             {logInError && 'status' in logInError && logInError.status === 500 && isOpenModal && (
