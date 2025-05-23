@@ -31,6 +31,9 @@ import {
     FIND_RECIPE_BUTTON,
 } from '~/shared/constants/tests';
 
+import { authors } from '../model/lib/mockData/authorsList';
+import { meets } from '../model/lib/mockData/meatList';
+import { sides } from '../model/lib/mockData/sidesList';
 import { selectFilters } from '../model/selectors/selectFilters';
 import {
     removeAllFiltersAction,
@@ -46,29 +49,6 @@ import {
 import { AllergensExclusion } from './allergens-exclusion/AllergensExclusion';
 import { FiltersSelect } from './filters-select/FiltersSelect';
 import { FiltersTags } from './filters-tags/FiltersTags';
-
-const authors = [
-    'Елена Мин',
-    'Мирием Чонишвили',
-    'Елена Прекрасная',
-    'Alex Cook',
-    'Екатерина Константинопольская',
-    'Инна Высоцкая',
-    'Анна Рогачева',
-    'Повар Ши',
-    'Иван Орлов',
-];
-const meets = ['Курица', 'Свинина', 'Говядина', 'Индейка', 'Утка'];
-const sides = [
-    'Картошка',
-    'Гречка',
-    'Паста',
-    'Спагетти',
-    'Рис',
-    'Капуста',
-    'Фасоль',
-    'Другие овощи',
-];
 
 type DrawerProps = {
     isOpen: boolean;
