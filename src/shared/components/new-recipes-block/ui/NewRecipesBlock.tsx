@@ -45,9 +45,9 @@ export const NewRecipesBlock: FC = () => {
         newRecipesCards = newRecipes.data.map((recipe: Recipe, idx: number) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
-            )!;
+            );
             const category = categories.find(
-                (category) => category._id === subcategory.rootCategoryId,
+                (category) => category._id === subcategory?.rootCategoryId,
             )!;
             const handleCard = getRecipeCardHandler(
                 recipe,

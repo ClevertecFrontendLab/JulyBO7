@@ -8,6 +8,7 @@ import { CategoryPage } from '~/pages/category-page';
 import { ErrorPage } from '~/pages/error-page';
 import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
+import { NewRecipePage } from '~/pages/new-recipe-page';
 import { RecipePage } from '~/pages/recipe-page';
 import { SubcategoryPage } from '~/pages/subcategory-page';
 import { VerificationPage } from '~/pages/verification-page';
@@ -106,6 +107,14 @@ export const AppRouter = memo(() => {
                         sidebar={<Sidebar />}
                     >
                         <JuiciestPage />
+                    </AppLayout>
+                }
+            />
+            <Route
+                path={routePaths[AppRoutes.NEW_RECIPE]}
+                element={
+                    <AppLayout header={<Navbar />} footer={<Footer />} menu={<Menu />}>
+                        <NewRecipePage />
                     </AppLayout>
                 }
             />

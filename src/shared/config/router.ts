@@ -1,10 +1,11 @@
 export enum AppRoutes {
     MAIN = 'main',
-    THE_JUICIEST = 'the juiciest',
+    THE_JUICIEST = 'the-juiciest',
     LOGIN = 'login',
     SIGNUP = 'signup',
-    NOT_FOUND = 'not found',
+    NOT_FOUND = 'not-found',
     VERIFICATION = 'verification',
+    NEW_RECIPE = 'new-recipe',
 }
 
 export type RoutePaths = {
@@ -16,6 +17,7 @@ export const routePaths: RoutePaths = {
     [AppRoutes.LOGIN]: '/login',
     [AppRoutes.SIGNUP]: '/signup',
     [AppRoutes.VERIFICATION]: '/verification',
+    [AppRoutes.NEW_RECIPE]: '/new-recipe',
 
     [AppRoutes.NOT_FOUND]: '/not-found',
 };

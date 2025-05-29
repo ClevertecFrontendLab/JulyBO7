@@ -1,4 +1,4 @@
-import { Recipe } from './recipe';
+import { Ingredient, Recipe, Step } from './recipe';
 
 export type RequestParams = Partial<{
     page: number;
@@ -29,4 +29,24 @@ export type GetCategoryRecipesRequest = {
     searchString?: string;
     page?: number;
     limit?: number;
+};
+export type CreateNewRecipeRequest = {
+    categoriesIds: string[];
+    title: string;
+    description: string;
+    time: number;
+    portions: number;
+    image: string;
+    steps: Step[];
+    ingredients: Ingredient[];
+};
+export type MeasureUnits = {
+    _id: string;
+    name: string;
+};
+export type GetMeasureUnitsResponse = MeasureUnits[];
+export type UploadFileResponse = {
+    name: string;
+    url: string;
+    _id: string;
 };

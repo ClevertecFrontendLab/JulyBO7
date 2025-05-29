@@ -1,0 +1,61 @@
+import {
+    HStack,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    Text,
+} from '@chakra-ui/react';
+import React from 'react';
+import { useController, UseControllerProps } from 'react-hook-form';
+
+import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
+
+type NumberInputProps = {
+    label: string;
+} & UseControllerProps<CreateNewRecipeFormData>;
+
+export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
+    const { label } = props;
+    const { field, fieldState } = useController(props);
+
+    const handleChange = (value: string, valueAsNumber: number) => {
+        console.log(
+            'value: ',
+            value,
+            'valueAsNumber: ',
+            valueAsNumber,
+            'field state: ',
+            fieldState,
+        );
+        field.onChange(valueAsNumber);
+    };
+    return (
+        <HStack justify='flex-start' w='100%' gap={{ base: '16px', lg: '24px' }}>
+            <Text textStyle={{ base: 's', lg: 'm' }} fontWeight={600}>
+                {label}
+            </Text>
+            <NumberInput
+                w={{ base: '73px', md: '90px' }}
+                h='40px'
+                onChange={handleChange}
+                defaultValue={undefined}
+                color='primaryColor'
+            >
+                <NumberInputField
+                    // value={field.value}
+                    // onChange={handleChange}
+                    // {...field}
+                    // min={1}
+                    border={fieldState.invalid ? '1px solid red' : '1px solid rgba(0, 0, 0, 0.08)'}
+                />
+
+                <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                </NumberInputStepper>
+            </NumberInput>
+        </HStack>
+    );
+};

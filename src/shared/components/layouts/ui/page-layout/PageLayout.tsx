@@ -1,12 +1,12 @@
-import { Box } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
 type PageLayoutProps = {
     children: ReactNode;
-};
+} & BoxProps;
 
 export const PageLayout: FC<PageLayoutProps> = (props) => {
-    const { children } = props;
+    const { children, ...rest } = props;
 
     return (
         <Box
@@ -17,6 +17,7 @@ export const PageLayout: FC<PageLayoutProps> = (props) => {
             pl={{ base: '16px', md: '20px', lg: '280px' }}
             pr={{ base: '16px', md: '20px', lg: '280px' }}
             width={{ base: '360px', md: '768px', lg: '1440px', '2xl': '1920px' }}
+            {...rest}
         >
             {children}
         </Box>

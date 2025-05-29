@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 import { Outlet } from 'react-router';
 
@@ -14,6 +14,9 @@ type AppLayoutProps = Partial<{
 
 export const AppLayout: FC<AppLayoutProps> = (props) => {
     const { header, menu, footer, sidebar, children } = props;
+
+    const [isSmallerThan1440] = useMediaQuery('(max-width: 1400px)');
+
     return (
         <>
             {!!header && header}
@@ -25,7 +28,7 @@ export const AppLayout: FC<AppLayoutProps> = (props) => {
                 {children ? children : <Outlet />}
                 {!!sidebar && sidebar}
             </Box>
-            {!!footer && footer}
+            {!!footer && isSmallerThan1440 && footer}
         </>
     );
 };

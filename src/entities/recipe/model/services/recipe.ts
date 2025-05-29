@@ -2,7 +2,14 @@ import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { Tags } from '~/shared/api/constants/tags';
 
-import { GetCategoryRecipesRequest, GetRecipesResponse, RequestParams } from '../types/params';
+import {
+    CreateNewRecipeRequest,
+    GetCategoryRecipesRequest,
+    GetMeasureUnitsResponse,
+    GetRecipesResponse,
+    RequestParams,
+    UploadFileResponse,
+} from '../types/params';
 import { Recipe } from '../types/recipe';
 
 export const recipeApiSlice = apiSlice
@@ -37,6 +44,30 @@ export const recipeApiSlice = apiSlice
 
                 providesTags: [Tags.RECIPE],
             }),
+            createRecipe: builder.mutation<void, CreateNewRecipeRequest>({
+                query: (body) => ({
+                    url: `${ApiEndpoints.RECIPE}`,
+                    method: 'POST',
+                    body,
+                }),
+
+                invalidatesTags: [Tags.RECIPE],
+            }),
+            getMeasureUnits: builder.query<GetMeasureUnitsResponse, void>({
+                query: () => ({
+                    url: ApiEndpoints.MEASURE_UNITS,
+                    method: 'GET',
+                }),
+            }),
+            uploadFile: builder.mutation<UploadFileResponse, FormData>({
+                query: (formData) => ({
+                    url: ApiEndpoints.FILE_UPLOAD,
+                    method: 'POST',
+                    body: formData,
+                }),
+
+                invalidatesTags: [Tags.RECIPE],
+            }),
         }),
     });
 
@@ -45,4 +76,7 @@ export const {
     useGetCategoryRecipesQuery,
     usePrefetch,
     useGetRecipeByIdQuery,
+    useGetMeasureUnitsQuery,
+    useCreateRecipeMutation,
+    useUploadFileMutation,
 } = recipeApiSlice;
