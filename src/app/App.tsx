@@ -1,19 +1,18 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useMatch } from 'react-router';
+import { RouterProvider } from 'react-router';
 
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useCheckAuthQuery } from '~/features/auth';
 import { AppLoader } from '~/shared/components/loader';
-import { AppRoutes, routePaths } from '~/shared/config/router';
 import { LOCAL_STORAGE_CATEGORIES_KEY } from '~/shared/constants/localStorage';
 
-import { AppRouter } from './providers/routes/ui/AppRouter';
+import { router } from './providers/routes/ui/router';
 import { setIsAuthAction, setIsInitAction } from './store/app-slice';
 import { useAppDispatch } from './store/hooks';
 
 function App() {
-    const matchMainPage = useMatch(routePaths[AppRoutes.MAIN]);
+    // const matchMainPage = useMatch(routePaths[AppRoutes.MAIN]);
     const dispatch = useAppDispatch();
 
     const { data: categories, isLoading: isLoadingCategories } = useGetCategoriesQuery();
@@ -41,8 +40,10 @@ function App() {
 
     return (
         <Box bg='bgColor' position='relative' h='100vh'>
-            <AppRouter />
-            {(isLoadingCategories || isLoadingAuth) && matchMainPage ? <AppLoader /> : null}
+            {/* <AppRouter /> */}
+            <RouterProvider router={router} />
+
+            {isLoadingCategories || isLoadingAuth ? <AppLoader /> : null}
         </Box>
     );
 }

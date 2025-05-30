@@ -9,3 +9,4 @@ export const AMOUNT = 'Количество';
 export const MEASUREMENT_UNIT = 'Единица измерения';
 
 export const ADD_COOKING_STEPS = 'Добавьте шаги приготовления';
+export const DRAFT_SAVED = 'Черновик успешно сохранен';

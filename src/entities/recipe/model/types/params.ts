@@ -50,3 +50,4 @@ export type UploadFileResponse = {
     url: string;
     _id: string;
 };
+export type CreateDraftRequest = Partial<Omit<CreateNewRecipeRequest, 'title'>> & { title: string };

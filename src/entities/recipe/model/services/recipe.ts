@@ -3,6 +3,7 @@ import { ApiEndpoints } from '~/shared/api/constants/api';
 import { Tags } from '~/shared/api/constants/tags';
 
 import {
+    CreateDraftRequest,
     CreateNewRecipeRequest,
     GetCategoryRecipesRequest,
     GetMeasureUnitsResponse,
@@ -44,7 +45,7 @@ export const recipeApiSlice = apiSlice
 
                 providesTags: [Tags.RECIPE],
             }),
-            createRecipe: builder.mutation<void, CreateNewRecipeRequest>({
+            createRecipe: builder.mutation<Recipe, CreateNewRecipeRequest>({
                 query: (body) => ({
                     url: `${ApiEndpoints.RECIPE}`,
                     method: 'POST',
@@ -68,6 +69,13 @@ export const recipeApiSlice = apiSlice
 
                 invalidatesTags: [Tags.RECIPE],
             }),
+            createDraft: builder.mutation<void, CreateDraftRequest>({
+                query: (body) => ({
+                    url: ApiEndpoints.RECIPE_DRAFT,
+                    method: 'POST',
+                    body,
+                }),
+            }),
         }),
     });
 
@@ -79,4 +87,5 @@ export const {
     useGetMeasureUnitsQuery,
     useCreateRecipeMutation,
     useUploadFileMutation,
+    useCreateDraftMutation,
 } = recipeApiSlice;

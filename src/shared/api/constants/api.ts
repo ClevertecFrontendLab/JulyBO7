@@ -11,4 +11,5 @@ export enum ApiEndpoints {
     RESET_PASSWORD = '/auth/reset-password',
     MEASURE_UNITS = '/measure-units',
     FILE_UPLOAD = '/file/upload',
+    RECIPE_DRAFT = '/recipe/draft',
 }

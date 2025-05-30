@@ -2,16 +2,20 @@ import { Textarea } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 
 type FormTextareaProps = {
     placeholder: string;
-} & UseControllerProps<CreateNewRecipeFormData>;
+} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'description'>;
 
 export const FormTextarea: FC<FormTextareaProps> = (props) => {
     const { placeholder, ...rest } = props;
     const { field, fieldState } = useController(rest);
-
+    console.log('textarea: ', typeof field.value);
+    if (field.value === '') {
+        field.onChange(undefined);
+    }
     return (
         <Textarea
             {...field}

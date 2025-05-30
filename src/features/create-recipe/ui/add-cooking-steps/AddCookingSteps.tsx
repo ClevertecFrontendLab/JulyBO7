@@ -57,25 +57,24 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
         setdescriptionValue([...descriptionValue, '']);
 
         const newStep = {
-            description: '',
-            image: '',
+            description: undefined,
+            image: undefined,
             stepNumber: field.value.length + 1,
         };
         field.onChange([...field.value, newStep]);
+        console.log('img в форме: ', field);
     };
     const handleStepDelete = (idx: number) => () => {
         if (field.value.length === 1) {
             const newStep = {
-                description: '',
-                image: '',
+                description: undefined,
+                image: undefined,
                 stepNumber: 1,
             };
             field.onChange([newStep]);
             setdescriptionValue(['']);
             setStepNumber(1);
             setImageSrc([{ idx: null, image: '' }]);
-
-            console.log('handleDelete: ');
         } else {
             const newValue = field.value
                 .filter((_, index) => index !== idx)

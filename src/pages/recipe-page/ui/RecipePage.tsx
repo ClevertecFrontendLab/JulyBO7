@@ -2,7 +2,8 @@ import { VStack } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
-import { useAppDispatch } from '~/app/store/hooks';
+import { setSuccessMessageAction } from '~/app/store/app-slice';
+import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { useGetRecipeByIdQuery } from '~/entities/recipe';
 import avatar1 from '~/shared/assets/images/Avatar.png';
 import { Alert } from '~/shared/components/alert';
@@ -25,6 +26,7 @@ export const RecipePage: FC = () => {
     const location: { state: UrlState } = useLocation();
     const dispatch = useAppDispatch();
     const [errorMessage, setErrorMessage] = useState('');
+    const successMessage = useAppSelector((state) => state.app.successMessage);
 
     const {
         data: recipe,
@@ -56,6 +58,10 @@ export const RecipePage: FC = () => {
         }
     }, [dispatch, isErrorRecipe, location.state, navigate]);
 
+    const handleSuccessMessageClose = () => {
+        dispatch(setSuccessMessageAction(''));
+    };
+
     if (getRecipeByIdError && !errorMessage) {
         setErrorMessage(ERROR_MESSAGE);
     }
@@ -82,6 +88,9 @@ export const RecipePage: FC = () => {
             {isLoading && <AppLoader />}
             {errorMessage && (
                 <Alert onClose={() => setErrorMessage('')} title={errorMessage} type='error' />
+            )}
+            {successMessage && (
+                <Alert title={successMessage} type='success' onClose={handleSuccessMessageClose} />
             )}
         </PageLayout>
     );

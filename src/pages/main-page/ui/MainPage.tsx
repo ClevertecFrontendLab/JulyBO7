@@ -2,8 +2,10 @@ import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { setSuccessMessageAction } from '~/app/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
 import { FoundRecipesCards, Recipe } from '~/entities/recipe';
+import { Alert } from '~/shared/components/alert';
 import { PageLayout } from '~/shared/components/layouts';
 import { NewRecipesBlock } from '~/shared/components/new-recipes-block/ui/NewRecipesBlock';
 import { RelevantKitchen } from '~/shared/components/relevant-kitchen';
@@ -18,6 +20,7 @@ import { JuisiestBlock } from './juisiest-block/JuisiestBlock';
 export const MainPage: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const successMessage = useAppSelector((state) => state.app.successMessage);
 
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>();
 
@@ -27,6 +30,10 @@ export const MainPage: FC = () => {
 
     const isAuth = useAppSelector((state) => state.app.isAuth);
     const isInit = useAppSelector((state) => state.app.isInit);
+
+    const handleSuccessMessageClose = () => {
+        dispatch(setSuccessMessageAction(''));
+    };
 
     useEffect(() => {
         dispatch(removeAllFiltersAction());
@@ -76,6 +83,9 @@ export const MainPage: FC = () => {
                     )}
                 </VStack>
             </VStack>
+            {successMessage && (
+                <Alert title={successMessage} type='success' onClose={handleSuccessMessageClose} />
+            )}
         </PageLayout>
     );
 };

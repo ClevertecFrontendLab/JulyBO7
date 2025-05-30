@@ -1,16 +1,13 @@
 import { z } from 'zod';
 
-export const createNewRecipeFormSchema = z.object({
-    categoriesIds: z.array(z.string()).min(3),
+export const createDraftFormSchema = z.object({
+    categoriesIds: z.array(z.string()).optional(),
     title: z.string().min(1).max(50),
-    description: z.string().min(1).max(500),
+    description: z.string().optional(),
 
-    portions: z.number().refine((value) => value > 0),
-    time: z
-        .number()
-        .max(10000)
-        .refine((value) => value > 0),
-    image: z.string().min(1),
+    portions: z.number().optional(),
+    time: z.number().optional(),
+    image: z.string().optional(),
     ingredients: z
         .array(
             z.object({
@@ -19,7 +16,7 @@ export const createNewRecipeFormSchema = z.object({
                 measureUnit: z.string().min(1),
             }),
         )
-        .min(1),
+        .optional(),
     steps: z
         .array(
             z.object({
@@ -28,7 +25,7 @@ export const createNewRecipeFormSchema = z.object({
                 image: z.string().optional(),
             }),
         )
-        .min(1),
+        .optional(),
 });
 
-export type CreateNewRecipeFormData = z.infer<typeof createNewRecipeFormSchema>;
+export type CreateDraftFormSchema = z.infer<typeof createDraftFormSchema>;
