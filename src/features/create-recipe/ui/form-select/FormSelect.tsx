@@ -6,19 +6,21 @@ import { useController, UseControllerProps } from 'react-hook-form';
 import { Category } from '~/shared/types/categories';
 
 import { SELECT_AT_LEAST_3_TAGS } from '../../model/constants/formText';
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 import { Placeholder } from './placeholder/Placeholder';
 
 type FormSelectProps = {
     options?: Category[];
     isClose?: boolean;
-} & UseControllerProps<CreateNewRecipeFormData, 'categoriesIds'>;
+} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'categoriesIds'>;
 
 export const FormSelect: FC<FormSelectProps> = (props) => {
     const { options, isClose, ...rest } = props;
 
     const { field, fieldState } = useController(rest);
     const [selectedOptions, setSelectedOptions] = useState<Category[]>([]);
+    console.log('field form select: ', field.value);
 
     const handleCheckedOption = (option: Category) => (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.checked;

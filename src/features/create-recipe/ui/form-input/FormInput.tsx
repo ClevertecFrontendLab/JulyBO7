@@ -2,11 +2,12 @@ import { Input } from '@chakra-ui/react';
 import React from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 
 type FormInputProps = {
     placeholder: string;
-} & UseControllerProps<CreateNewRecipeFormData, 'title'>;
+} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'title'>;
 
 export const FormInput: React.FC<FormInputProps> = (props) => {
     const { placeholder, ...rest } = props;

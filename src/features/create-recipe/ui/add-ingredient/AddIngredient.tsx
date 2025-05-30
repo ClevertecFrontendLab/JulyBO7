@@ -13,9 +13,13 @@ import {
     INGREDIENT,
     MEASUREMENT_UNIT,
 } from '../../model/constants/formText';
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 
-type AddIngredientProps = UseControllerProps<CreateNewRecipeFormData, 'ingredients'>;
+type AddIngredientProps = UseControllerProps<
+    CreateNewRecipeFormData | CreateDraftFormSchema,
+    'ingredients'
+>;
 
 export const AddIngredient: FC<AddIngredientProps> = (props) => {
     const { field, fieldState } = useController(props);
@@ -68,6 +72,7 @@ export const AddIngredient: FC<AddIngredientProps> = (props) => {
     };
 
     const handleIngredientAddition = () => {
+        // const prevFieldValue = field.value ? // проверить на то чтобы  не раскукоживался undefined
         field.onChange([...field.value, { title, count: Number(count), measureUnit }]);
         setTitle('');
         setCount('');

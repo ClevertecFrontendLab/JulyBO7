@@ -1,6 +1,6 @@
 import { Box, Button, Stack, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useBlocker, useLocation, useNavigate } from 'react-router';
 
@@ -51,7 +51,7 @@ export const CreateNewRecipeForm: FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const { handleSubmit, control, formState } = useForm<
+    const { handleSubmit, control, formState, getValues } = useForm<
         CreateNewRecipeFormData | CreateDraftFormSchema
     >({
         defaultValues: {
@@ -61,12 +61,16 @@ export const CreateNewRecipeForm: FC = () => {
             time: undefined,
             portions: undefined,
             image: undefined,
-            steps: [{ description: undefined, stepNumber: 1, image: undefined }],
+            // steps: [{ description: undefined, stepNumber: 1, image: undefined }],
+            steps: undefined,
+
             ingredients: [],
         },
         mode: 'onSubmit',
 
-        resolver: zodResolver(mode === 'draft' ? createDraftFormSchema : createNewRecipeFormSchema),
+        resolver: zodResolver(
+            mode === 'newRecipe' ? createNewRecipeFormSchema : createDraftFormSchema,
+        ),
     });
     const [createRecipeTrigger, { isLoading: createRecipeIsLoading }] = useCreateRecipeMutation();
     const [createDraftTrigger, { isLoading: createDraftIsLoading }] = useCreateDraftMutation();
@@ -84,19 +88,13 @@ export const CreateNewRecipeForm: FC = () => {
         data,
     ) => {
         setShouldBlockNavigate(false);
+
         if (mode === 'draft') {
-            console.log('onsubmitDraft:', data);
-
             try {
-                const res = await createDraftTrigger(data).unwrap();
-                console.log('res', res);
+                await createDraftTrigger(data).unwrap();
 
-                if (isOpenModal) {
-                    blocker.proceed?.();
-                } else {
-                    dispatch(setSuccessMessageAction(DRAFT_SAVED));
-                    navigate(routePaths[AppRoutes.MAIN]);
-                }
+                dispatch(setSuccessMessageAction(DRAFT_SAVED));
+                navigate(routePaths[AppRoutes.MAIN]);
             } catch {
                 setErrorMessage({
                     title: 'Ошибка сервера',
@@ -109,12 +107,9 @@ export const CreateNewRecipeForm: FC = () => {
         }
         if (mode === 'newRecipe') {
             try {
-                console.log('onsubmitCreate:', data);
-
                 const res = await createRecipeTrigger(data).unwrap();
                 dispatch(setSuccessMessageAction(DRAFT_SAVED));
 
-                console.log('res', res);
                 if (categories && subcategories) {
                     const firstRecipeSubcategory = subcategories.find(
                         (sub) => sub._id === res.categoriesIds[0],
@@ -144,10 +139,46 @@ export const CreateNewRecipeForm: FC = () => {
             }
         }
     };
-    const handleSaveDraft = () => {
-        setMode('draft');
-        console.log('onsave draft - form is validate', formState.isValid);
-    };
+
+    const handleSaveDraft = useCallback(async () => {
+        const categoriesIds = getValues('categoriesIds');
+        const description = getValues('description');
+        const title = getValues('title');
+        const image = getValues('image');
+        const ingredients = getValues('ingredients');
+        const portions = getValues('portions');
+        const steps = getValues('steps');
+        const time = getValues('time');
+
+        if (formState.isValid) {
+            try {
+                await createDraftTrigger({
+                    description,
+                    categoriesIds,
+                    title,
+                    image,
+                    ingredients,
+                    portions,
+                    steps,
+                    time,
+                }).unwrap();
+
+                blocker.proceed?.();
+            } catch {
+                setErrorMessage({
+                    title: 'Ошибка сервера',
+                    text: 'Не получилось сохранить в черновик.',
+                });
+            } finally {
+                setShouldBlockNavigate(true);
+                setMode('start');
+            }
+        } else {
+            setIsOpenModal(false);
+            blocker.reset?.();
+        }
+    }, [formState.isValid, blocker, createDraftTrigger, getValues]);
+
     const handleCloseModal = () => {
         setIsOpenModal(false);
         blocker.reset?.();
@@ -165,18 +196,7 @@ export const CreateNewRecipeForm: FC = () => {
         }
     }, [blocker.state]);
 
-    useEffect(() => {
-        if (!formState.isValid && isOpenModal && mode === 'draft') {
-            handleCloseModal();
-            setMode('start');
-        }
-    }, [formState.isValid, isOpenModal, mode]);
-
-    const onError: SubmitErrorHandler<CreateNewRecipeFormData | CreateDraftFormSchema> = (
-        errors,
-    ) => {
-        console.log('ON ERROR - mode: ', mode, 'errrors: ', errors);
-
+    const onError: SubmitErrorHandler<CreateNewRecipeFormData | CreateDraftFormSchema> = () => {
         setMode('start');
     };
 
@@ -186,7 +206,6 @@ export const CreateNewRecipeForm: FC = () => {
                 <ConfirmNavigation
                     blocker={blocker}
                     onSaveDraft={handleSaveDraft}
-                    isValidate={formState.isValid}
                     isOpen={isOpenModal}
                     onClose={handleCloseModal}
                 />
@@ -226,7 +245,9 @@ export const CreateNewRecipeForm: FC = () => {
                     <AddCookingSteps name='steps' control={control} />
                     <Stack flexDirection={{ base: 'column', md: 'row' }} gap='20px'>
                         <Button
-                            onClick={() => setMode('draft')}
+                            onClick={() => {
+                                setMode('draft');
+                            }}
                             type='submit'
                             h='48px'
                             p='0 24px'

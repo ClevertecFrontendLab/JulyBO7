@@ -19,7 +19,6 @@ import cupImage from '~/shared/assets/loginErrorModal.png';
 type ConfirmNavigationProps = {
     blocker: Blocker;
     onSaveDraft: () => void;
-    isValidate: boolean;
     onClose: () => void;
     isOpen: boolean;
 };
@@ -56,7 +55,7 @@ export const ConfirmNavigation: FC<ConfirmNavigationProps> = (props) => {
                         </Text>
                     </Box>
                     <Button
-                        type='submit'
+                        // type='submit'
                         w='100%'
                         onClick={onSaveDraft}
                         h='48px'

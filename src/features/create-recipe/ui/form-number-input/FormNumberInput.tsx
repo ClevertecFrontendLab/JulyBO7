@@ -10,11 +10,12 @@ import {
 import React from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 
 type NumberInputProps = {
     label: string;
-} & UseControllerProps<CreateNewRecipeFormData>;
+} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema>;
 
 export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
     const { label } = props;

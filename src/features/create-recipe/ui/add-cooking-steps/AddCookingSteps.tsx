@@ -8,11 +8,15 @@ import { AppLoader } from '~/shared/components/loader';
 
 import { ADD_COOKING_STEPS } from '../../model/constants/formText';
 import { useUploadImage } from '../../model/hooks/useUploadImage';
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 import { UploadImageModal } from '../upload-image-modal/UploadImageModal';
 import { CookingStep } from './cooking-step/CookingStep';
 
-type AddCookingStepsProps = UseControllerProps<CreateNewRecipeFormData, 'steps'>;
+type AddCookingStepsProps = UseControllerProps<
+    CreateNewRecipeFormData | CreateDraftFormSchema,
+    'steps'
+>;
 
 export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
     const { field, fieldState } = useController(props);

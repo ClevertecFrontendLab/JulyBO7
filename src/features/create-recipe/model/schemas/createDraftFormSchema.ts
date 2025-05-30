@@ -1,12 +1,24 @@
 import { z } from 'zod';
 
 export const createDraftFormSchema = z.object({
-    categoriesIds: z.array(z.string()).optional(),
-    title: z.string().min(1).max(50),
-    description: z.string().optional(),
+    // categoriesIds: z.array(z.string()).optional(),
+    categoriesIds: z
+        .string()
+        .array()
+        .optional()
+        .refine((arr) => !arr || arr.length === 0 || arr.length >= 3),
 
-    portions: z.number().optional(),
-    time: z.number().optional(),
+    title: z.string().min(1).max(50),
+    description: z.string().min(1).max(500).optional(),
+    portions: z
+        .number()
+        .refine((value) => value > 0)
+        .optional(),
+    time: z
+        .number()
+        .max(10000)
+        .refine((value) => value > 0)
+        .optional(),
     image: z.string().optional(),
     ingredients: z
         .array(

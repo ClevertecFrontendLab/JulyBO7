@@ -8,10 +8,11 @@ import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 
+import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 import { UploadImageModal } from '../upload-image-modal/UploadImageModal';
 
-type FormImageProps = UseControllerProps<CreateNewRecipeFormData, 'image'>;
+type FormImageProps = UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'image'>;
 
 export const FormImage: React.FC<FormImageProps> = (props) => {
     const { field, fieldState } = useController(props);

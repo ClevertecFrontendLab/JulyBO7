@@ -37,7 +37,7 @@ export type CreateNewRecipeRequest = {
     time: number;
     portions: number;
     image: string;
-    steps: Step[];
+    steps: (Omit<Step, 'image'> & { image?: string })[];
     ingredients: Ingredient[];
 };
 export type MeasureUnits = {
