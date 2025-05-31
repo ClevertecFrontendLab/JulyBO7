@@ -1,10 +1,10 @@
 import { Badge, HStack, Text, useMediaQuery } from '@chakra-ui/react';
 import React from 'react';
 
-import { Category } from '~/shared/types/categories';
+import { SelectedOption } from '../FormSelect';
 
 type PlaceholderProps = {
-    selectedOptions: Category[];
+    selectedOptions: SelectedOption[];
 };
 
 export const Placeholder: React.FC<PlaceholderProps> = (props) => {
@@ -34,7 +34,7 @@ export const Placeholder: React.FC<PlaceholderProps> = (props) => {
 
                 return (
                     <Badge
-                        key={selectedOption._id}
+                        key={selectedOption.id}
                         variant='outline_lime'
                         textStyle='xs'
                         fontWeight={500}

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const createDraftFormSchema = z.object({
-    // categoriesIds: z.array(z.string()).optional(),
     categoriesIds: z
         .string()
         .array()

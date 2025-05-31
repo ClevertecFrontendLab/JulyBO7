@@ -5,15 +5,17 @@ import { Recipe } from '~/entities/recipe';
 import { Category, SubCategory } from '../types/categories';
 import { UrlState } from '../types/url';
 
-export const getRecipeCardHandler = (
+export const getRecipeCardHandler = <T = unknown>(
     recipe: Recipe,
     navigate: NavigateFunction,
     categoryData: Category,
     subcategoryData: SubCategory,
     fromPath: string,
+    prefixPathSegment?: string,
+    additionalState?: T,
 ) => {
     const handleCard = () => {
-        const state: UrlState = {
+        const state: UrlState<T> = {
             breadcrumb: [
                 {
                     title: categoryData.title,
@@ -30,10 +32,15 @@ export const getRecipeCardHandler = (
                 },
             ],
             fromPath,
+            additionalState,
         };
-        navigate(`/${categoryData.category}/${subcategoryData.category}/${recipe._id}`, {
-            state,
-        });
+
+        navigate(
+            `${prefixPathSegment ? prefixPathSegment : ''}/${categoryData.category}/${subcategoryData.category}/${recipe._id}`,
+            {
+                state,
+            },
+        );
     };
     return handleCard;
 };

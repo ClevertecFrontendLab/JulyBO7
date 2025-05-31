@@ -1,8 +1,9 @@
-import { createBrowserRouter, Navigate } from 'react-router';
+import { createBrowserRouter, Navigate, RouteObject } from 'react-router';
 
 import { SignUpForm } from '~/features/auth';
 import { AuthPage, LoginPage } from '~/pages/auth-page';
 import { CategoryPage } from '~/pages/category-page';
+import { EditRecipePage } from '~/pages/edit-recipe-page';
 import { ErrorPage } from '~/pages/error-page';
 import { JuiciestPage } from '~/pages/juiciest-page';
 import { MainPage } from '~/pages/main-page';
@@ -22,7 +23,7 @@ import { Sidebar } from '~/widgets/sidebar/ui/Sidebar';
 const categoriesLC = localStorage.getItem(LOCAL_STORAGE_CATEGORIES_KEY);
 const categories = categoriesLC ? JSON.parse(categoriesLC) : [];
 
-const getCategoriesRouteElements = (categoryData: Category) => ({
+const getCategoriesRouteElements = (categoryData: Category): RouteObject => ({
     path: `/${categoryData.category}/`,
     element: (
         <AppLayout header={<Navbar />} footer={<Footer />} menu={<Menu />} sidebar={<Sidebar />}>
@@ -39,7 +40,7 @@ const categoriesRoutes = categories
     .filter((item) => !item.rootCategoryId)
     .map(getCategoriesRouteElements);
 
-const getRecipeRoutes = (categoryData: Category) => ({
+const getRecipeRoutes = (categoryData: Category): RouteObject => ({
     path: `/${categoryData.category}/`,
     children: categoryData.subCategories.map((subcat) => ({
         path: `${subcat.category}/:recipeId`,
@@ -56,7 +57,26 @@ const getRecipeRoutes = (categoryData: Category) => ({
     })),
 });
 
-const recipeRoutes = categories.filter((item) => !item.rootCategoryId).map(getRecipeRoutes);
+const recipeRoutes: RouteObject[] = categories
+    .filter((item) => !item.rootCategoryId)
+    .map(getRecipeRoutes);
+
+const editRecipeRoutes: RouteObject[] = recipeRoutes.map((recipeRoute) => ({
+    path: `/edit-recipe${recipeRoute.path}`,
+    children: recipeRoute.children?.map((childrenRoute) => ({
+        ...childrenRoute,
+        element: (
+            <AppLayout
+                header={<Navbar />}
+                footer={<Footer />}
+                menu={<Menu />}
+                sidebar={<Sidebar />}
+            >
+                <EditRecipePage />
+            </AppLayout>
+        ),
+    })),
+}));
 
 export const router = createBrowserRouter([
     {
@@ -74,6 +94,8 @@ export const router = createBrowserRouter([
     },
     ...categoriesRoutes,
     ...recipeRoutes,
+    ...editRecipeRoutes,
+
     {
         path: routePaths[AppRoutes.THE_JUICIEST],
         element: (

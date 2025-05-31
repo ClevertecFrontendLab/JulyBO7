@@ -2,13 +2,17 @@ import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router';
 
+import { setLoginAction } from '~/app/store/app-slice';
 import { useGetCategoriesQuery } from '~/entities/category';
 import { useCheckAuthQuery } from '~/features/auth';
 import { AppLoader } from '~/shared/components/loader';
-import { LOCAL_STORAGE_CATEGORIES_KEY } from '~/shared/constants/localStorage';
+import {
+    LOCAL_STORAGE_CATEGORIES_KEY,
+    LOCAL_STORAGE_USER_DATA_KEY,
+} from '~/shared/constants/localStorage';
 
 import { router } from './providers/routes/ui/router';
-import { setIsAuthAction, setIsInitAction } from './store/app-slice';
+import { setIsAuthAction, setIsInitAction, setUserIdAction } from './store/app-slice';
 import { useAppDispatch } from './store/hooks';
 
 function App() {
@@ -32,6 +36,12 @@ function App() {
     useEffect(() => {
         if (authData) {
             dispatch(setIsAuthAction(true));
+            const userDataLC = localStorage.getItem(LOCAL_STORAGE_USER_DATA_KEY);
+            const userData = userDataLC && JSON.parse(userDataLC);
+            if (userData) {
+                dispatch(setUserIdAction(userData.userId));
+                dispatch(setLoginAction(userData.login));
+            }
         }
         if (isSuccessAuth || isErrorAuth) {
             dispatch(setIsInitAction(true));

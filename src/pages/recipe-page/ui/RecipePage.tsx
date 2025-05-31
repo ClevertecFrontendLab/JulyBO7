@@ -28,12 +28,18 @@ export const RecipePage: FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const successMessage = useAppSelector((state) => state.app.successMessage);
 
+    const userId = useAppSelector((state) => state.app.userId);
+
+    console.log('RECIPE PAGE:', 'USER ID: ', userId);
+
     const {
         data: recipe,
         isLoading,
         isError: isErrorRecipe,
         error: getRecipeByIdError,
     } = useGetRecipeByIdQuery(recipeId!);
+
+    const myRecipe = userId === recipe?.authorId;
 
     useEffect(() => {
         if (isErrorRecipe && location.state.fromPath) {
@@ -72,7 +78,7 @@ export const RecipePage: FC = () => {
     return (
         <PageLayout>
             <VStack align='center' spacing={{ base: '24px', lg: '40px' }}>
-                <HeaderRecipe recipe={recipe} />
+                <HeaderRecipe recipe={recipe} myRecipe={myRecipe} />
                 <NutritionValueBlock nutritionValue={recipe.nutritionValue} />
                 <IngredientsBlock items={recipe.ingredients} portions={recipe.portions} />
                 <CookingSteps steps={recipe.steps} />

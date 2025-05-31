@@ -15,21 +15,13 @@ import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeForm
 
 type NumberInputProps = {
     label: string;
-} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema>;
+} & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'time' | 'portions'>;
 
 export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
     const { label } = props;
     const { field, fieldState } = useController(props);
 
-    const handleChange = (value: string, valueAsNumber: number) => {
-        console.log(
-            'value: ',
-            value,
-            'valueAsNumber: ',
-            valueAsNumber,
-            'field state: ',
-            fieldState,
-        );
+    const handleChange = (_, valueAsNumber: number) => {
         field.onChange(valueAsNumber);
     };
     return (
@@ -41,7 +33,8 @@ export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
                 w={{ base: '73px', md: '90px' }}
                 h='40px'
                 onChange={handleChange}
-                defaultValue={undefined}
+                value={field.value}
+                // defaultValue={undefined}
                 color='primaryColor'
             >
                 <NumberInputField

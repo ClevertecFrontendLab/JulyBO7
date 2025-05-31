@@ -1,7 +1,12 @@
+import { jwtDecode } from 'jwt-decode';
+
 import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { Tags } from '~/shared/api/constants/tags';
-import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '~/shared/constants/localStorage';
+import {
+    LOCAL_STORAGE_ACCESS_TOKEN_KEY,
+    LOCAL_STORAGE_USER_DATA_KEY,
+} from '~/shared/constants/localStorage';
 
 import { OtpPasswordFormData } from '../../ui/otp-password-form/OtpPasswordForm';
 import { AccountRecoveryFormData } from '../schemas/accountRecoveryFormSchema';
@@ -62,13 +67,16 @@ export const authApi = apiSlice
                 invalidatesTags: [Tags.AUTH],
                 transformResponse: (response, meta) => {
                     const headers = meta?.response?.headers;
-
                     const customHeader = headers?.get('Authentication-Access');
                     if (customHeader) {
+                        const decodedToken = jwtDecode(customHeader);
                         localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, customHeader);
+                        localStorage.setItem(
+                            LOCAL_STORAGE_USER_DATA_KEY,
+                            JSON.stringify(decodedToken),
+                        );
                     }
-
-                    return { response, customHeader };
+                    return { response };
                 },
             }),
         }),

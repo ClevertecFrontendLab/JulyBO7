@@ -1,14 +1,53 @@
-import { Box, Button, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { Badge, Box, Button, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
 import { RecipeBages, useGetCategoriesQuery } from '~/entities/category';
 import { Recipe } from '~/entities/recipe';
+import Alarm from '~/shared/assets/icons/components/Alarm';
+import Basket from '~/shared/assets/icons/components/Basket';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Reaction from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import Pen from '~/shared/assets/icons/components/Pen';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import { getRecipeCardHandler as getNavigateHandler } from '~/shared/lib/getRecipeCardHandler';
+import { SubCategory } from '~/shared/types/categories';
 
-export const HeaderRecipe: FC<{ recipe: Recipe }> = ({ recipe }) => {
+type HeaderRecipeProps = {
+    recipe: Recipe;
+    myRecipe: boolean;
+};
+
+export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
+    const { myRecipe, recipe } = props;
     const { data: categories } = useGetCategoriesQuery();
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    const subcategories = categories?.filter((category) => category.rootCategoryId);
+
+    const handleEditRecipe = () => {
+        if (categories && subcategories) {
+            const firstRecipeSubcategory = subcategories.find(
+                (sub) => sub._id === recipe.categoriesIds[0],
+            );
+            const categoryRecipe = categories.find(
+                (cat) => cat._id === firstRecipeSubcategory?.rootCategoryId,
+            );
+            if (firstRecipeSubcategory && categoryRecipe) {
+                const navigateToRecipePage = getNavigateHandler<Recipe>(
+                    recipe,
+                    navigate,
+                    categoryRecipe,
+                    firstRecipeSubcategory as SubCategory,
+                    pathname,
+                    '/edit-recipe',
+                    recipe,
+                );
+                navigateToRecipePage();
+            }
+        }
+    };
 
     return (
         <Stack
@@ -68,35 +107,64 @@ export const HeaderRecipe: FC<{ recipe: Recipe }> = ({ recipe }) => {
                         <Text textStyle='s'>{recipe?.description}</Text>
                     </Box>
                 </Box>
+
                 <HStack flexWrap='wrap' justify='space-between' w='100%'>
-                    <HStack>
-                        <Button
-                            variant='outline'
-                            size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
-                            leftIcon={
-                                <Reaction
-                                    w={{ base: '12px', lg: '14px', '2xl': '16px' }}
-                                    h={{ base: '12px', lg: '14px', '2xl': '16px' }}
-                                />
-                            }
-                        >
-                            Оценить рецепт
-                        </Button>
-                        <Button
-                            variant='solid'
-                            color='primaryColor'
-                            bg='lime.400'
-                            size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
-                            leftIcon={
-                                <Bookmark
-                                    w={{ base: '12px', lg: '14px', '2xl': '16px' }}
-                                    h={{ base: '12px', lg: '14px', '2xl': '16px' }}
-                                />
-                            }
-                        >
-                            Сохранить в закладки
-                        </Button>
-                    </HStack>
+                    <Badge
+                        borderRadius='4px'
+                        p='2px 8px'
+                        bg='gray.300'
+                        display='flex'
+                        alignItems='center'
+                        gap='8px'
+                    >
+                        <Alarm />
+                        <Text as='span' textStyle='s'>{`${recipe.time} минут`}</Text>
+                    </Badge>
+                    {myRecipe ? (
+                        <HStack>
+                            <Button variant='clear' size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}>
+                                <Basket fill='black' />
+                            </Button>
+                            <Button
+                                onClick={handleEditRecipe}
+                                variant='outline'
+                                border='1px solid rgba(0, 0, 0, 0.48)'
+                                size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
+                                leftIcon={<Pen fill='black' />}
+                            >
+                                Редактировать рецепт
+                            </Button>
+                        </HStack>
+                    ) : (
+                        <HStack>
+                            <Button
+                                variant='outline'
+                                size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
+                                leftIcon={
+                                    <Reaction
+                                        w={{ base: '12px', lg: '14px', '2xl': '16px' }}
+                                        h={{ base: '12px', lg: '14px', '2xl': '16px' }}
+                                    />
+                                }
+                            >
+                                Оценить рецепт
+                            </Button>
+                            <Button
+                                variant='solid'
+                                color='primaryColor'
+                                bg='lime.400'
+                                size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
+                                leftIcon={
+                                    <Bookmark
+                                        w={{ base: '12px', lg: '14px', '2xl': '16px' }}
+                                        h={{ base: '12px', lg: '14px', '2xl': '16px' }}
+                                    />
+                                }
+                            >
+                                Сохранить в закладки
+                            </Button>
+                        </HStack>
+                    )}
                 </HStack>
             </VStack>
         </Stack>

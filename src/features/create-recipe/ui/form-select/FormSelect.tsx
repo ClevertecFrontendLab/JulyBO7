@@ -10,6 +10,8 @@ import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 import { Placeholder } from './placeholder/Placeholder';
 
+export type SelectedOption = { title: string; id: string };
+
 type FormSelectProps = {
     options?: Category[];
     isClose?: boolean;
@@ -19,21 +21,37 @@ export const FormSelect: FC<FormSelectProps> = (props) => {
     const { options, isClose, ...rest } = props;
 
     const { field, fieldState } = useController(rest);
-    const [selectedOptions, setSelectedOptions] = useState<Category[]>([]);
-    console.log('field form select: ', field.value);
+
+    const defaultSelectedOptions = !field.value
+        ? []
+        : field.value
+              .map((subcatId) => {
+                  const option = options?.find((option) => option._id === subcatId);
+                  return option ? { title: option.title, id: option._id } : undefined;
+              })
+              .filter((selectedOption) => selectedOption !== undefined);
+
+    const [selectedOptions, setSelectedOptions] =
+        useState<SelectedOption[]>(defaultSelectedOptions);
 
     const handleCheckedOption = (option: Category) => (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.currentTarget.checked;
-        if (value) {
-            const fieldValue = [...selectedOptions.map((options) => options._id), option._id];
-            setSelectedOptions([...selectedOptions, option]);
+        const checked = e.currentTarget.checked;
+        if (checked) {
+            let fieldValue;
+            if (field.value) {
+                fieldValue = [...field.value, option._id];
+            } else {
+                fieldValue = [option._id];
+            }
+
             field.onChange(fieldValue);
+            setSelectedOptions([...selectedOptions, { title: option.title, id: option._id }]);
         } else {
-            const value = selectedOptions.filter(
-                (selectedOption) => selectedOption._id !== option._id,
+            const fieldValue = field.value?.filter((subcatId) => subcatId !== option._id);
+            field.onChange(fieldValue);
+            setSelectedOptions(
+                selectedOptions.filter((selectedOption) => selectedOption?.id !== option._id),
             );
-            setSelectedOptions(value);
-            field.onChange(value.map((item) => item._id));
         }
     };
     const optionsList = options?.map((option, idx) => (
@@ -45,9 +63,7 @@ export const FormSelect: FC<FormSelectProps> = (props) => {
             bg={idx % 2 ? 'bgColor' : 'gray.300'}
         >
             <Checkbox
-                isChecked={
-                    !!selectedOptions.find((selectedOption) => selectedOption._id === option._id)
-                }
+                isChecked={!!field.value?.find((subcatId) => subcatId === option._id)}
                 onChange={handleCheckedOption(option)}
                 variant='lime'
                 autoFocus={false}

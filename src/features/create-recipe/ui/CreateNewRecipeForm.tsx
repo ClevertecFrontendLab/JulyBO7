@@ -7,7 +7,6 @@ import { useBlocker, useLocation, useNavigate } from 'react-router';
 import { setSuccessMessageAction } from '~/app/store/app-slice';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
-import { useCreateRecipeMutation } from '~/entities/recipe';
 import { useCreateDraftMutation } from '~/entities/recipe/model/services/recipe';
 import Pen from '~/shared/assets/icons/components/Pen';
 import { Alert } from '~/shared/components/alert';
@@ -21,6 +20,7 @@ import {
     DRAFT_SAVED,
     HOW_LONG_DOES_IT_TAKE_TO_COOK_IN_MINUTES,
     HOW_MANY_PEOPLE_YOUR_RECIPE,
+    RECIPE_PUBLISHED_SUCCESSFULLY,
     RECIPE_TITLE,
 } from '../model/constants/formText';
 import {
@@ -40,7 +40,14 @@ import { FormNumberInput } from './form-number-input/FormNumberInput';
 import { FormSelect } from './form-select/FormSelect';
 import { FormTextarea } from './form-textarea/FormTextarea';
 
-export const CreateNewRecipeForm: FC = () => {
+type CreateNewRecipeFormProps = {
+    defaultValues: Partial<CreateNewRecipeFormData>;
+    triggerToPublishRecipe: unknown;
+    recipeId?: string;
+};
+export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
+    const { defaultValues, triggerToPublishRecipe, recipeId } = props;
+
     const { data: categories } = useGetCategoriesQuery();
     const subcategories = categories?.filter((category) => category.rootCategoryId);
     const navigate = useNavigate();
@@ -54,25 +61,13 @@ export const CreateNewRecipeForm: FC = () => {
     const { handleSubmit, control, formState, getValues } = useForm<
         CreateNewRecipeFormData | CreateDraftFormSchema
     >({
-        defaultValues: {
-            categoriesIds: [],
-            title: '',
-            description: undefined,
-            time: undefined,
-            portions: undefined,
-            image: undefined,
-            // steps: [{ description: undefined, stepNumber: 1, image: undefined }],
-            steps: undefined,
-
-            ingredients: [],
-        },
+        defaultValues,
         mode: 'onSubmit',
 
         resolver: zodResolver(
             mode === 'newRecipe' ? createNewRecipeFormSchema : createDraftFormSchema,
         ),
     });
-    const [createRecipeTrigger, { isLoading: createRecipeIsLoading }] = useCreateRecipeMutation();
     const [createDraftTrigger, { isLoading: createDraftIsLoading }] = useCreateDraftMutation();
 
     const [errorMessage, setErrorMessage] = useState<null | { title: string; text: string }>();
@@ -107,8 +102,17 @@ export const CreateNewRecipeForm: FC = () => {
         }
         if (mode === 'newRecipe') {
             try {
-                const res = await createRecipeTrigger(data).unwrap();
-                dispatch(setSuccessMessageAction(DRAFT_SAVED));
+                let res;
+                if (recipeId) {
+                    res = await triggerToPublishRecipe({
+                        formData: data,
+                        id: recipeId,
+                    }).unwrap();
+                } else {
+                    res = await triggerToPublishRecipe(data).unwrap();
+                }
+
+                dispatch(setSuccessMessageAction(RECIPE_PUBLISHED_SUCCESSFULLY));
 
                 if (categories && subcategories) {
                     const firstRecipeSubcategory = subcategories.find(
@@ -246,6 +250,7 @@ export const CreateNewRecipeForm: FC = () => {
                     <Stack flexDirection={{ base: 'column', md: 'row' }} gap='20px'>
                         <Button
                             onClick={() => {
+                                console.log('CLICK НА КНОПКЕ СОХРАНИТЬ ЧЕРНОВКИ');
                                 setMode('draft');
                             }}
                             type='submit'
@@ -258,7 +263,10 @@ export const CreateNewRecipeForm: FC = () => {
                             Сохранить черновик
                         </Button>
                         <Button
-                            onClick={() => setMode('newRecipe')}
+                            onClick={() => {
+                                console.log('CLICK НА КНОПКЕ ОТПРАВИТЬ РЕЦЕПТ');
+                                setMode('newRecipe');
+                            }}
                             type='submit'
                             h='48px'
                             p='0 24px'
@@ -268,7 +276,7 @@ export const CreateNewRecipeForm: FC = () => {
                     </Stack>
                 </VStack>
             </form>
-            {createRecipeIsLoading || (createDraftIsLoading && <AppLoader />)}
+            {createDraftIsLoading && <AppLoader />}
             {errorMessage && (
                 <Alert
                     onClose={() => setErrorMessage(null)}

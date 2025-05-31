@@ -10,3 +10,4 @@ export const MEASUREMENT_UNIT = 'Единица измерения';
 
 export const ADD_COOKING_STEPS = 'Добавьте шаги приготовления';
 export const DRAFT_SAVED = 'Черновик успешно сохранен';
+export const RECIPE_PUBLISHED_SUCCESSFULLY = 'Рецепт успешно опубликован';

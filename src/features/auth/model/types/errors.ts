@@ -10,4 +10,5 @@ export type AuthErrorMessage = {
 export type AuthResponse = {
     statusText: string;
     message: string;
+    decodedToken?: { userId: string; login: string };
 };

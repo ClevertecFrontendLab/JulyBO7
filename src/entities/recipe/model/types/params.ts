@@ -30,6 +30,7 @@ export type GetCategoryRecipesRequest = {
     page?: number;
     limit?: number;
 };
+
 export type CreateNewRecipeRequest = {
     categoriesIds: string[];
     title: string;
@@ -40,11 +41,17 @@ export type CreateNewRecipeRequest = {
     steps: (Omit<Step, 'image'> & { image?: string })[];
     ingredients: Ingredient[];
 };
+
+export type UpdateRecipeRequest = {
+    id: string;
+    formData: CreateNewRecipeRequest;
+};
 export type MeasureUnits = {
     _id: string;
     name: string;
 };
 export type GetMeasureUnitsResponse = MeasureUnits[];
+
 export type UploadFileResponse = {
     name: string;
     url: string;

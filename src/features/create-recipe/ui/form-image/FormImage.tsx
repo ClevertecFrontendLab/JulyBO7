@@ -22,7 +22,7 @@ export const FormImage: React.FC<FormImageProps> = (props) => {
     const [file, setFile] = useState<File | null>();
     const [errorMessage, setErrorMessage] = useState<null | { title: string; text: string }>();
 
-    const [trigger, { isLoading, data }] = useUploadFileMutation();
+    const [trigger, { isLoading }] = useUploadFileMutation();
 
     const handleImageAddition = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -47,7 +47,7 @@ export const FormImage: React.FC<FormImageProps> = (props) => {
 
             const res = await trigger(formData).unwrap();
 
-            field.onChange(`${IMAGE_API}${res.url}`);
+            field.onChange(res.url);
 
             setPreviewImage('');
             setIsOpenModal(false);
@@ -59,9 +59,9 @@ export const FormImage: React.FC<FormImageProps> = (props) => {
 
     return (
         <>
-            {data?.url ? (
+            {field.value ? (
                 <Image
-                    src={`${IMAGE_API}${data.url}`}
+                    src={`${IMAGE_API}${field.value}`}
                     objectFit='cover'
                     w={{ base: '328px', md: '232px', lg: '353px', '2xl': '553px' }}
                     h={{ base: '224px', md: '224px', lg: '410px' }}

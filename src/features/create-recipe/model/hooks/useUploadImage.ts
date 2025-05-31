@@ -1,26 +1,23 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 import { useUploadFileMutation } from '~/entities/recipe';
-import { IMAGE_API } from '~/shared/constants/imageApi';
 
 import { CreateNewRecipeFormData } from '../schemas/createNewRecipeFormSchema';
 
 type UseUploadImage = {
     field: ControllerRenderProps<CreateNewRecipeFormData, 'steps'>;
     setIsOpenModal: (value: boolean) => void;
+    stepIndexForImageUpload: React.RefObject<number | null>;
+    setImage: (value: string) => void;
 };
 export const useUploadImage = (params: UseUploadImage) => {
-    const { field, setIsOpenModal } = params;
+    const { field, setIsOpenModal, stepIndexForImageUpload, setImage } = params;
+
     const [errorMessage, setErrorMessage] = useState<null | { title: string; text: string }>();
-    const [imageSrc, setImageSrc] = useState<{ idx: number | null; image: string }[]>([
-        { idx: null, image: '' },
-    ]);
+
     const [file, setFile] = useState<File | null>();
-
     const [previewImage, setPreviewImage] = useState<string>('');
-
-    const stepIndexForImageUpload = useRef<number>(null);
 
     const [trigger, { isLoading }] = useUploadFileMutation();
 
@@ -40,28 +37,22 @@ export const useUploadImage = (params: UseUploadImage) => {
             formData.append('file', file);
 
             const res = await trigger(formData).unwrap();
-            const newImageSrc = {
-                idx: stepIndexForImageUpload.current,
-                image: previewImage,
-            };
-            setImageSrc([...imageSrc, newImageSrc]);
-            // const changedStepValue = field.value.find(
-            //     (_, index) => index === stepIndexForImageUpload.current,
-            // );
-            const newValue = field.value.map((step, index) => {
-                if (index === stepIndexForImageUpload.current) {
-                    return { ...step, image: `${IMAGE_API}${res.url}` };
-                }
-            });
-            field.onChange(newValue);
-            // if (changedStepValue) {
-            //     field.onChange([
-            //         ...field.value,
-            //         { ...changedStepValue, image: `${IMAGE_API}${res.url}` },
-            //     ]);
-            // }
 
-            stepIndexForImageUpload.current = null;
+            if (stepIndexForImageUpload.current !== null) {
+                const newValue = field.value.map((step, index) => {
+                    if (index === stepIndexForImageUpload.current) {
+                        return { ...step, image: res.url };
+                    } else {
+                        return step;
+                    }
+                });
+
+                field.onChange(newValue);
+                stepIndexForImageUpload.current = null;
+            } else {
+                setImage(res.url);
+            }
+
             setPreviewImage('');
             setIsOpenModal(false);
         } catch {
@@ -77,8 +68,6 @@ export const useUploadImage = (params: UseUploadImage) => {
         errorMessage,
         setErrorMessage,
         previewImage,
-        imageSrc,
         stepIndexForImageUpload,
-        setImageSrc,
     };
 };

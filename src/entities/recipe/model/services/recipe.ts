@@ -9,6 +9,7 @@ import {
     GetMeasureUnitsResponse,
     GetRecipesResponse,
     RequestParams,
+    UpdateRecipeRequest,
     UploadFileResponse,
 } from '../types/params';
 import { Recipe } from '../types/recipe';
@@ -76,6 +77,14 @@ export const recipeApiSlice = apiSlice
                     body,
                 }),
             }),
+            updateRecipe: builder.mutation<void, UpdateRecipeRequest>({
+                query: (data) => ({
+                    url: `${ApiEndpoints.RECIPE}/${data.id}`,
+                    method: 'PATCH',
+                    body: data.formData,
+                }),
+                invalidatesTags: [Tags.RECIPE],
+            }),
         }),
     });
 
@@ -88,4 +97,5 @@ export const {
     useCreateRecipeMutation,
     useUploadFileMutation,
     useCreateDraftMutation,
+    useUpdateRecipeMutation,
 } = recipeApiSlice;

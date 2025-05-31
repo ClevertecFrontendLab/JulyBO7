@@ -1,7 +1,8 @@
 import { Button, Text, VStack } from '@chakra-ui/react';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
+import { Step } from '~/entities/recipe';
 import Plus from '~/shared/assets/icons/components/SmallPlus';
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
@@ -21,9 +22,15 @@ type AddCookingStepsProps = UseControllerProps<
 export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
     const { field, fieldState } = useController(props);
 
-    const [stepNumber, setStepNumber] = useState(1);
-    const [descriptionValue, setdescriptionValue] = useState<string[]>(['']);
+    const [stepNumber, setStepNumber] = useState(
+        !field.value || field.value.length === 0 ? 1 : field.value.length,
+    );
+    const [descriptionValue, setDescriptionValue] = useState('');
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [image, setImage] = useState<string>();
+
+    const stepIndexForImageUpload = useRef<number>(null);
+
     const {
         handleImageAddition,
         handleUploadImage,
@@ -31,24 +38,13 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
         errorMessage,
         setErrorMessage,
         previewImage,
-        imageSrc,
-        stepIndexForImageUpload,
-        setImageSrc,
-    } = useUploadImage({ field, setIsOpenModal });
+    } = useUploadImage({ field, setIsOpenModal, stepIndexForImageUpload, setImage });
 
     const handleDescriptionChange = (idx: number) => (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setdescriptionValue(
-            descriptionValue.map((value, index) => {
-                if (index === idx) {
-                    return e.currentTarget.value;
-                } else {
-                    return value;
-                }
-            }),
-        );
-        const newValue = field.value.map((step, index) => {
+        const description = e.currentTarget.value;
+        const newValue = field.value?.map((step, index) => {
             if (index === idx) {
-                return { ...step, description: e.currentTarget.value };
+                return { ...step, description };
             }
             return step;
         });
@@ -57,47 +53,50 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
     };
 
     const handleStepAddition = () => {
-        setStepNumber(stepNumber + 1);
-        setdescriptionValue([...descriptionValue, '']);
-
-        const newStep = {
-            description: undefined,
-            image: undefined,
-            stepNumber: field.value.length + 1,
-        };
-        field.onChange([...field.value, newStep]);
-        console.log('img в форме: ', field);
+        setStepNumber((prev) =>
+            !field.value || prev - field.value?.length === 1 ? prev : prev + 1,
+        );
     };
-    const handleStepDelete = (idx: number) => () => {
-        if (field.value.length === 1) {
-            const newStep = {
-                description: undefined,
-                image: undefined,
-                stepNumber: 1,
-            };
-            field.onChange([newStep]);
-            setdescriptionValue(['']);
-            setStepNumber(1);
-            setImageSrc([{ idx: null, image: '' }]);
-        } else {
-            const newValue = field.value
-                .filter((_, index) => index !== idx)
-                .map((step, index) => ({ ...step, stepNumber: index + 1 }));
-            field.onChange(newValue);
-            setStepNumber(stepNumber - 1);
-            setdescriptionValue(descriptionValue.filter((_, index) => index !== idx));
-            setImageSrc(imageSrc.filter((step) => step.idx !== idx));
 
-            console.log('field: ', field);
+    const handleStepDelete = (idx: number) => () => {
+        const newValue = field.value
+            ?.filter((_, index) => index !== idx)
+            .map((step, index) => ({ ...step, stepNumber: index + 1 }));
+
+        field.onChange(newValue);
+        setStepNumber((prev) => (prev === 1 ? prev : prev - 1));
+    };
+
+    const handleOpenModal = (idx?: number) => () => {
+        setIsOpenModal(true);
+        if (idx !== undefined) {
+            stepIndexForImageUpload.current = idx;
         }
     };
 
-    const handleOpenModal = (idx: number) => () => {
-        setIsOpenModal(true);
-        stepIndexForImageUpload.current = idx;
-    };
     const handleCloseModal = () => {
         setIsOpenModal(false);
+    };
+    console.log('FIELD VALUE: ', field);
+
+    const handleStepToFormAddition = () => {
+        if (descriptionValue.trim()) {
+            const newStep: Omit<Step, 'image'> & { image?: string } = {
+                description: descriptionValue.trim(),
+                stepNumber: stepNumber,
+                image: image === '' ? undefined : image,
+            };
+            let newFieldValue;
+
+            if (!field.value) {
+                newFieldValue = [newStep];
+            } else {
+                newFieldValue = [...field.value, newStep];
+            }
+            field.onChange(newFieldValue);
+            setDescriptionValue('');
+            setImage('');
+        }
     };
 
     return (
@@ -106,22 +105,31 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
                 {ADD_COOKING_STEPS}
             </Text>
 
-            {Array.from({ length: stepNumber }).map((_, idx) => {
-                const src = imageSrc.find((src) => src.idx === idx)?.image;
-                // const src = field.value.find((_, index) => index === idx)?.image;
-
-                return (
+            {Array.isArray(field.value) &&
+                field.value.length > 0 &&
+                field.value.map((step, idx) => (
                     <CookingStep
-                        value={descriptionValue[idx]}
-                        step={idx + 1}
+                        value={step.description}
+                        step={step.stepNumber}
+                        imageSrc={step.image}
                         onChange={handleDescriptionChange(idx)}
                         onDelete={handleStepDelete(idx)}
                         invalid={fieldState.invalid}
                         onImageAddition={handleOpenModal(idx)}
-                        imageSrc={src}
                     />
-                );
-            })}
+                ))}
+
+            {(!field.value || field.value.length === 0 || stepNumber !== field.value.length) && (
+                <CookingStep
+                    value={descriptionValue}
+                    step={stepNumber}
+                    onChange={(e) => setDescriptionValue(e.currentTarget.value)}
+                    invalid={fieldState.invalid}
+                    onBlurText={handleStepToFormAddition}
+                    imageSrc={image}
+                    onImageAddition={handleOpenModal()}
+                />
+            )}
 
             <Button
                 onClick={handleStepAddition}
