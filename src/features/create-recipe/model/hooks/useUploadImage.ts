@@ -69,5 +69,6 @@ export const useUploadImage = (params: UseUploadImage) => {
         setErrorMessage,
         previewImage,
         stepIndexForImageUpload,
+        setPreviewImage,
     };
 };

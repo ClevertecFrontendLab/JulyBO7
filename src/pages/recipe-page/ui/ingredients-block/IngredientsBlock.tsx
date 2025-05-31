@@ -17,7 +17,7 @@ import {
     INGREDIENT_QUANTITY,
 } from '~/shared/constants/tests';
 
-import { INGREDIENTS, PORTIONS } from '../../main/recipePage';
+import { INGREDIENTS, PORTIONS } from '../../model/constants/recipePage';
 
 type IngredientsBlockProps = {
     items: Ingredient[];

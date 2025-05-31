@@ -1,17 +1,32 @@
 import { Badge, Box, Button, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, MouseEvent, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
+import { setSuccessMessageAction } from '~/app/store/app-slice';
+import { useAppDispatch } from '~/app/store/hooks';
 import { RecipeBages, useGetCategoriesQuery } from '~/entities/category';
-import { Recipe } from '~/entities/recipe';
+import {
+    Recipe,
+    useDeleteRecipeMutation,
+    useLikeRecipeMutation,
+    useSaveRecipeMutation,
+} from '~/entities/recipe';
 import Alarm from '~/shared/assets/icons/components/Alarm';
 import Basket from '~/shared/assets/icons/components/Basket';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Reaction from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 import Pen from '~/shared/assets/icons/components/Pen';
+import { Alert } from '~/shared/components/alert';
+import { AppLoader } from '~/shared/components/loader';
+import { AppRoutes, routePaths } from '~/shared/config/router';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 import { getRecipeCardHandler as getNavigateHandler } from '~/shared/lib/getRecipeCardHandler';
 import { SubCategory } from '~/shared/types/categories';
+import { ErrorMessage } from '~/shared/types/errors';
+
+import { FAILED_TO_DELETE_RECIPE, SERVER_ERROR, TRY_LATER } from '../../model/constants/error';
+import { RECIPE_DELETE_SUCCESS } from '../../model/constants/recipePage';
 
 type HeaderRecipeProps = {
     recipe: Recipe;
@@ -23,8 +38,15 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
     const { data: categories } = useGetCategoriesQuery();
     const navigate = useNavigate();
     const { pathname } = useLocation();
+    const dispatch = useAppDispatch();
 
     const subcategories = categories?.filter((category) => category.rootCategoryId);
+
+    const [trigger, { isLoading: deleteRecipeIsLoading }] = useDeleteRecipeMutation();
+    const [likeRecipeTrigger] = useLikeRecipeMutation();
+    const [saveRecipeTrigger] = useSaveRecipeMutation();
+
+    const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
     const handleEditRecipe = () => {
         if (categories && subcategories) {
@@ -47,6 +69,47 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                 navigateToRecipePage();
             }
         }
+    };
+    const handleDeleteRecipe = async () => {
+        try {
+            await trigger(recipe._id);
+
+            dispatch(setSuccessMessageAction(RECIPE_DELETE_SUCCESS));
+            navigate(routePaths[AppRoutes.MAIN]);
+        } catch (error) {
+            const dataError = error as FetchBaseQueryError;
+            if (dataError.status === 500) {
+                setErrorMessage({ title: SERVER_ERROR, text: FAILED_TO_DELETE_RECIPE });
+            }
+        }
+    };
+    const handleRecipeLike = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        try {
+            await likeRecipeTrigger(recipe._id);
+        } catch (error) {
+            const dataError = error as FetchBaseQueryError;
+            if (dataError.status === 500) {
+                setErrorMessage({ title: SERVER_ERROR, text: TRY_LATER });
+            }
+        }
+    };
+
+    const handleSaveRecipe = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        try {
+            await saveRecipeTrigger(recipe._id);
+        } catch (error) {
+            const dataError = error as FetchBaseQueryError;
+            if (dataError.status === 500) {
+                setErrorMessage({ title: SERVER_ERROR, text: TRY_LATER });
+            }
+        }
+    };
+
+    const handleErrorAlertClose = () => {
+        setErrorMessage(undefined);
     };
 
     return (
@@ -123,7 +186,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                     {myRecipe ? (
                         <HStack>
                             <Button variant='clear' size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}>
-                                <Basket fill='black' />
+                                <Basket onClick={handleDeleteRecipe} fill='black' />
                             </Button>
                             <Button
                                 onClick={handleEditRecipe}
@@ -138,6 +201,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                     ) : (
                         <HStack>
                             <Button
+                                onClick={handleRecipeLike}
                                 variant='outline'
                                 size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
                                 leftIcon={
@@ -150,6 +214,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                                 Оценить рецепт
                             </Button>
                             <Button
+                                onClick={handleSaveRecipe}
                                 variant='solid'
                                 color='primaryColor'
                                 bg='lime.400'
@@ -167,6 +232,18 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                     )}
                 </HStack>
             </VStack>
+            {errorMessage && (
+                <Alert
+                    title={errorMessage?.title}
+                    type='error'
+                    text={errorMessage?.text}
+                    onClose={handleErrorAlertClose}
+                    // bottom={{ base: '100px', lg: '80px' }}
+                    // left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
+                    // transform='translateX(0)'
+                />
+            )}
+            {deleteRecipeIsLoading && <AppLoader />}
         </Stack>
     );
 };

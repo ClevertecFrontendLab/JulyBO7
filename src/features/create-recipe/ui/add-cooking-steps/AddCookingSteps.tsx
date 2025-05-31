@@ -38,6 +38,7 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
         errorMessage,
         setErrorMessage,
         previewImage,
+        setPreviewImage,
     } = useUploadImage({ field, setIsOpenModal, stepIndexForImageUpload, setImage });
 
     const handleDescriptionChange = (idx: number) => (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -98,7 +99,10 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
             setImage('');
         }
     };
-
+    const handleDeleteImage = () => {
+        setPreviewImage('');
+        setIsOpenModal(false);
+    };
     return (
         <VStack w={{ base: '100%', md: '604px', lg: '658px', '2xl': '668px' }} gap='16px'>
             <Text textStyle={{ base: 's', lg: 'm' }} fontWeight={600} alignSelf='start'>
@@ -151,6 +155,7 @@ export const AddCookingSteps: React.FC<AddCookingStepsProps> = (props) => {
                 previewImage={previewImage}
                 onImageAddition={handleImageAddition}
                 onImageSave={handleUploadImage}
+                onImageDelete={handleDeleteImage}
             />
             {isLoading && <AppLoader />}
             {errorMessage && (

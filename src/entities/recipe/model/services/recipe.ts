@@ -1,6 +1,7 @@
 import { apiSlice } from '~/shared/api';
 import { ApiEndpoints } from '~/shared/api/constants/api';
 import { Tags } from '~/shared/api/constants/tags';
+import { LOCAL_STORAGE_USER_DATA_KEY } from '~/shared/constants/localStorage';
 
 import {
     CreateDraftRequest,
@@ -34,7 +35,11 @@ export const recipeApiSlice = apiSlice
                     url: `${ApiEndpoints.RECIPE}/${id}`,
                     method: 'GET',
                 }),
-                providesTags: [Tags.RECIPE],
+                providesTags: (result) => {
+                    const userDataLC = localStorage.getItem(LOCAL_STORAGE_USER_DATA_KEY);
+                    const userData = userDataLC && JSON.parse(userDataLC);
+                    return result && result.authorId !== userData.userId ? [Tags.RECIPE] : [];
+                },
             }),
 
             getCategoryRecipes: builder.query<GetRecipesResponse, GetCategoryRecipesRequest>({
@@ -51,6 +56,30 @@ export const recipeApiSlice = apiSlice
                     url: `${ApiEndpoints.RECIPE}`,
                     method: 'POST',
                     body,
+                }),
+
+                invalidatesTags: [Tags.RECIPE],
+            }),
+            deleteRecipe: builder.mutation<void, string>({
+                query: (id) => ({
+                    url: `${ApiEndpoints.RECIPE}/${id}`,
+                    method: 'DELETE',
+                }),
+
+                invalidatesTags: [Tags.RECIPE],
+            }),
+            likeRecipe: builder.mutation<void, string>({
+                query: (id) => ({
+                    url: `${ApiEndpoints.RECIPE}/${id}${ApiEndpoints.LIKE}`,
+                    method: 'POST',
+                }),
+
+                invalidatesTags: [Tags.RECIPE],
+            }),
+            saveRecipe: builder.mutation<void, string>({
+                query: (id) => ({
+                    url: `${ApiEndpoints.RECIPE}/${id}${ApiEndpoints.BOOKMARK}`,
+                    method: 'POST',
                 }),
 
                 invalidatesTags: [Tags.RECIPE],
@@ -98,4 +127,7 @@ export const {
     useUploadFileMutation,
     useCreateDraftMutation,
     useUpdateRecipeMutation,
+    useDeleteRecipeMutation,
+    useLikeRecipeMutation,
+    useSaveRecipeMutation,
 } = recipeApiSlice;

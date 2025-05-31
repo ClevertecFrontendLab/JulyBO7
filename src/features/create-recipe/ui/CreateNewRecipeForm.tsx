@@ -7,7 +7,7 @@ import { useBlocker, useLocation, useNavigate } from 'react-router';
 import { setSuccessMessageAction } from '~/app/store/app-slice';
 import { useAppDispatch } from '~/app/store/hooks';
 import { useGetCategoriesQuery } from '~/entities/category';
-import { useCreateDraftMutation } from '~/entities/recipe/model/services/recipe';
+import { useCreateDraftMutation } from '~/entities/recipe';
 import Pen from '~/shared/assets/icons/components/Pen';
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';

@@ -20,10 +20,11 @@ type UploadImageModalProps = {
     previewImage: string;
     onImageAddition: (e: ChangeEvent<HTMLInputElement>) => void;
     onImageSave: () => void;
+    onImageDelete?: () => void;
 };
 
 export const UploadImageModal: React.FC<UploadImageModalProps> = (props) => {
-    const { isOpen, onClose, previewImage, onImageAddition, onImageSave } = props;
+    const { isOpen, onClose, previewImage, onImageAddition, onImageSave, onImageDelete } = props;
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -56,6 +57,9 @@ export const UploadImageModal: React.FC<UploadImageModalProps> = (props) => {
                                 />
                                 <Button onClick={onImageSave} h='48px' w='100%'>
                                     Сохранить
+                                </Button>
+                                <Button onClick={onImageDelete} variant='clear' h='48px' w='100%'>
+                                    Удалить
                                 </Button>
                             </VStack>
                         ) : (

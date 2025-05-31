@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { NutritionValue } from '~/entities/recipe';
 
-import { CALORIES_NOTE } from '../../main/recipePage';
+import { CALORIES_NOTE } from '../../model/constants/recipePage';
 import { NutritionValueItem } from './nutrition-value-item/NutritionValueItem';
 
 export const NutritionValueBlock: FC<{ nutritionValue: NutritionValue }> = (props) => {

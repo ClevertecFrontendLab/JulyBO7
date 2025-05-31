@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useLocation } from 'react-router';
 
 import { Recipe } from '~/entities/recipe';
-import { useUpdateRecipeMutation } from '~/entities/recipe/model/services/recipe';
+import { useUpdateRecipeMutation } from '~/entities/recipe';
 import { CreateNewRecipeForm } from '~/features/create-recipe';
 import { PageLayout } from '~/shared/components/layouts';
 import { AppLoader } from '~/shared/components/loader';

@@ -9,14 +9,18 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
-import { FC, ReactNode } from 'react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { FC, MouseEvent, ReactNode, useState } from 'react';
 
 import { RecipeBages } from '~/entities/category';
-import { Recipe } from '~/entities/recipe';
+import { Recipe, useSaveRecipeMutation } from '~/entities/recipe';
+import { SERVER_ERROR, TRY_LATER } from '~/pages/recipe-page/model/constants/error';
 import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
+import { Alert } from '~/shared/components/alert';
 import { IMAGE_API } from '~/shared/constants/imageApi';
 import { Category } from '~/shared/types/categories';
+import { ErrorMessage } from '~/shared/types/errors';
 
 import { Badge, BadgeColor, BadgeTheme } from '../../../badge/ui/Badge';
 
@@ -33,6 +37,25 @@ type HorizontalCardProps = {
 export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
     const { title, onSave, onCook, recomend, indexForTest, recipe, categories, ...rest } = props;
 
+    const [saveRecipeTrigger] = useSaveRecipeMutation();
+    const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
+
+    const handleSaveRecipe = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        try {
+            await saveRecipeTrigger(recipe._id);
+        } catch (error) {
+            const dataError = error as FetchBaseQueryError;
+            if (dataError.status === 500) {
+                setErrorMessage({ title: SERVER_ERROR, text: TRY_LATER });
+            }
+        }
+    };
+
+    const handleErrorAlertClose = () => {
+        setErrorMessage(undefined);
+    };
     return (
         <Card
             as='article'
@@ -130,7 +153,11 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                 </Box>
 
                 <ButtonGroup gap={{ base: '12px', lg: '8px' }} justifyContent='flex-end' mt='auto'>
-                    <Button variant='outline' size={{ base: 's', lg: 'm' }} onClick={onSave}>
+                    <Button
+                        variant='outline'
+                        size={{ base: 's', lg: 'm' }}
+                        onClick={handleSaveRecipe}
+                    >
                         <Bookmark />
                         <Text ml='8px' display={{ base: 'none', lg: 'block' }} fontWeight={600}>
                             Сохранить
@@ -146,6 +173,14 @@ export const HorizontalCard: FC<HorizontalCardProps> = (props) => {
                     </Button>
                 </ButtonGroup>
             </Stack>
+            {errorMessage && (
+                <Alert
+                    title={errorMessage?.title}
+                    type='error'
+                    text={errorMessage?.text}
+                    onClose={handleErrorAlertClose}
+                />
+            )}
         </Card>
     );
 };
