@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { FC, MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { setSuccessMessageAction } from '~/app/store/app-slice';
@@ -21,6 +21,8 @@ import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import { LOCAL_STORAGE_USER_DATA_KEY } from '~/shared/constants/localStorage';
+import { RECIPE_DELETE_BUTTON } from '~/shared/constants/tests';
 import { getRecipeCardHandler as getNavigateHandler } from '~/shared/lib/getRecipeCardHandler';
 import { SubCategory } from '~/shared/types/categories';
 import { ErrorMessage } from '~/shared/types/errors';
@@ -30,11 +32,10 @@ import { RECIPE_DELETE_SUCCESS } from '../../model/constants/recipePage';
 
 type HeaderRecipeProps = {
     recipe: Recipe;
-    myRecipe: boolean;
 };
 
 export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
-    const { myRecipe, recipe } = props;
+    const { recipe } = props;
     const { data: categories } = useGetCategoriesQuery();
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -47,6 +48,8 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
     const [saveRecipeTrigger] = useSaveRecipeMutation();
 
     const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
+
+    const [myRecipe, setMyRecipe] = useState(false);
 
     const handleEditRecipe = () => {
         if (categories && subcategories) {
@@ -72,7 +75,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
     };
     const handleDeleteRecipe = async () => {
         try {
-            await trigger(recipe._id);
+            await trigger(recipe._id).unwrap();
 
             dispatch(setSuccessMessageAction(RECIPE_DELETE_SUCCESS));
             navigate(routePaths[AppRoutes.MAIN]);
@@ -86,7 +89,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
     const handleRecipeLike = async (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         try {
-            await likeRecipeTrigger(recipe._id);
+            await likeRecipeTrigger(recipe._id).unwrap();
         } catch (error) {
             const dataError = error as FetchBaseQueryError;
             if (dataError.status === 500) {
@@ -99,7 +102,7 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
         e.preventDefault();
 
         try {
-            await saveRecipeTrigger(recipe._id);
+            await saveRecipeTrigger(recipe._id).unwrap();
         } catch (error) {
             const dataError = error as FetchBaseQueryError;
             if (dataError.status === 500) {
@@ -111,6 +114,15 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
     const handleErrorAlertClose = () => {
         setErrorMessage(undefined);
     };
+
+    useEffect(() => {
+        const userDataLC = localStorage.getItem(LOCAL_STORAGE_USER_DATA_KEY);
+        let userId;
+        if (userDataLC) {
+            userId = JSON.parse(userDataLC).userId;
+            setMyRecipe(userId === recipe.authorId);
+        }
+    }, [recipe.authorId]);
 
     return (
         <Stack
@@ -185,7 +197,11 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                     </Badge>
                     {myRecipe ? (
                         <HStack>
-                            <Button variant='clear' size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}>
+                            <Button
+                                data-test-id={RECIPE_DELETE_BUTTON}
+                                variant='clear'
+                                size={{ base: 'xs', lg: 'm', '2xl': 'xl' }}
+                            >
                                 <Basket onClick={handleDeleteRecipe} fill='black' />
                             </Button>
                             <Button
@@ -238,9 +254,6 @@ export const HeaderRecipe: FC<HeaderRecipeProps> = (props) => {
                     type='error'
                     text={errorMessage?.text}
                     onClose={handleErrorAlertClose}
-                    // bottom={{ base: '100px', lg: '80px' }}
-                    // left={{ base: '16px', md: '220px', lg: '155px', '2xl': '275px' }}
-                    // transform='translateX(0)'
                 />
             )}
             {deleteRecipeIsLoading && <AppLoader />}

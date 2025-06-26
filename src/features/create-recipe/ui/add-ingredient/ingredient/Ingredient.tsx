@@ -1,13 +1,13 @@
 import { Button, HStack, Input, Select } from '@chakra-ui/react';
 import React, { ChangeEvent, JSX } from 'react';
 
+import { useGetMeasureUnitsQuery } from '~/entities/recipe';
 import Basket from '~/shared/assets/icons/components/Basket';
-import Plus from '~/shared/assets/icons/components/Plus';
 
 type IngredientProps = {
-    countValue: number;
-    title: string;
-    measureUnit: string;
+    countValue?: number;
+    title?: string;
+    measureUnit?: string;
     onChangeTitle: (e: ChangeEvent<HTMLInputElement>) => void;
     onChangeCount: (e: ChangeEvent<HTMLInputElement>) => void;
     onChangeMeasureUnit: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -15,8 +15,11 @@ type IngredientProps = {
     onDelete?: () => void;
     onAdd?: () => void;
     options?: JSX.Element[];
-    borderColor?: string;
     placeholder?: string;
+    titleDataTestId?: string;
+    countDataTestId?: string;
+    measureUnitDataTestId?: string;
+    deleteBtnDataTestId?: string;
 };
 
 export const Ingredient: React.FC<IngredientProps> = (props) => {
@@ -28,51 +31,91 @@ export const Ingredient: React.FC<IngredientProps> = (props) => {
         onChangeCount,
         measureUnit,
         onChangeMeasureUnit,
-        options,
         onDelete,
         placeholder,
-        borderColor,
-        onAdd,
+
+        titleDataTestId,
+        countDataTestId,
+        measureUnitDataTestId,
+        deleteBtnDataTestId,
     } = props;
+
+    const { data: measureUnits } = useGetMeasureUnitsQuery();
+
     return (
         <HStack gap={{ base: '12px', lg: '16px' }} flexWrap='wrap'>
             <Input
-                value={title}
+                data-test-id={titleDataTestId}
+                value={title ?? ''}
                 onChange={onChangeTitle}
-                autoFocus={true}
-                borderColor={borderColor || invalid ? 'error.100' : 'gray.200'}
+                borderColor={invalid ? 'rgb(229, 62, 62)' : 'gray.200'}
                 w={{ base: '100%', md: '241px', lg: '283px', '2xl': '293px' }}
                 h='40px'
                 color='gray.400'
                 placeholder={placeholder}
+                borderWidth={invalid ? '2px' : '1px'}
+                _hover={{
+                    borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                }}
+                _focus={{
+                    borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                }}
             />
             <Input
-                value={countValue}
+                data-test-id={countDataTestId}
+                value={countValue ?? ''}
                 onChange={onChangeCount}
-                borderColor={borderColor || invalid ? 'error.100' : 'gray.200'}
+                placeholder='100'
+                borderColor={invalid ? 'rgb(229, 62, 62)' : 'gray.200'}
                 w='80px'
                 h='40px'
                 color='gray.400'
+                borderWidth={invalid ? '2px' : '1px'}
+                _hover={{
+                    borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                }}
+                _focus={{
+                    borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                }}
             />
-            <Select
-                placeholder='Единица измерения...'
-                value={measureUnit}
-                onChange={onChangeMeasureUnit}
-                borderColor={borderColor || invalid ? 'error.100' : 'gray.200'}
-                w={{ base: '192px', md: '215px' }}
-                h='40px'
-                color='gray.400'
-            >
-                {options}
-            </Select>
-            {onDelete && (
-                <Button onClick={onDelete} variant='clear' minW='32px' h='32px'>
-                    <Basket fill='lime.600' />
-                </Button>
+            {measureUnits && (
+                <Select
+                    data-test-id={measureUnitDataTestId}
+                    value={measureUnit}
+                    defaultValue='Единица измерения'
+                    onChange={onChangeMeasureUnit}
+                    borderWidth={invalid ? '2px' : '1px'}
+                    borderColor={invalid ? 'rgb(229, 62, 62)' : 'gray.200'}
+                    w={{ base: '192px', md: '215px' }}
+                    h='40px'
+                    color='gray.400'
+                    _hover={{
+                        borderColor: invalid ? 'error.100' : 'gray.200',
+                    }}
+                    _focus={{
+                        borderColor: invalid ? 'error.100' : 'gray.200',
+                    }}
+                >
+                    <option value='Единица измерения' disabled hidden>
+                        Единица измерения...
+                    </option>
+                    {measureUnits?.map((unit) => (
+                        <option key={unit._id} value={unit.name}>
+                            {unit.name}
+                        </option>
+                    ))}
+                </Select>
             )}
-            {onAdd && (
-                <Button onClick={onAdd} borderRadius='50px' p='0px 9px' minW='32px' h='32px'>
-                    <Plus />
+
+            {onDelete && (
+                <Button
+                    data-test-id={deleteBtnDataTestId}
+                    onClick={onDelete}
+                    variant='clear'
+                    minW='32px'
+                    h='32px'
+                >
+                    <Basket fill='lime.600' />
                 </Button>
             )}
         </HStack>

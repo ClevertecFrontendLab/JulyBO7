@@ -7,18 +7,33 @@ import { IMAGE_API } from '~/shared/constants/imageApi';
 
 type CookingStepProps = {
     step: number;
-    value: string;
     invalid: boolean;
     onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
     onImageAddition: () => void;
-    imageSrc?: string;
+    imageSrc?: string | null;
     onDelete?: () => void;
-    onBlurText?: () => void;
+    value?: string;
+
+    imageBlockDataTestId?: string;
+    descriptionDataTestId?: string;
+    imageDataTestId?: string;
+    deleteBtnDataTestId?: string;
 };
 
 export const CookingStep: FC<CookingStepProps> = (props) => {
-    const { value, onChange, step, onDelete, invalid, onImageAddition, imageSrc, onBlurText } =
-        props;
+    const {
+        value,
+        onChange,
+        step,
+        onDelete,
+        invalid,
+        onImageAddition,
+        imageSrc,
+        imageBlockDataTestId,
+        imageDataTestId,
+        descriptionDataTestId,
+        deleteBtnDataTestId,
+    } = props;
 
     return (
         <Stack
@@ -29,28 +44,30 @@ export const CookingStep: FC<CookingStepProps> = (props) => {
             border='1px solid rgba(0, 0, 0, 0.08)'
             gap={0}
         >
-            {imageSrc ? (
-                <Image
-                    src={`${IMAGE_API}${imageSrc}`}
-                    alt='фото шага'
-                    borderRadius='8px'
-                    objectFit='cover'
-                    minH='160px'
-                    w={{ base: '100%', md: '346px' }}
-                />
-            ) : (
-                <HStack
-                    minH={{ base: '160px', md: '100%' }}
-                    w={{ base: '100%', md: '346px' }}
-                    bg='gray.200'
-                    alignItems='center'
-                    justifyContent='center'
-                >
-                    <Button onClick={onImageAddition} variant='clear' w='32px' h='32px'>
+            <Box data-test-id={imageBlockDataTestId} onClick={onImageAddition}>
+                {imageSrc ? (
+                    <Image
+                        data-test-id={imageDataTestId}
+                        src={`${IMAGE_API}${imageSrc}`}
+                        alt='фото шага'
+                        borderRadius='8px'
+                        objectFit='cover'
+                        minH='160px'
+                        w={{ base: '100%', md: '346px' }}
+                    />
+                ) : (
+                    <HStack
+                        minH={{ base: '160px', md: '100%' }}
+                        w={{ base: '100%', md: '346px' }}
+                        bg='gray.200'
+                        alignItems='center'
+                        justifyContent='center'
+                    >
                         <ImageIcon />
-                    </Button>
-                </HStack>
-            )}
+                    </HStack>
+                )}
+            </Box>
+
             <Box p='20px' flexGrow={1}>
                 <HStack w='100%' justifyContent='space-between' alignItems='center' mb='16px'>
                     <Badge
@@ -65,23 +82,38 @@ export const CookingStep: FC<CookingStepProps> = (props) => {
                         {`Шаг ${step}`}
                     </Badge>
                     {onDelete && (
-                        <Button onClick={onDelete} variant='clear' minW='32px' h='32px'>
+                        <Button
+                            data-test-id={deleteBtnDataTestId}
+                            onClick={onDelete}
+                            variant='clear'
+                            minW='32px'
+                            h='32px'
+                        >
                             <Basket fill='lime.600' />
                         </Button>
                     )}
                 </HStack>
 
                 <Textarea
+                    data-test-id={descriptionDataTestId}
                     textStyle='s'
                     placeholder='Шаг'
                     value={value}
-                    onBlur={onBlurText}
-                    // onBlur={() => console.log('BLUR ON TEXTAREA')}
                     onChange={onChange}
                     p='12px'
                     minH='84px'
                     h='auto'
-                    borderColor={invalid ? 'error.100' : 'gray.50'}
+                    borderStyle='solid'
+                    borderWidth={invalid ? '2px' : '1px'}
+                    borderColor={invalid ? 'rgb(229, 62, 62)' : 'gray.50'}
+                    _hover={{
+                        borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                        boxShadow: 'none',
+                    }}
+                    _focus={{
+                        borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.200',
+                        boxShadow: 'none',
+                    }}
                     resize='vertical'
                     overflow='hidden'
                 />

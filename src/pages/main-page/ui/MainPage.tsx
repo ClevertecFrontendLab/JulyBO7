@@ -1,6 +1,6 @@
 import { Button, Stack, VStack } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { setSuccessMessageAction } from '~/app/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/app/store/hooks';
@@ -51,6 +51,7 @@ export const MainPage: FC = () => {
         <PageLayout>
             <VStack align='center'>
                 <SearchPanel title={TITLE} getFoundRecipes={getFoundRecipes} />
+                <Link to='/map'>Перейти в карту</Link>
                 <VStack spacing={{ base: '32px', lg: '40px' }} w='100%'>
                     {filteredRecipes && filteredRecipes.length > 0 ? (
                         <>

@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { useCreateRecipeMutation } from '~/entities/recipe';
 import { CreateNewRecipeForm } from '~/features/create-recipe';
@@ -8,6 +8,7 @@ import { AppLoader } from '~/shared/components/loader';
 
 export const NewRecipePage: FC = () => {
     const [trigger, { isLoading }] = useCreateRecipeMutation();
+    const [mode, setMode] = useState<'draft' | 'newRecipe' | 'start'>('start');
 
     const defaultValues = {
         categoriesIds: [],
@@ -28,6 +29,8 @@ export const NewRecipePage: FC = () => {
                 <CreateNewRecipeForm
                     defaultValues={defaultValues}
                     triggerToPublishRecipe={trigger}
+                    mode={mode}
+                    onChangeMode={(mode) => setMode(mode)}
                 />
             </Box>
             {isLoading && <AppLoader />}

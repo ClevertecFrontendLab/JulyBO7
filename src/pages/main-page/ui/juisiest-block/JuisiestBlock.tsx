@@ -50,17 +50,23 @@ export const JuisiestBlock: FC = () => {
         juiciestCards = recipes.data.map((recipe, idx) => {
             const subcategory = categories.find(
                 (category) => category._id === recipe.categoriesIds[0],
-            )!;
-            const category = categories.find(
-                (category) => category._id === subcategory.rootCategoryId,
-            )!;
-            const handleCook = getRecipeCardHandler(
-                recipe,
-                navigate,
-                category,
-                subcategory as SubCategory,
-                pathname,
             );
+            let category;
+            let handleCook;
+            if (subcategory) {
+                category = categories.find(
+                    (category) => category._id === subcategory.rootCategoryId,
+                );
+            }
+            if (category && subcategory) {
+                handleCook = getRecipeCardHandler(
+                    recipe,
+                    navigate,
+                    category,
+                    subcategory as SubCategory,
+                    pathname,
+                );
+            }
 
             return (
                 <HorizontalCard

@@ -1,96 +1,76 @@
-import { Button, HStack, Image } from '@chakra-ui/react';
-import React, { ChangeEvent, useState } from 'react';
+import { Box, HStack, Image } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
-import { useUploadFileMutation } from '~/entities/recipe';
 import ImageIcon from '~/shared/assets/icons/components/Image';
 import { Alert } from '~/shared/components/alert';
-import { AppLoader } from '~/shared/components/loader';
 import { IMAGE_API } from '~/shared/constants/imageApi';
+import {
+    RECIPE_IMAGE_BLOCK,
+    RECIPE_IMAGE_BLOCK_INPUT_FILE,
+    RECIPE_IMAGE_BLOCK_PREVIEW_IMAGE,
+} from '~/shared/constants/tests';
 
 import { CreateDraftFormSchema } from '../../model/schemas/createDraftFormSchema';
 import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeFormSchema';
 import { UploadImageModal } from '../upload-image-modal/UploadImageModal';
 
-type FormImageProps = UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'image'>;
+type FormImageProps = UseControllerProps<
+    CreateNewRecipeFormData | CreateDraftFormSchema,
+    'image'
+> & { invalid: boolean };
 
-export const FormImage: React.FC<FormImageProps> = (props) => {
-    const { field, fieldState } = useController(props);
+export const FormImage: React.FC<FormImageProps> = ({ invalid, ...props }) => {
+    const { field } = useController(props);
 
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [previewImage, setPreviewImage] = useState<string>('');
-    const [file, setFile] = useState<File | null>();
     const [errorMessage, setErrorMessage] = useState<null | { title: string; text: string }>();
 
-    const [trigger, { isLoading }] = useUploadFileMutation();
-
-    const handleImageAddition = (e: ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0];
-        if (!selectedFile) return;
-        let newPreviewUrls = '';
-
-        newPreviewUrls = URL.createObjectURL(selectedFile);
-        setFile(selectedFile);
-        setPreviewImage(newPreviewUrls);
-    };
-    const handleCloseModal = () => {
-        setIsOpenModal(false);
-    };
-    const handleOpenModal = () => {
-        setIsOpenModal(true);
-    };
-
-    const handleUploadImage = async () => {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const res = await trigger(formData).unwrap();
-
-            field.onChange(res.url);
-
-            setPreviewImage('');
-            setIsOpenModal(false);
-        } catch {
-            setErrorMessage({ title: 'Ошибка сервера', text: 'Попробуйте сохранить фото позже.' });
-            setIsOpenModal(false);
+    const handleDeleteImage = () => {
+        if (field.value) {
+            field.onChange(undefined);
         }
+    };
+    const handleImageSave = (url: string) => {
+        field.onChange(url);
     };
 
     return (
         <>
-            {field.value ? (
-                <Image
-                    src={`${IMAGE_API}${field.value}`}
-                    objectFit='cover'
-                    w={{ base: '328px', md: '232px', lg: '353px', '2xl': '553px' }}
-                    h={{ base: '224px', md: '224px', lg: '410px' }}
-                    borderRadius='8px'
-                    alt='новый рецепт'
-                />
-            ) : (
-                <HStack
-                    h={{ base: '224px', md: '224px', lg: '410px' }}
-                    w={{ base: '328px', md: '232px', lg: '353px', '2xl': '553px' }}
-                    bg='gray.200'
-                    borderRadius='8px'
-                    alignItems='center'
-                    justifyContent='center'
-                    border={fieldState.invalid ? '1px solid red' : 'none'}
-                >
-                    <Button onClick={handleOpenModal} variant='clear' w='32px' h='32px'>
+            <Box data-test-id={RECIPE_IMAGE_BLOCK} onClick={() => setIsOpenModal(true)}>
+                {field.value ? (
+                    <Image
+                        data-test-id={RECIPE_IMAGE_BLOCK_PREVIEW_IMAGE}
+                        src={`${IMAGE_API}${field.value}`}
+                        objectFit='cover'
+                        w={{ base: '328px', md: '232px', lg: '353px', '2xl': '553px' }}
+                        h={{ base: '224px', md: '224px', lg: '410px' }}
+                        borderRadius='8px'
+                        alt='новый рецепт'
+                    />
+                ) : (
+                    <HStack
+                        h={{ base: '224px', md: '224px', lg: '410px' }}
+                        w={{ base: '328px', md: '232px', lg: '353px', '2xl': '553px' }}
+                        bg='gray.200'
+                        borderRadius='8px'
+                        alignItems='center'
+                        justifyContent='center'
+                        border={invalid ? '1px solid rgb(229, 62, 62)' : 'none'}
+                    >
                         <ImageIcon />
-                    </Button>
-                </HStack>
-            )}
+                    </HStack>
+                )}
+            </Box>
             <UploadImageModal
+                dataTestId={RECIPE_IMAGE_BLOCK_INPUT_FILE}
                 isOpen={isOpenModal}
-                onClose={handleCloseModal}
-                previewImage={previewImage}
-                onImageAddition={handleImageAddition}
-                onImageSave={handleUploadImage}
+                onClose={() => setIsOpenModal(false)}
+                onSave={handleImageSave}
+                onDelete={handleDeleteImage}
+                setError={setErrorMessage}
+                image={field.value ? `${IMAGE_API}${field.value}` : undefined}
             />
-            {isLoading && <AppLoader />}
             {errorMessage && (
                 <Alert
                     onClose={() => setErrorMessage(null)}

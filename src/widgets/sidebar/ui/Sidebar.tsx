@@ -6,6 +6,7 @@ import Bookmark from '~/shared/assets/icons/components/BsBookmarkHeart';
 import Emoji from '~/shared/assets/icons/components/BsEmojiHeartEyes';
 import People from '~/shared/assets/icons/components/BsPeopleFill';
 import ButtonIcon from '~/shared/assets/icons/components/Button';
+import { ADD_RECIPE_BUTTON } from '~/shared/constants/tests';
 
 import { handleNewRecipeCreation } from '../model/lib/handleNewRecipeCreation';
 import cls from './Sidebar.module.scss';
@@ -67,6 +68,7 @@ export const Sidebar: FC = () => {
                 </Button>
             </VStack>
             <Button
+                data-test-id={ADD_RECIPE_BUTTON}
                 onClick={handleWriteRecipe}
                 w='208px'
                 h='208px'

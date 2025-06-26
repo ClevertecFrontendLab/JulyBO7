@@ -1,7 +1,7 @@
 import { Box, Button, Stack, VStack } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useBlocker, useLocation, useNavigate } from 'react-router';
 
 import { setSuccessMessageAction } from '~/app/store/app-slice';
@@ -12,6 +12,13 @@ import Pen from '~/shared/assets/icons/components/Pen';
 import { Alert } from '~/shared/components/alert';
 import { AppLoader } from '~/shared/components/loader';
 import { AppRoutes, routePaths } from '~/shared/config/router';
+import {
+    RECIPE_FORM,
+    RECIPE_PORTIONS,
+    RECIPE_PUBLISH_RECIPE_BUTTON,
+    RECIPE_SAVE_DRAFT_BUTTON,
+    RECIPE_TIME,
+} from '~/shared/constants/tests';
 import { getRecipeCardHandler as getNavigateHandler } from '~/shared/lib/getRecipeCardHandler';
 import { SubCategory } from '~/shared/types/categories';
 
@@ -52,109 +59,127 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
     const subcategories = categories?.filter((category) => category.rootCategoryId);
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const [mode, setMode] = useState<'draft' | 'newRecipe' | 'start'>('start');
     const [shouldBlockNavigate, setShouldBlockNavigate] = useState(true);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isInvalidRecipeForm, setIsInvalidRecipeForm] = useState(false);
+    const [isInvalidDraftForm, setIsInvalidDraftForm] = useState(false);
 
     const dispatch = useAppDispatch();
 
-    const { handleSubmit, control, formState, getValues } = useForm<
-        CreateNewRecipeFormData | CreateDraftFormSchema
-    >({
+    const form = useForm<CreateNewRecipeFormData | CreateDraftFormSchema>({
         defaultValues,
-        mode: 'onSubmit',
-
-        resolver: zodResolver(
-            mode === 'newRecipe' ? createNewRecipeFormSchema : createDraftFormSchema,
-        ),
     });
+
     const [createDraftTrigger, { isLoading: createDraftIsLoading }] = useCreateDraftMutation();
 
     const [errorMessage, setErrorMessage] = useState<null | { title: string; text: string }>();
 
     const blocker = useBlocker(
         ({ currentLocation, nextLocation }) =>
-            formState.isDirty &&
+            form.formState.isDirty &&
             shouldBlockNavigate &&
             currentLocation.pathname !== nextLocation.pathname,
     );
 
     const onSubmit: SubmitHandler<CreateNewRecipeFormData | CreateDraftFormSchema> = async (
         data,
+        event,
     ) => {
+        const isDraft = event?.nativeEvent?.submitter?.id === 'draft';
+        const schema = isDraft ? createDraftFormSchema : createNewRecipeFormSchema;
+        const validData = schema.safeParse(data);
+
         setShouldBlockNavigate(false);
 
-        if (mode === 'draft') {
-            try {
-                await createDraftTrigger(data).unwrap();
+        if (isDraft) {
+            if (validData.success) {
+                try {
+                    await createDraftTrigger(data).unwrap();
 
-                dispatch(setSuccessMessageAction(DRAFT_SAVED));
-                navigate(routePaths[AppRoutes.MAIN]);
-            } catch {
-                setErrorMessage({
-                    title: 'Ошибка сервера',
-                    text: 'Не получилось сохранить в черновик.',
-                });
-            } finally {
-                setShouldBlockNavigate(true);
-                setMode('start');
+                    dispatch(setSuccessMessageAction(DRAFT_SAVED));
+                    navigate(routePaths[AppRoutes.MAIN]);
+                } catch {
+                    setErrorMessage({
+                        title: 'Ошибка сервера',
+                        text: 'Не получилось сохранить в черновик.',
+                    });
+                } finally {
+                    setShouldBlockNavigate(true);
+                }
+            } else {
+                setIsInvalidRecipeForm(false);
+                setIsInvalidDraftForm(true);
             }
         }
-        if (mode === 'newRecipe') {
-            try {
-                let res;
-                if (recipeId) {
-                    res = await triggerToPublishRecipe({
-                        formData: data,
-                        id: recipeId,
-                    }).unwrap();
-                } else {
-                    res = await triggerToPublishRecipe(data).unwrap();
-                }
-
-                dispatch(setSuccessMessageAction(RECIPE_PUBLISHED_SUCCESSFULLY));
-
-                if (categories && subcategories) {
-                    const firstRecipeSubcategory = subcategories.find(
-                        (sub) => sub._id === res.categoriesIds[0],
-                    );
-                    const categoryRecipe = categories.find(
-                        (cat) => cat._id === firstRecipeSubcategory?.rootCategoryId,
-                    );
-                    if (firstRecipeSubcategory && categoryRecipe) {
-                        const navigateToRecipePage = getNavigateHandler(
-                            res,
-                            navigate,
-                            categoryRecipe,
-                            firstRecipeSubcategory as SubCategory,
-                            pathname,
-                        );
-                        navigateToRecipePage();
+        if (!isDraft) {
+            console.log('fetch recipe - error: ', validData.error);
+            if (validData.success) {
+                try {
+                    let res;
+                    if (recipeId) {
+                        res = await triggerToPublishRecipe({
+                            formData: data,
+                            id: recipeId,
+                        }).unwrap();
+                    } else {
+                        res = await triggerToPublishRecipe(data).unwrap();
                     }
+
+                    dispatch(setSuccessMessageAction(RECIPE_PUBLISHED_SUCCESSFULLY));
+
+                    if (categories && subcategories) {
+                        const firstRecipeSubcategory = subcategories.find(
+                            (sub) => sub._id === res.categoriesIds[0],
+                        );
+                        const categoryRecipe = categories.find(
+                            (cat) => cat._id === firstRecipeSubcategory?.rootCategoryId,
+                        );
+                        if (firstRecipeSubcategory && categoryRecipe) {
+                            const navigateToRecipePage = getNavigateHandler(
+                                res,
+                                navigate,
+                                categoryRecipe,
+                                firstRecipeSubcategory as SubCategory,
+                                pathname,
+                            );
+                            navigateToRecipePage();
+                        }
+                    }
+                } catch (error) {
+                    const dataError = error as FetchBaseQueryError;
+                    if (dataError.status === 500) {
+                        setErrorMessage({
+                            title: 'Ошибка сервера',
+                            text: 'Попробуйте пока сохранить в черновик.',
+                        });
+                    }
+                    if (dataError.status === 409) {
+                        setErrorMessage({
+                            title: 'Ошибка',
+                            text: 'Рецепт с таким названием уже существует',
+                        });
+                    }
+                } finally {
+                    setShouldBlockNavigate(true);
                 }
-            } catch {
-                setErrorMessage({
-                    title: 'Ошибка сервера',
-                    text: 'Попробуйте пока сохранить в черновик.',
-                });
-            } finally {
-                setShouldBlockNavigate(true);
-                setMode('start');
+            } else {
+                setIsInvalidRecipeForm(true);
+                setIsInvalidDraftForm(false);
             }
         }
     };
 
     const handleSaveDraft = useCallback(async () => {
-        const categoriesIds = getValues('categoriesIds');
-        const description = getValues('description');
-        const title = getValues('title');
-        const image = getValues('image');
-        const ingredients = getValues('ingredients');
-        const portions = getValues('portions');
-        const steps = getValues('steps');
-        const time = getValues('time');
+        const categoriesIds = form.getValues('categoriesIds');
+        const description = form.getValues('description');
+        const title = form.getValues('title');
+        const image = form.getValues('image');
+        const ingredients = form.getValues('ingredients');
+        const portions = form.getValues('portions');
+        const steps = form.getValues('steps');
+        const time = form.getValues('time');
 
-        if (formState.isValid) {
+        if (form.formState.isValid) {
             try {
                 await createDraftTrigger({
                     description,
@@ -175,13 +200,12 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
                 });
             } finally {
                 setShouldBlockNavigate(true);
-                setMode('start');
             }
         } else {
             setIsOpenModal(false);
             blocker.reset?.();
         }
-    }, [formState.isValid, blocker, createDraftTrigger, getValues]);
+    }, [form.formState.isValid, blocker, createDraftTrigger, form.getValues, form]);
 
     const handleCloseModal = () => {
         setIsOpenModal(false);
@@ -189,10 +213,10 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
     };
 
     useEffect(() => {
-        if (blocker.state === 'blocked' && !formState.isDirty) {
+        if (blocker.state === 'blocked' && !form.formState.isDirty) {
             blocker.reset();
         }
-    }, [blocker, formState.isDirty]);
+    }, [blocker, form.formState.isDirty, form]);
 
     useEffect(() => {
         if (blocker.state === 'blocked') {
@@ -200,13 +224,13 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
         }
     }, [blocker.state]);
 
-    const onError: SubmitErrorHandler<CreateNewRecipeFormData | CreateDraftFormSchema> = () => {
-        setMode('start');
-    };
-
     return (
         <Box pr={{ base: 0, '2xl': '115px' }}>
-            <form onSubmit={handleSubmit(onSubmit, onError)} style={{ width: '100%' }}>
+            <form
+                data-test-id={RECIPE_FORM}
+                onSubmit={form.handleSubmit(onSubmit)}
+                style={{ width: '100%' }}
+            >
                 <ConfirmNavigation
                     blocker={blocker}
                     onSaveDraft={handleSaveDraft}
@@ -219,40 +243,61 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
                         gap={{ base: '16px', lg: '24px' }}
                         w='100%'
                     >
-                        <FormImage name='image' control={control} />
+                        <FormImage
+                            name='image'
+                            control={form.control}
+                            invalid={isInvalidRecipeForm}
+                        />
 
                         <VStack gap={{ base: '16px', lg: '24px' }}>
                             <FormSelect
                                 options={subcategories}
-                                control={control}
+                                control={form.control}
                                 name='categoriesIds'
+                                invalid={isInvalidRecipeForm}
                             />
-                            <FormInput name='title' control={control} placeholder={RECIPE_TITLE} />
+                            <FormInput
+                                name='title'
+                                control={form.control}
+                                placeholder={RECIPE_TITLE}
+                                invalid={isInvalidRecipeForm || isInvalidDraftForm}
+                            />
                             <FormTextarea
                                 name='description'
-                                control={control}
+                                control={form.control}
                                 placeholder={BRIEF_DESCRIPTION_OF_THE_RECIPE}
+                                invalid={isInvalidRecipeForm}
                             />
                             <FormNumberInput
+                                dataTestId={RECIPE_PORTIONS}
                                 name='portions'
-                                control={control}
+                                control={form.control}
                                 label={HOW_MANY_PEOPLE_YOUR_RECIPE}
+                                invalid={isInvalidRecipeForm}
                             />
                             <FormNumberInput
+                                dataTestId={RECIPE_TIME}
                                 name='time'
-                                control={control}
+                                control={form.control}
                                 label={HOW_LONG_DOES_IT_TAKE_TO_COOK_IN_MINUTES}
+                                invalid={isInvalidRecipeForm}
                             />
                         </VStack>
                     </Stack>
-                    <AddIngredient name='ingredients' control={control} />
-                    <AddCookingSteps name='steps' control={control} />
+                    <AddIngredient
+                        name='ingredients'
+                        control={form.control}
+                        invalid={isInvalidRecipeForm}
+                    />
+                    <AddCookingSteps
+                        name='steps'
+                        control={form.control}
+                        invalid={isInvalidRecipeForm}
+                    />
                     <Stack flexDirection={{ base: 'column', md: 'row' }} gap='20px'>
                         <Button
-                            onClick={() => {
-                                console.log('CLICK НА КНОПКЕ СОХРАНИТЬ ЧЕРНОВКИ');
-                                setMode('draft');
-                            }}
+                            data-test-id={RECIPE_SAVE_DRAFT_BUTTON}
+                            id='draft'
                             type='submit'
                             h='48px'
                             p='0 24px'
@@ -263,10 +308,8 @@ export const CreateNewRecipeForm: FC<CreateNewRecipeFormProps> = (props) => {
                             Сохранить черновик
                         </Button>
                         <Button
-                            onClick={() => {
-                                console.log('CLICK НА КНОПКЕ ОТПРАВИТЬ РЕЦЕПТ');
-                                setMode('newRecipe');
-                            }}
+                            data-test-id={RECIPE_PUBLISH_RECIPE_BUTTON}
+                            id='newRecipe'
                             type='submit'
                             h='48px'
                             p='0 24px'

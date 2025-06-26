@@ -22,14 +22,14 @@ export const Placeholder: React.FC<PlaceholderProps> = (props) => {
     }
 
     const categoriesTags = (
-        <HStack flexWrap='wrap'>
+        <HStack as='span' flexWrap='wrap'>
             {selectedOptions.slice(0, endIndex).map((selectedOption, idx) => {
                 let badgeContent;
 
                 if (!isSmallerThan1440) {
-                    badgeContent = idx === 0 || idx === 1 ? selectedOption.title : `+ ${tagNumber}`;
+                    badgeContent = idx === 0 || idx === 1 ? selectedOption.title : `+${tagNumber}`;
                 } else {
-                    badgeContent = idx === 0 ? selectedOption.title : `+ ${tagNumber}`;
+                    badgeContent = idx === 0 ? selectedOption.title : `+${tagNumber}`;
                 }
 
                 return (

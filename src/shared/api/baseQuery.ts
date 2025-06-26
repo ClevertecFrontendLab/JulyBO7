@@ -1,8 +1,12 @@
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
+import { jwtDecode } from 'jwt-decode';
 
-import { LOCAL_STORAGE_ACCESS_TOKEN_KEY } from '../constants/localStorage';
+import {
+    LOCAL_STORAGE_ACCESS_TOKEN_KEY,
+    LOCAL_STORAGE_USER_DATA_KEY,
+} from '../constants/localStorage';
 import { ApiEndpoints } from './constants/api';
 
 const mutex = new Mutex();
@@ -35,6 +39,11 @@ export const baseQueryWithReauth: BaseQueryFn<
                     const headers = refreshResult.meta?.response?.headers;
                     const customHeader = headers?.get('Authentication-Access');
                     if (customHeader) {
+                        const decodedToken = jwtDecode(customHeader);
+                        localStorage.setItem(
+                            LOCAL_STORAGE_USER_DATA_KEY,
+                            JSON.stringify(decodedToken),
+                        );
                         localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, customHeader);
                     }
 

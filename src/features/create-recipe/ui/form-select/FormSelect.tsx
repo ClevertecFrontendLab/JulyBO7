@@ -3,6 +3,7 @@ import { Box, Button, Checkbox, HStack, Menu, MenuButton, MenuList, Text } from 
 import { ChangeEvent, FC, useState } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
+import { RECIPE_CATEGORIES } from '~/shared/constants/tests';
 import { Category } from '~/shared/types/categories';
 
 import { SELECT_AT_LEAST_3_TAGS } from '../../model/constants/formText';
@@ -15,12 +16,13 @@ export type SelectedOption = { title: string; id: string };
 type FormSelectProps = {
     options?: Category[];
     isClose?: boolean;
+    invalid: boolean;
 } & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'categoriesIds'>;
 
 export const FormSelect: FC<FormSelectProps> = (props) => {
-    const { options, isClose, ...rest } = props;
+    const { options, isClose, invalid, ...rest } = props;
 
-    const { field, fieldState } = useController(rest);
+    const { field } = useController(rest);
 
     const defaultSelectedOptions = !field.value
         ? []
@@ -86,6 +88,7 @@ export const FormSelect: FC<FormSelectProps> = (props) => {
                         flexShrink={0}
                     >
                         <MenuButton
+                            data-test-id={RECIPE_CATEGORIES}
                             _hover={{ bg: 'transparent' }}
                             _active={{ bg: 'transparent' }}
                             // isDisabled={disabled}
@@ -98,8 +101,8 @@ export const FormSelect: FC<FormSelectProps> = (props) => {
                             border={
                                 isOpen
                                     ? '1px solid #c4ff61'
-                                    : fieldState.invalid
-                                      ? '1px solid red'
+                                    : invalid
+                                      ? '1px solid rgb(229, 62, 62)'
                                       : '1px solid  rgba(0, 0, 0, 0.08)'
                             }
                             px='16px'

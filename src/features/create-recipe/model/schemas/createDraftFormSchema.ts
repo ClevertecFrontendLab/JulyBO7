@@ -22,21 +22,19 @@ export const createDraftFormSchema = z.object({
     ingredients: z
         .array(
             z.object({
-                title: z.string().min(1).max(50),
-                count: z.number().positive(),
-                measureUnit: z.string().min(1),
+                title: z.string().min(1).max(50).optional(),
+                count: z.number().positive().optional(),
+                measureUnit: z.string().min(1).optional(),
             }),
         )
         .optional(),
-    steps: z
-        .array(
-            z.object({
-                stepNumber: z.number().positive(),
-                description: z.string().min(1).max(300),
-                image: z.string().optional(),
-            }),
-        )
-        .optional(),
+    steps: z.array(
+        z.object({
+            stepNumber: z.number().positive(),
+            description: z.string().max(300).optional(),
+            image: z.string().optional(),
+        }),
+    ),
 });
 
 export type CreateDraftFormSchema = z.infer<typeof createDraftFormSchema>;

@@ -9,27 +9,80 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 
+import { useUploadFileMutation } from '~/entities/recipe';
 import CloseInCircle from '~/shared/assets/icons/components/CrossInCircle';
 import ImageIcon from '~/shared/assets/icons/components/Image';
+import {
+    RECIPE_IMAGE_MODAL,
+    RECIPE_IMAGE_MODAL_IMAGE_BLOCK,
+    RECIPE_IMAGE_MODAL_PREVIEW_IMAGE,
+} from '~/shared/constants/tests';
 
 type UploadImageModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    previewImage: string;
-    onImageAddition: (e: ChangeEvent<HTMLInputElement>) => void;
-    onImageSave: () => void;
-    onImageDelete?: () => void;
+    onSave: (url: string) => void;
+    onDelete: () => void;
+    setError: ({ title, text }: { title: string; text: string }) => void;
+    image?: string;
+    dataTestId?: string;
 };
 
-export const UploadImageModal: React.FC<UploadImageModalProps> = (props) => {
-    const { isOpen, onClose, previewImage, onImageAddition, onImageSave, onImageDelete } = props;
+export const UploadImageModal: FC<UploadImageModalProps> = (props) => {
+    const { isOpen, onClose, onSave, onDelete, dataTestId, image, setError } = props;
+
+    const [file, setFile] = useState<File | null>();
+    const [previewImage, setPreviewImage] = useState<string>();
+
+    const [trigger] = useUploadFileMutation();
+
+    const handleImageAddition = (e: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+        if (!selectedFile) return;
+        let newPreviewUrls = '';
+
+        newPreviewUrls = URL.createObjectURL(selectedFile);
+        setFile(selectedFile);
+        setPreviewImage(newPreviewUrls);
+    };
+
+    const handleModalClose = () => {
+        onClose();
+        setPreviewImage(undefined);
+    };
+
+    const handleDeleteImage = () => {
+        if (previewImage) {
+            setPreviewImage(undefined);
+        } else {
+            onDelete();
+        }
+        onClose();
+    };
+
+    const handleImageSave = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await trigger(formData).unwrap();
+
+            onSave(res.url);
+            setPreviewImage(undefined);
+        } catch {
+            setError({ title: 'Ошибка сервера', text: 'Попробуйте сохранить фото позже.' });
+        } finally {
+            handleModalClose();
+        }
+    };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={handleModalClose} isCentered>
             <ModalOverlay backdropFilter='blur(4px)' bg='rgba(0, 0, 0, 0.16)' />
             <ModalContent
+                data-test-id={RECIPE_IMAGE_MODAL}
                 bg='bgColor'
                 borderRadius='16px'
                 p='32px 32px 40px 32px'
@@ -44,21 +97,32 @@ export const UploadImageModal: React.FC<UploadImageModalProps> = (props) => {
                     <Text fontSize='24px' fontWeight={700} textAlign='center'>
                         Изображение
                     </Text>
-                    <VStack w='100%' alignItems='center' justifyContent='center'>
-                        {previewImage ? (
+                    <VStack
+                        data-test-id={RECIPE_IMAGE_MODAL_IMAGE_BLOCK}
+                        w='100%'
+                        alignItems='center'
+                        justifyContent='center'
+                    >
+                        {previewImage || image ? (
                             <VStack alignItems='center' justifyContent='center'>
                                 <Image
-                                    src={
-                                        typeof previewImage === 'string' ? previewImage : undefined
-                                    }
+                                    data-test-id={RECIPE_IMAGE_MODAL_PREVIEW_IMAGE}
+                                    src={previewImage || image}
                                     h='206px'
                                     w='206px'
                                     borderRadius='8px'
                                 />
-                                <Button onClick={onImageSave} h='48px' w='100%'>
-                                    Сохранить
-                                </Button>
-                                <Button onClick={onImageDelete} variant='clear' h='48px' w='100%'>
+                                {image ? null : (
+                                    <Button onClick={handleImageSave} h='48px' w='100%'>
+                                        Сохранить
+                                    </Button>
+                                )}
+                                <Button
+                                    onClick={handleDeleteImage}
+                                    variant='clear'
+                                    h='48px'
+                                    w='100%'
+                                >
                                     Удалить
                                 </Button>
                             </VStack>
@@ -77,10 +141,11 @@ export const UploadImageModal: React.FC<UploadImageModalProps> = (props) => {
                                 <label>
                                     <ImageIcon cursor='pointer' />
                                     <Input
+                                        data-test-id={dataTestId}
                                         type='file'
                                         accept={'image/*'}
                                         hidden
-                                        onChange={onImageAddition}
+                                        onChange={handleImageAddition}
                                     />
                                 </label>
                             </VStack>

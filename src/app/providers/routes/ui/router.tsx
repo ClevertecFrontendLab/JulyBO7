@@ -20,8 +20,20 @@ import { Menu } from '~/widgets/menu';
 import { Navbar } from '~/widgets/navbar';
 import { Sidebar } from '~/widgets/sidebar/ui/Sidebar';
 
-const categoriesLC = localStorage.getItem(LOCAL_STORAGE_CATEGORIES_KEY);
-const categories = categoriesLC ? JSON.parse(categoriesLC) : [];
+async function fetchDynamicRoutes() {
+    const response = await fetch('https://marathon-api.clevertec.ru/category');
+    return response.json();
+}
+let categories;
+try {
+    categories = await fetchDynamicRoutes();
+} catch {
+    const categoriesLC = localStorage.getItem(LOCAL_STORAGE_CATEGORIES_KEY);
+    categories = categoriesLC ? JSON.parse(categoriesLC) : [];
+}
+// categories = await fetchDynamicRoutes();
+// const categoriesLC = localStorage.getItem(LOCAL_STORAGE_CATEGORIES_KEY);
+// const categories = categoriesLC ? JSON.parse(categoriesLC) : [];
 
 const getCategoriesRouteElements = (categoryData: Category): RouteObject => ({
     path: `/${categoryData.category}/`,
@@ -36,9 +48,9 @@ const getCategoriesRouteElements = (categoryData: Category): RouteObject => ({
     })),
 });
 
-const categoriesRoutes = categories
-    .filter((item) => !item.rootCategoryId)
-    .map(getCategoriesRouteElements);
+const categoriesRoutes = Array.isArray(categories)
+    ? categories.filter((item: Category) => !item.rootCategoryId).map(getCategoriesRouteElements)
+    : [];
 
 const getRecipeRoutes = (categoryData: Category): RouteObject => ({
     path: `/${categoryData.category}/`,
@@ -57,9 +69,9 @@ const getRecipeRoutes = (categoryData: Category): RouteObject => ({
     })),
 });
 
-const recipeRoutes: RouteObject[] = categories
-    .filter((item) => !item.rootCategoryId)
-    .map(getRecipeRoutes);
+const recipeRoutes: RouteObject[] = Array.isArray(categories)
+    ? categories.filter((item: Category) => !item.rootCategoryId).map(getRecipeRoutes)
+    : [];
 
 const editRecipeRoutes: RouteObject[] = recipeRoutes.map((recipeRoute) => ({
     path: `/edit-recipe${recipeRoute.path}`,
@@ -149,6 +161,6 @@ export const router = createBrowserRouter([
     },
     {
         path: '*',
-        element: <Navigate to={routePaths[AppRoutes.NOT_FOUND]} />,
+        element: <Navigate to={routePaths[AppRoutes.NOT_FOUND]} replace />,
     },
 ]);

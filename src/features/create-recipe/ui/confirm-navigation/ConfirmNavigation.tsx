@@ -15,6 +15,7 @@ import { Blocker } from 'react-router';
 import CloseInCircle from '~/shared/assets/icons/components/CrossInCircle';
 import Pen from '~/shared/assets/icons/components/Pen';
 import cupImage from '~/shared/assets/loginErrorModal.png';
+import { CLOSE_BUTTON, RECIPE_PREVENTIVE_MODAL } from '~/shared/constants/tests';
 
 type ConfirmNavigationProps = {
     blocker: Blocker;
@@ -34,12 +35,13 @@ export const ConfirmNavigation: FC<ConfirmNavigationProps> = (props) => {
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay backdropFilter='blur(4px)' bg='rgba(0, 0, 0, 0.16)' />
             <ModalContent
+                data-test-id={RECIPE_PREVENTIVE_MODAL}
                 bg='bgColor'
                 borderRadius='16px'
                 p='32px'
                 w={{ base: '316px', lg: '396px' }}
             >
-                <ModalCloseButton>
+                <ModalCloseButton data-test-id={CLOSE_BUTTON}>
                     <CloseInCircle />
                 </ModalCloseButton>
 
@@ -55,7 +57,6 @@ export const ConfirmNavigation: FC<ConfirmNavigationProps> = (props) => {
                         </Text>
                     </Box>
                     <Button
-                        // type='submit'
                         w='100%'
                         onClick={onSaveDraft}
                         h='48px'

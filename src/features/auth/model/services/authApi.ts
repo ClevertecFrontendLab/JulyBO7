@@ -65,12 +65,14 @@ export const authApi = apiSlice
                     url: ApiEndpoints.LOGIN,
                 }),
                 invalidatesTags: [Tags.AUTH],
+
                 transformResponse: (response, meta) => {
                     const headers = meta?.response?.headers;
                     const customHeader = headers?.get('Authentication-Access');
                     if (customHeader) {
                         const decodedToken = jwtDecode(customHeader);
                         localStorage.setItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY, customHeader);
+
                         localStorage.setItem(
                             LOCAL_STORAGE_USER_DATA_KEY,
                             JSON.stringify(decodedToken),

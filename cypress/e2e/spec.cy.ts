@@ -3660,7 +3660,12 @@ const UPDATE_RECIPE_RESPONSE = {
             description: 'Потом кошачью ****',
             image: '/media/images/bc0748c4-8d00-4c10-ad8e-534874343d46.webp',
         },
-        { stepNumber: 3, description: 'охапка дров', image: null },
+        {
+            stepNumber: 3,
+            description: 'охапка дров',
+
+            image: null,
+        },
         {
             stepNumber: 4,
             description: 'и плов готов',
@@ -3674,7 +3679,11 @@ const UPDATE_RECIPE_RESPONSE = {
     _id: '681cbbd4b6c3c1bbdbf32bba',
 };
 
-const NOT_MY_RECIPE = { ...UPDATE_RECIPE_RESPONSE, authorId: '000000000000000' };
+const NOT_MY_RECIPE = {
+    ...UPDATE_RECIPE_RESPONSE,
+    authorId: '000000000000000',
+    _id: '000000000000000',
+};
 
 const checkBorderColor = (testId: string) =>
     cy.getByTestId(testId).should('have.css', 'border-color', 'rgb(229, 62, 62)');
@@ -4002,6 +4011,7 @@ describe('recipe management', () => {
 
             cy.getByTestId('recipe-ingredients-title-0').clear().type('сахар');
             cy.getByTestId('recipe-ingredients-count-0').clear().type('4');
+
             cy.getByTestId('recipe-ingredients-measureUnit-0').select('г');
 
             cy.getByTestId(TEST_ID.Recipe.AddIngredientsButton).click();

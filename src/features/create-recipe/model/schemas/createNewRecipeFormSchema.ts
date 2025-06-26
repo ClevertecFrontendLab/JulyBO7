@@ -24,8 +24,10 @@ export const createNewRecipeFormSchema = z.object({
         .array(
             z.object({
                 stepNumber: z.number().positive(),
-                description: z.string().min(1).max(300),
-                image: z.string().optional(),
+                description: z.string().min(1).max(30),
+                // description: z.string().min(1).max(300),
+
+                image: z.string().nullish(),
             }),
         )
         .min(1),

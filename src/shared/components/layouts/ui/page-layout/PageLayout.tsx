@@ -11,7 +11,8 @@ export const PageLayout: FC<PageLayoutProps> = (props) => {
     return (
         <Box
             as='main'
-            height='100%'
+            // height='100%'
+            // height='100vh'
             mt={{ base: '64px', lg: '80px' }}
             mb={{ base: '84px', lg: 0 }}
             pl={{ base: '16px', md: '20px', lg: '280px' }}

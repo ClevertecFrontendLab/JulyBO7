@@ -15,11 +15,13 @@ import { CreateNewRecipeFormData } from '../../model/schemas/createNewRecipeForm
 
 type NumberInputProps = {
     label: string;
+    invalid: boolean;
+    dataTestId?: string;
 } & UseControllerProps<CreateNewRecipeFormData | CreateDraftFormSchema, 'time' | 'portions'>;
 
 export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
-    const { label } = props;
-    const { field, fieldState } = useController(props);
+    const { label, dataTestId, invalid } = props;
+    const { field } = useController(props);
 
     const handleChange = (_, valueAsNumber: number) => {
         field.onChange(valueAsNumber);
@@ -34,15 +36,36 @@ export const FormNumberInput: React.FC<NumberInputProps> = (props) => {
                 h='40px'
                 onChange={handleChange}
                 value={field.value}
-                // defaultValue={undefined}
                 color='primaryColor'
             >
                 <NumberInputField
+                    data-test-id={dataTestId}
                     // value={field.value}
                     // onChange={handleChange}
                     // {...field}
                     // min={1}
-                    border={fieldState.invalid ? '1px solid red' : '1px solid rgba(0, 0, 0, 0.08)'}
+                    borderColor={invalid ? 'rgb(229, 62, 62)' : 'rgba(0, 0, 0, 0.08)'}
+                    borderWidth={invalid ? '2px' : '1px'}
+                    borderStyle='solid'
+                    _focus={{
+                        borderWidth: invalid ? '2px' : '1px',
+                        borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderBottomColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderTopColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderRightColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderLeftColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        boxShadow: invalid ? 'none' : '0 0 0 1px rgba(0, 0, 0, 0.24)',
+                    }}
+                    _hover={{
+                        borderWidth: invalid ? '2px' : '1px',
+                        borderColor: invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+
+                        // borderBottomColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderTopColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderRightColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        // borderLeftColor: fieldState.invalid ? 'rgb(229, 62, 62)' : 'gray.50',
+                        boxShadow: invalid ? 'none' : '0 0 0 1px rgba(0, 0, 0, 0.24)',
+                    }}
                 />
 
                 <NumberInputStepper>

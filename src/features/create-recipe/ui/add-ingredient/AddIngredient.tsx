@@ -1,9 +1,16 @@
-import { HStack, Text, VStack } from '@chakra-ui/react';
-import { ChangeEvent, FC, useState } from 'react';
+import { Button, HStack, Text, VStack } from '@chakra-ui/react';
+import { ChangeEvent, FC, useEffect } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
-import { useGetMeasureUnitsQuery } from '~/entities/recipe';
+import Plus from '~/shared/assets/icons/components/Plus';
 import PlusOutline from '~/shared/assets/icons/components/PlusOuline';
+import {
+    RECIPE_INGREDIENTS_ADD_INGREDIENTS,
+    RECIPE_INGREDIENTS_COUNT,
+    RECIPE_INGREDIENTS_MEASURE_UNIT,
+    RECIPE_INGREDIENTS_REMOVE_INGREDIENTS,
+    RECIPE_INGREDIENTS_TITLE,
+} from '~/shared/constants/tests';
 
 import {
     ADD_RECIPE_INGREDIENTS,
@@ -18,30 +25,11 @@ import { Ingredient } from './ingredient/Ingredient';
 type AddIngredientProps = UseControllerProps<
     CreateNewRecipeFormData | CreateDraftFormSchema,
     'ingredients'
->;
+> & { invalid: boolean };
 
-export const AddIngredient: FC<AddIngredientProps> = (props) => {
-    const { field, fieldState } = useController(props);
-    const { data: measureUnits } = useGetMeasureUnitsQuery();
+export const AddIngredient: FC<AddIngredientProps> = ({ invalid, ...props }) => {
+    const { field } = useController(props);
 
-    const [title, setTitle] = useState<string>('');
-    const [count, setCount] = useState<string>('');
-    const [measureUnit, setMeasureUnit] = useState<string>('');
-
-    const options = measureUnits?.map((unit) => <option value={unit.name}>{unit.name}</option>);
-
-    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.currentTarget.value;
-        setTitle(value);
-    };
-    const handleCountChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.currentTarget.value;
-        setCount(value);
-    };
-    const handleMeasureUnitChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const value = e.currentTarget.value;
-        setMeasureUnit(value);
-    };
     const handleFieldTitleChange = (idx: number) => (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = field.value?.map((ingred, index) => {
             if (index === idx) {
@@ -54,7 +42,10 @@ export const AddIngredient: FC<AddIngredientProps> = (props) => {
     const handleFieldCountChange = (idx: number) => (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = field.value?.map((ingred, index) => {
             if (index === idx) {
-                return { ...ingred, count: Number(e.currentTarget.value) };
+                const count = Number.isNaN(Number(e.currentTarget.value))
+                    ? 0
+                    : Number(e.currentTarget.value);
+                return { ...ingred, count };
             }
             return ingred;
         });
@@ -63,7 +54,7 @@ export const AddIngredient: FC<AddIngredientProps> = (props) => {
     const handleFieldMeasureUnitChange = (idx: number) => (e: ChangeEvent<HTMLSelectElement>) => {
         const newValue = field.value?.map((ingred, index) => {
             if (index === idx) {
-                return { ...ingred, measureUnit: e.currentTarget.value };
+                return { ...ingred, measureUnit: e.target.value };
             }
             return ingred;
         });
@@ -72,18 +63,28 @@ export const AddIngredient: FC<AddIngredientProps> = (props) => {
 
     const handleIngredientAddition = () => {
         if (field.value) {
-            field.onChange([...field.value, { title, count: Number(count), measureUnit }]);
-        } else {
-            field.onChange([{ title, count: Number(count), measureUnit }]);
+            field.onChange([
+                ...field.value,
+                { title: undefined, count: undefined, measureUnit: undefined },
+            ]);
         }
-        setTitle('');
-        setCount('');
-        setMeasureUnit('');
     };
     const handleIngredientDelete = (idx: number) => () => {
         const newValue = field.value?.filter((_, index) => index !== idx);
         field.onChange(newValue);
     };
+
+    useEffect(() => {
+        if (!field.value || field.value.length === 0) {
+            const newStep = {
+                title: undefined,
+                count: undefined,
+                measureUnit: undefined,
+            };
+            field.onChange([newStep]);
+        }
+    }, []);
+
     return (
         <VStack
             w={{ base: '100%', md: '604px', lg: '658px', '2xl': '668px' }}
@@ -105,124 +106,40 @@ export const AddIngredient: FC<AddIngredientProps> = (props) => {
             </HStack>
             {Array.isArray(field.value) &&
                 field.value.map((fieldValue, idx) => (
-                    <Ingredient
-                        key={fieldValue.title}
-                        countValue={fieldValue.count}
-                        title={fieldValue.title}
-                        onChangeTitle={handleFieldTitleChange(idx)}
-                        onChangeCount={handleFieldCountChange(idx)}
-                        measureUnit={fieldValue.measureUnit}
-                        onChangeMeasureUnit={handleFieldMeasureUnitChange(idx)}
-                        invalid={fieldState.invalid}
-                        onDelete={handleIngredientDelete(idx)}
-                        options={options}
-                    />
+                    <HStack gap={{ base: '12px', lg: '16px' }}>
+                        <Ingredient
+                            countDataTestId={`${RECIPE_INGREDIENTS_COUNT}-${idx}`}
+                            titleDataTestId={`${RECIPE_INGREDIENTS_TITLE}-${idx}`}
+                            measureUnitDataTestId={`${RECIPE_INGREDIENTS_MEASURE_UNIT}-${idx}`}
+                            deleteBtnDataTestId={`${RECIPE_INGREDIENTS_REMOVE_INGREDIENTS}-${idx}`}
+                            countValue={fieldValue.count}
+                            title={fieldValue.title}
+                            measureUnit={fieldValue.measureUnit}
+                            onChangeTitle={handleFieldTitleChange(idx)}
+                            onChangeCount={handleFieldCountChange(idx)}
+                            onChangeMeasureUnit={handleFieldMeasureUnitChange(idx)}
+                            invalid={invalid}
+                            placeholder='Ингредиент'
+                            onDelete={
+                                field.value && idx === field.value?.length - 1
+                                    ? undefined
+                                    : handleIngredientDelete(idx)
+                            }
+                        />
+                        {field.value && idx === field.value.length - 1 ? (
+                            <Button
+                                data-test-id={RECIPE_INGREDIENTS_ADD_INGREDIENTS}
+                                onClick={handleIngredientAddition}
+                                borderRadius='50px'
+                                p='0px 9px'
+                                minW='32px'
+                                h='32px'
+                            >
+                                <Plus />
+                            </Button>
+                        ) : null}
+                    </HStack>
                 ))}
-
-            <Ingredient
-                countValue={Number(count)}
-                title={title}
-                onChangeTitle={handleTitleChange}
-                onChangeCount={handleCountChange}
-                measureUnit={measureUnit}
-                onChangeMeasureUnit={handleMeasureUnitChange}
-                invalid={fieldState.invalid}
-                options={options}
-                placeholder='Ингредиент'
-                onAdd={handleIngredientAddition}
-            />
         </VStack>
     );
 };
-
-//<HStack
-//     key={fieldValue.title}
-//     gap={{ base: '12px', lg: '16px' }}
-//     flexWrap='wrap'
-// >
-//     <Input
-//         value={fieldValue.title}
-//         onChange={handleFieldTitleChange(idx)}
-//         autoFocus={true}
-//         borderColor={fieldState.invalid ? 'error.100' : 'gray.200'}
-//         w={{ base: '100%', md: '241px', lg: '283px', '2xl': '293px' }}
-//         h='40px'
-//         color='gray.400'
-//     />
-
-//     <Input
-//         value={fieldValue.count}
-//         onChange={handleFieldCountChange(idx)}
-//         borderColor={fieldState.invalid ? 'error.100' : 'gray.200'}
-//         w='80px'
-//         h='40px'
-//         color='gray.400'
-//     />
-//     <Select
-//         placeholder='Единица измерения...'
-//         value={fieldValue.measureUnit}
-//         onChange={handleFieldMeasureUnitChange(idx)}
-//         borderColor={fieldState.invalid ? 'error.100' : 'gray.200'}
-//         w={{ base: '192px', md: '215px' }}
-//         h='40px'
-//         color='gray.400'
-//     >
-//         {options}
-//     </Select>
-//     <Button
-//         onClick={handleIngredientDelete(idx)}
-//         variant='clear'
-//         minW='32px'
-//         h='32px'
-//     >
-//         <Basket />
-//     </Button>
-// </HStack>
-
-// <HStack gap={{ base: '12px', lg: '16px' }} flexWrap='wrap'>
-//     <Input
-//         w={{ base: '100%', md: '241px', lg: '283px', '2xl': '293px' }}
-//         h='40px'
-//         placeholder='Ингредиент'
-//         value={title}
-//         onChange={handleTitleChange}
-//         borderColor={
-//             fieldState.invalid && field.value?.length === 0 ? 'error.100' : 'gray.200'
-//         }
-//         color='gray.400'
-//     />
-//     <Input
-//         placeholder='100'
-//         value={count}
-//         onChange={handleCountChange}
-//         borderColor={
-//             fieldState.invalid && field.value?.length === 0 ? 'error.100' : 'gray.200'
-//         }
-//         w='80px'
-//         h='40px'
-//         color='gray.400'
-//     />
-//     <Select
-//         placeholder='Единица измерения...'
-//         _placeholder={{ color: 'gray.150' }}
-//         value={measureUnit}
-//         onChange={handleMeasureUnitChange}
-//         borderColor={
-//             fieldState.invalid && field.value?.length === 0 ? 'error.100' : 'gray.200'
-//         }
-//         w={{ base: '192px', md: '215px' }}
-//         h='40px'
-//         color='gray.400'
-//     >
-//         {options}
-//     </Select>
-//     <Button
-//         onClick={handleIngredientAddition}
-//         borderRadius='50px'
-//         p='0px 9px'
-//         minW='32px'
-//         h='32px'
-//     >
-//         <Plus />
-//     </Button>
-// </HStack>

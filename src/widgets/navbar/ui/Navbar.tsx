@@ -7,7 +7,7 @@ import LogoFirst from '~/shared/assets/icons/components/LogoFirst';
 import LogoSecond from '~/shared/assets/icons/components/LogoSecond';
 import avatar from '~/shared/assets/images/Avatar.png';
 import { AppRoutes, routePaths } from '~/shared/config/router';
-import { HEADER } from '~/shared/constants/tests';
+import { HEADER, HEADER_LOGO } from '~/shared/constants/tests';
 
 import { AvatarBlock } from './avatar-block/AvatarBlock';
 import { BreadCrumb } from './bread-crumb/BreadCrumb';
@@ -55,6 +55,7 @@ export const Navbar: FC = () => {
             >
                 <Box as='nav' display='flex' alignItems='center' h='100%'>
                     <ChakraLink
+                        data-test-id={HEADER_LOGO}
                         as={Link}
                         to={routePaths[AppRoutes.MAIN]}
                         display='flex'
